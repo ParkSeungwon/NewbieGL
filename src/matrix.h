@@ -1,4 +1,5 @@
 #pragma once
+#include<cstring>
 #include<sstream>
 #include<cmath>
 #include<cassert>
@@ -119,5 +120,71 @@ template <typename T> std::ostream& operator<<(std::ostream& o, const Matrix<T>&
 	o << "\u23a3" << ' ';
 	for(int x=1; x<=w; x++) o << std::setw(gap[x]) << r[x][h] << ' ';
 	o << "\u23a6" << std::endl;
+	return o;
+}
+
+template<typename T> class MatrixStream : public Matrix<T>
+{
+public:
+	MatrixStream(const Matrix<T>& m) : Matrix<T>{m} {
+		int w = this->width, h = this->height;
+		gap = new int[w];
+		memset((void*)gap, 0, sizeof(int) * w);
+		linebyline = new std::string[h];
+		for(int y=1; y<=h; y++) for(int x=1; x<=w; x++) {
+			std::stringstream ss;
+			ss << (*this)[x][y];
+			int sz = ss.str().length();
+			if(gap[x-1] < sz) gap[x-1] = sz;
+		}//print with setw
+		std::stringstream ss;
+		ss << "\u23a1" << ' ';
+		for(int x=1; x<=w; x++) ss << std::setw(gap[x-1]) << (*this)[x][1] << ' ';
+		ss << "\u23a4";
+		linebyline[0] = ss.str();
+		ss.str("");
+		ss.clear();
+		for(int y=2; y<h; y++) {
+			ss << "\u23a2" << ' ';
+			for(int x=1; x<=w; x++) ss << std::setw(gap[x-1]) << (*this)[x][y] << ' ';
+			ss << "\u23a5";
+			linebyline[y-1] = ss.str();
+			ss.str("");
+			ss.clear();
+		}
+		ss << "\u23a3" << ' ';
+		for(int x=1; x<=w; x++) ss << std::setw(gap[x-1]) << (*this)[x][h] << ' ';
+		ss << "\u23a6";
+		linebyline[h-1] = ss.str();
+		for(int i=0; i<h; i++) std::cout << linebyline[i] << std::endl;
+	}
+	~MatrixStream() {
+		delete[] gap;
+		delete[] linebyline;
+	}
+	template<typename T2>
+	friend std::ostream& operator<<(std::ostream& o, MatrixStream<T2>& r);
+
+protected:
+	int* gap;
+	std::string* linebyline;
+	int pos = 0;
+	auto operator>>(std::stringstream sss) {
+		int w = this->width, h = this->height;
+		if(pos == this->height) pos = 0;
+		if(linebyline[0].empty()) {
+		}
+		return sss << linebyline[pos++];
+	}
+};
+
+template<typename T> 
+std::ostream& operator<<(std::ostream& o, MatrixStream<T>& r) {
+	if(r.pos == r.height) {
+		r.pos = 0;
+		o.setstate(std::ios::eofbit);
+		return o;
+	}
+	o << r.linebyline[r.pos++];
 	return o;
 }

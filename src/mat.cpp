@@ -1,3 +1,4 @@
+#include<sstream>
 #include"matrix.h"
 #include"vector.h"
 using namespace std;
@@ -5,6 +6,9 @@ using namespace std;
 int main()
 {
 	Matrix<int> m = {{1,2,3},
+					 {4,5,6},
+					 {7,8,329}};
+	Matrix<int> m2 = {{1,2,3},
 					 {4,5,6},
 					 {7,8,329}};
 	Matrix<int> n{3,3};
@@ -16,4 +20,6 @@ int main()
 
 
 	cout << (Matrix<int>)v;
+	MatrixStream<int> ms{m}, ms2{m2};
+	while(cout << ms << ms2 << endl);
 }
