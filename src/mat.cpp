@@ -21,5 +21,7 @@ int main()
 
 	cout << (Matrix<int>)v;
 	MatrixStream<int> ms{m}, ms2{m2};
-	while(cout << ms << ms2 << endl);
+	MatrixStream<int> ms3{m*m2};
+	while(cout << ms << ms2 << ms3 << endl);
+	
 }

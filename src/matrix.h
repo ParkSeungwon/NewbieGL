@@ -156,7 +156,6 @@ public:
 		for(int x=1; x<=w; x++) ss << std::setw(gap[x-1]) << (*this)[x][h] << ' ';
 		ss << "\u23a6";
 		linebyline[h-1] = ss.str();
-		for(int i=0; i<h; i++) std::cout << linebyline[i] << std::endl;
 	}
 	~MatrixStream() {
 		delete[] gap;
