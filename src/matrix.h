@@ -7,33 +7,6 @@
 #include<iomanip>
 #include"combi.h"
 template<typename T> class Matrix;
-template<typename T> Matrix<T> LxB(Matrix<T> L, Matrix<T> B) 
-{///get x from Lx = B 
-	int h = L.get_height();
-	if(L.get_width() != h || B.get_width() != 1 || B.get_height() != h) 
-		throw "type mismatch";
-	Matrix<T> x{1, h};
-	for(int i=1; i<=h; i++) {
-		T sum = 0;
-		for(int j=1; j<i; j++) sum += L[j][i] * x[1][j];
-		x[1][i] = B[1][i] - sum;
-	}
-	return x;
-}
-
-template<typename T> Matrix<T> UxB(Matrix<T> U, Matrix<T> B) 
-{///get x from Ux = B
-	int h = U.get_height();
-	if(U.get_width() != h || B.get_width() != 1 || B.get_height() != h) 
-		throw "type mismatch";
-	Matrix<T> x{1, h};
-	for(int i=h; i>0; i--) {
-		T sum = 0;
-		for(int j=h; j>i; j--) sum += x[1][j] * U[j][i];
-		x[1][i] = (B[1][i] - sum) / U[i][i];
-	}
-	return x;
-}
 
 template <typename T> class Matrix
 {
@@ -44,6 +17,10 @@ public:
 		for(int i=0; i<w * h; i++) arr[i] = 0;
 	}
 	
+	Matrix(T x, T y, T z, T w = 1) : Matrix{1,4} {
+		arr[0] = x; arr[1] = y; arr[2] = z; arr[3] = w;
+	}
+
 	Matrix(std::initializer_list<std::initializer_list<T>> li)
 		: Matrix<T>{static_cast<unsigned short>(li.begin()->size()), 
 					static_cast<unsigned short>(li.size())} {
@@ -193,27 +170,6 @@ public:
 		(*this)[3][3] = z;
 		return *this;
 	}
-	auto LU_decompose() {
-		if(width != height) throw "should be square";
-		nPr npr{width, width};
-		while(npr.next()) {
-			Matrix<T> P{width, width};//조합으로 순열 매트릭스 생성.
-			for(int j=1,i=0; j<=height; j++) P[npr[i++]][j] = 1;
-			auto m = P * (*this);
-			m = LU_decompose(m);
-			if(!m[1][1]) continue;
-			else {
-				Matrix<T> L{width, height};
-				Matrix<T> U{width, height};
-				for(int x=1; x<=width; x++) 
-					for(int y=1; y<=width; y++)
-						if(x<y) L[x][y] = m[x][y];
-						else U[x][y] = m[x][y]; 
-				for(int x=1; x<=width; x++) L[x][x] = 1;
-				return std::array<Matrix<T>, 3>{P, L, U};
-			}
-		}
-	}
 
 	Matrix<T> One() const {
 		for(int i=0; i<width*height; i++)  arr[i] = 1;
@@ -244,7 +200,7 @@ private:
 		int w = m.width;
 		int h = m.height;
 		if(!m[1][1]) return Matrix<T>{w,h};
-		if(width == 1) return m;
+		if(m.width == 1) return m;
 		for(int y=2; y<=h; y++) m[1][y] /= m[1][1];// c /= a11
 		for(int x=2; x<=w; x++) for(int y=2; y<=h; y++) 
 			m[x][y] -= m[x][1] * m[1][y];// A' -= ch
@@ -254,6 +210,55 @@ private:
 		if(!mm[1][1]) return Matrix<T>{w,h};//if a11 == 0 -> change P, redo
 		for(int x=1; x<w; x++) for(int y=1; y<w; y++) m[x+1][y+1] = mm[x][y];
 		return m;
+	}
+
+	auto LU_decompose() {
+		if(width != height) throw "should be square";
+		nPr npr{width, width};
+		while(npr.next()) {
+			Matrix<T> P{width, width};//조합으로 순열 매트릭스 생성.
+			for(int j=1,i=0; j<=height; j++) P[npr[i++]][j] = 1;
+			auto m = P * (*this);
+			m = LU_decompose(m);
+			if(!m[1][1]) continue;
+			else {
+				Matrix<T> L{width, height};
+				Matrix<T> U{width, height};
+				for(int x=1; x<=width; x++) 
+					for(int y=1; y<=width; y++)
+						if(x<y) L[x][y] = m[x][y];
+						else U[x][y] = m[x][y]; 
+				for(int x=1; x<=width; x++) L[x][x] = 1;
+				return std::array<Matrix<T>, 3>{P, L, U};
+			}
+		}
+	}
+	Matrix<T> LxB(Matrix<T> L, Matrix<T> B) 
+	{///get x from Lx = B 
+		int h = L.get_height();
+		if(L.get_width() != h || B.get_width() != 1 || B.get_height() != h) 
+			throw "type mismatch";
+		Matrix<T> x{1, h};
+		for(int i=1; i<=h; i++) {
+			T sum = 0;
+			for(int j=1; j<i; j++) sum += L[j][i] * x[1][j];
+			x[1][i] = B[1][i] - sum;
+		}
+		return x;
+	}
+
+	Matrix<T> UxB(Matrix<T> U, Matrix<T> B) 
+	{///get x from Ux = B
+		int h = U.get_height();
+		if(U.get_width() != h || B.get_width() != 1 || B.get_height() != h) 
+			throw "type mismatch";
+		Matrix<T> x{1, h};
+		for(int i=h; i>0; i--) {
+			T sum = 0;
+			for(int j=h; j>i; j--) sum += x[1][j] * U[j][i];
+			x[1][i] = (B[1][i] - sum) / U[i][i];
+		}
+		return x;
 	}
 };
 

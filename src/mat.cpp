@@ -31,17 +31,8 @@ int main()
 	cout << ms5 << ms7 << '=' << ms4 << endl;
 	cout << ms5.space() << ms7 << ' ' << endl;
 
-	const char* p = "%%=%";
-
-	Matrix<double> L{{1,0,0,0},{3,1,0,0},{2,3,1,0},{1,2,2,1}};
-	Matrix<double> U{{2,4,1,3},{0,4,2,5},{0,0,7,2},{0,0,0,13}};
-	Matrix<double> B{{1},{0},{0},{0}};
-	auto mat = LxB(L, B);
-	auto mat2 = UxB(U, mat);
-	cout << mat << endl;
-	cout << mat2 << endl;
-
-	cout << L * mat << endl;
-	cout << U * mat2 << endl;
-	cout << L*U*mat2 << endl;
+	Matrix<double> mr = {{3.2,0,-4},
+					 {4,6,6.1},
+					 {3,8.9,0.9}};
+	cout << mr.inverse();
 }

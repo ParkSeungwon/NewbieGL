@@ -7,7 +7,6 @@
 #include <chrono>         // std::chrono::seconds
 #include <iostream>
 #include <cmath>
-#include"vector.h"
 #include"glutil.h"
 using namespace std;
 
@@ -27,7 +26,7 @@ int main(void)
 	int width, height;
 	glfwGetFramebufferSize(window, &width, &height);
 	//glViewport(0, 0, width, height);
-	glOrtho(0, 256,0,256,0,-1);
+	glOrtho(256,0,0,256,1,-1);
 	unsigned char z = 0;
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window)) {

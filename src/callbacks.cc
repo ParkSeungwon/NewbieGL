@@ -38,6 +38,6 @@ bool glinit(GLFWwindow* window) {
 	glfwSetCursorPosCallback(window, cursor_pos_callback);
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
-	glClearColor(1, 1, 1, 1); // while background
+	glClearColor(1, 1, 1, 1); // white background
 	return true;
 }

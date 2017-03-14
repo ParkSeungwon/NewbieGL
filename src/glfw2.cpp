@@ -7,7 +7,6 @@
 #include <chrono>         // std::chrono::seconds
 #include <iostream>
 #include<cmath>
-#include"vector.h"
 #include"glutil.h"
 using namespace std;
 
@@ -35,14 +34,14 @@ int main(void)
 	while (!glfwWindowShouldClose(window)) {
 		/* Render here */
 		glClear(GL_COLOR_BUFFER_BIT);
-		Vec4D<float> pt {1.0f, 0.0f, 0.0f, 0.0f};
+		Matrix<float> pt{1, 0, 0};
 
 		//TODO: draw here
 		glBegin(GL_TRIANGLE_FAN);
 		for(int i=0; i<20; i++) {
 			pt = m * pt;
-			glColor3fv(pt.v);
-			glVertex3fv(pt.v);
+			glColor3fv(pt.data());
+			glVertex3fv(pt.data());
 		}
 		glEnd();
 
