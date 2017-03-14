@@ -6,7 +6,7 @@
 #include <thread>         // std::this_thread::sleep_for
 #include <chrono>         // std::chrono::seconds
 #include <iostream>
-#include "math.h"
+#include<cmath>
 #include"vector.h"
 #include"glutil.h"
 using namespace std;
@@ -14,33 +14,17 @@ using namespace std;
 const int wt = 640;
 const int ht = 480;
 
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
-void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos);
-
 int main(void)
 {
 	if (!glfwInit()) return -1;
-
 	GLFWwindow* window = glfwCreateWindow(wt, ht, "Hello World", NULL, NULL);
+	if (!glinit(window)) return -1;
 
-	if (!window) {
-		glfwTerminate();
-		return -1;
-	}
 	
 	const float theta = 2.0 * M_PI / 20;
 	Matrix<float> m{4,4};
 	m.glrotateZ(theta);
 	
-	// callbacks here
-	glfwSetKeyCallback(window, key_callback);
-	glfwSetMouseButtonCallback(window, mouse_button_callback);
-	glfwSetCursorPosCallback(window, cursor_pos_callback);
-	
-	/* Make the window's context current */
-	glfwMakeContextCurrent(window);
-	glClearColor(1, 1, 1, 1); // while background
 
 	int width, height;
 	glfwGetFramebufferSize(window, &width, &height);
