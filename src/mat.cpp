@@ -1,4 +1,5 @@
 #include<sstream>
+#include"rational.h"
 #include"matrix.h"
 #include"vector.h"
 using namespace std;
@@ -34,5 +35,11 @@ int main()
 	Matrix<double> mr = {{3.2,0,-4},
 					 {4,6,6.1},
 					 {3,8.9,0.9}};
-	cout << mr.inverse();
+	cout << mr.inverse() * mr;
+
+	Matrix<Ratio> mr2 = {{Ratio(2,3),1},{Ratio(1,2),2}};
+	Matrix<Ratio> mr3 = {{Ratio(1,3),1},{Ratio(1,2),2}};
+
+	cout << Ratio(2,41) << ';' << endl;
+	cout << mr2 * mr3 + mr2;
 }
