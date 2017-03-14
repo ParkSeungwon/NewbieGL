@@ -1,11 +1,11 @@
 CC = g++
 OBJ = $(wildcard *.o)
 EXE = $(patsubst %.x, ../%.x, $(wildcard *.x))
-gtkmmLIB = $(shell pkg-config gtkmm-3.0 --libs)
+glLIB = -lGLU -lGL -lglut -lglfw
 
 all : $(EXE)
 
 ../%.x : %.x $(OBJ)
-	$(CC) -o $@ $< $(OBJ) 
+	$(CC) -o $@ $< $(OBJ) $(glLIB)
 
 

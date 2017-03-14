@@ -23,11 +23,7 @@ public:
 		return Vec2D<T>::operator*(r) + z_*r.z_;
 	}
 	operator Matrix<T>() {
-		Matrix<T> m{1,3};
-		m[1][1] = this->x();
-		m[1][2] = this->y();
-		m[1][3] = z();
-		return m;
+		return Matrix<T>{{this->x()},{this->y()},{z()}};
 	}
 	Vec3D<T> operator^(const Vec3D<T>& r) {//counter product X
 		return Vec3D<T> {
@@ -40,3 +36,35 @@ public:
 protected:
 	T z_;
 };
+
+template<typename T> struct Vec4D
+{
+	union {
+		struct {
+			T x, y, z, w;
+		};
+		T v[4];
+	};
+ 	Vec4D(T x, T y, T z, T w) {
+ 		this->x = x; this->y = y; this->z = z; this->w = w;
+ 	}
+ 	Vec4D(const Matrix<T>& r) {
+ 		memcpy(v, r.data(), 4 * sizeof(T));
+ 	}
+		
+	T operator*(const Vec4D<T>& r) {//dot product
+		return x * r.x + y * r.y + z * r.z + w * r.w;
+	}
+	operator Matrix<T>() {
+		return Matrix<T>{{x},{y},{z},{w}};
+	}
+};
+
+template<typename T> std::ostream& operator<<(std::ostream& o, const Vec3D<T>& r) {
+	o << '(' << r.x() << ',' << r.y() << ',' << r.z() << ')';
+	return o;
+}
+template<typename T> std::ostream& operator<<(std::ostream& o, const Vec4D<T>& r) {
+	o << '(' << r.x << ',' << r.y << ',' << r.z << ',' << r.w << ')';
+	return o;
+}

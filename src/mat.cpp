@@ -7,21 +7,41 @@ int main()
 {
 	Matrix<int> m = {{1,2,3},
 					 {4,5,6},
-					 {7,8,329}};
-	Matrix<int> m2 = {{1,2,3},
-					 {4,5,6},
-					 {7,8,329}};
-	Matrix<int> n{3,3};
-	n[1][2] = 2;
+					 {7,8,9}};
+	m[3][2] = 11;
 	Vec3D<int> v{2,3,4};
+	auto m2 = m * v;
+	MatrixStream<int> ms1{m}, ms2{v}, ms3{m2};//cannot use on the fly
+	const char *c = " = ";
+	for(int i=0; i<ms1.get_height(); i++) 
+		cout << ms1 << ms2 << c[i] << ms3 << endl;
 
-	cout << m;
-	cout << m * v;
-
-
-	cout << (Matrix<int>)v;
-	MatrixStream<int> ms{m}, ms2{m2};
-	MatrixStream<int> ms3{m*m2};
-	while(cout << ms << ms2 << ms3 << endl);
+	Vec3D<int> v2{1,3,4};
+	cout << v * v2 << endl;
+	cout << (v ^ v2) << endl;
 	
+	Matrix<float> m6{{2.1},{1},{2}};
+	Matrix<float> m5{{0.3,0.4, 1.123}};
+	auto m9 = m5 * m6;
+	MatrixStream<float> ms5{m5};
+	MatrixStream<float> ms4{m9};
+	MatrixStream<float> ms7{m6};
+
+	cout << ms5.space() << ms7 << ' ' << endl;
+	cout << ms5 << ms7 << '=' << ms4 << endl;
+	cout << ms5.space() << ms7 << ' ' << endl;
+
+	const char* p = "%%=%";
+
+	Matrix<double> L{{1,0,0,0},{3,1,0,0},{2,3,1,0},{1,2,2,1}};
+	Matrix<double> U{{2,4,1,3},{0,4,2,5},{0,0,7,2},{0,0,0,13}};
+	Matrix<double> B{{1},{0},{0},{0}};
+	auto mat = LxB(L, B);
+	auto mat2 = UxB(U, mat);
+	cout << mat << endl;
+	cout << mat2 << endl;
+
+	cout << L * mat << endl;
+	cout << U * mat2 << endl;
+	cout << L*U*mat2 << endl;
 }
