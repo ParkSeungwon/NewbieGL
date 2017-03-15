@@ -6,7 +6,6 @@
 #include<iostream>
 #include<iomanip>
 #include"combi.h"
-template<typename T> class Matrix;
 
 template <typename T> class Matrix
 {
@@ -105,7 +104,7 @@ public:
 		return m;
 	}
 
-	Matrix<T> inverse() {
+	Matrix<T> inverse() const{
 		auto a = LU_decompose();
 		auto P = a[0], L = a[1], U = a[2];
 		Matrix<T> I{width, height};
@@ -117,6 +116,13 @@ public:
 			for(int j=1; j<=height; j++) I[i][j] = x[1][j];
 		}
 		return I;
+	}
+
+	Matrix<T> transpose() const{
+		Matrix<T> m{height, width};
+		for(int x=1; x<=width; x++) for(int y=1; y<=height; y++)
+			m[y][x] = (*this)[x][y];
+		return m;
 	}
 
 	Matrix<T> E() {
@@ -196,7 +202,7 @@ private:
 		for(int i=0; i<width; i++) sum += (*this)[i+1][row] * *(col+i);
 		return sum;
 	}
-	Matrix<T> LU_decompose(Matrix<T> m) {
+	static Matrix<T> LU_decompose(Matrix<T> m) {
 		int w = m.width;
 		int h = m.height;
 		if(!m[1][1]) return Matrix<T>{w,h};
@@ -212,7 +218,7 @@ private:
 		return m;
 	}
 
-	auto LU_decompose() {
+	auto LU_decompose() const{
 		if(width != height) throw "should be square";
 		nPr npr{width, width};
 		while(npr.next()) {
@@ -234,7 +240,7 @@ private:
 		}
 		throw "no inverse";
 	}
-	Matrix<T> LxB(Matrix<T> L, Matrix<T> B) 
+	static Matrix<T> LxB(Matrix<T> L, Matrix<T> B) 
 	{///get x from Lx = B 
 		int h = L.get_height();
 		if(L.get_width() != h || B.get_width() != 1 || B.get_height() != h) 
@@ -248,7 +254,7 @@ private:
 		return x;
 	}
 
-	Matrix<T> UxB(Matrix<T> U, Matrix<T> B) 
+	static Matrix<T> UxB(Matrix<T> U, Matrix<T> B) 
 	{///get x from Ux = B
 		int h = U.get_height();
 		if(U.get_width() != h || B.get_width() != 1 || B.get_height() != h) 
