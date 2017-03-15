@@ -232,6 +232,7 @@ private:
 				return std::array<Matrix<T>, 3>{P, L, U};
 			}
 		}
+		throw "no inverse";
 	}
 	Matrix<T> LxB(Matrix<T> L, Matrix<T> B) 
 	{///get x from Lx = B 

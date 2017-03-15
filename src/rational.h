@@ -11,6 +11,10 @@ public:
 	bool operator==(const Ratio& r) {return (n == r.n) && (den == r.den);}
 	bool operator!=(const Ratio& r) {return !(*this == r);}
 	Ratio& operator+=(const Ratio& r);
+	Ratio& operator/=(const Ratio& r);
+	Ratio& operator*=(const Ratio& r);
+	Ratio& operator-=(const Ratio& r);
+	bool operator!() {return !n;}
 	bool operator>(const Ratio& r);
 	bool operator<(const Ratio& r);
 	bool operator>=(const Ratio& r) {return *this == r || *this > r;}

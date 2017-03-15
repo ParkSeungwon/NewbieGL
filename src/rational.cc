@@ -55,6 +55,19 @@ Ratio& Ratio::operator+=(const Ratio& r)
 	 return *this = *this + r;
 }
 
+Ratio& Ratio::operator*=(const Ratio& r)
+{
+	return *this = *this * r;
+}
+
+Ratio& Ratio::operator/=(const Ratio& r)
+{
+	return *this = *this / r;
+}
+Ratio& Ratio::operator-=(const Ratio& r)
+{
+	return *this = *this - r;
+}
 vector<unsigned int> Ratio::prime_div(int num)
 {
 	vector<unsigned int> prime, component;
