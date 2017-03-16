@@ -1,0 +1,70 @@
+\documentclass[12pt,a4paper]{article}
+\synctex=1
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1cm]{geometry}
+\usepackage{graphicx}
+%\usepackage{verbatim}
+\usepackage{listings}
+\usepackage{textcomp}
+\usepackage{courier}
+\usepackage{libertine}
+\usepackage{pgfornament}
+\usepackage{eso-pic}
+\usepackage[hangul]{kotex}
+\linespread{1.3}
+
+\title{
+	\centering
+	\pgfornament[width=12cm,color=teal]{84}\\
+	\vspace{1cm}
+	\fontsize{50}{50} \selectfont {컴퓨터 그래픽스 입문}\\
+		\pgfornament[width=12cm,color=teal]{88}\\
+	\vfill}
+\author{
+	\LARGE
+	\begin{tabular}{rl}
+		\hline
+		학번 : & 2016110056\\ 
+		학과 : & 불교학부 \\
+		이름 : & 박승원\\
+		날짜 : & \today\\
+		\hline
+	\end{tabular}\vspace{2cm}
+	\\
+\includegraphics[width=0.5\textwidth]{logo.jpg}
+	}
+\date{}
+
+
+\begin{document}
+\maketitle
+\pagenumbering{gobble}
+\noindent
+\lstset{language=C++, columns=flexible, tabsize=4, frame=shadowbox, showstringspaces=false, breaklines=true, upquote=true, basicstyle=\normalsize}
+
+
+1. Draw a smiley as pretty as you can. You may google 'smiley face' for more an better references.(5)\\
+Scoring guide\\
+- Draw a color filled face : 1 point\\
+- Draw a smiley mouth : 1 point\\
+- Draw a eyes(left + right) : 2 point\\
+- How much pretty smiley face  : 1 point\\
+
+2. Move the smiley by up/down/left/right key inputs. (5)\\
+Scoring guide\\
+- move left : 1 point\\
+- move right : 1 point\\
+- move up : 1 point\\
+- move down : 1 point\\
+- how well did you write the report : 1 point\\
+
+원을 그리기 위한 클래스로 원위의 점들을 벡터로 가진다.
+\lstinputlisting{src/circle.h}
+
+기본 매트릭스, 위치 이동과 기본 자료형으로 쓰임.
+\lstinputlisting{src/matrix.h}
+
+메인 파일
+\lstinputlisting{src/glfw2.cpp}	
+	
+\end{document}

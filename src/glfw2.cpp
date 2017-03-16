@@ -21,18 +21,17 @@ int main(void)
 	if (!glfwInit()) return -1;
 	GLFWwindow* window = glfwCreateWindow(wt, ht, "Smiley Face", NULL, NULL);
 	if (!glinit(window)) return -1;
-
 	
 	const float theta = 2.0 * M_PI / 20;
 	Matrix<float> m{4,4};
 	m.glrotateZ(theta);
-	
 
 	int width, height;
 	glfwGetFramebufferSize(window, &width, &height);
 	glViewport(0, 0, width, height);
 	glortho(2);
 	glColor3f(1,0,0);
+
 	Matrix<float> center{0,0,0};
 	Circle bcircle{center.data(), 1};
 	Circle ycircle{center.data(), 0.95};
@@ -44,6 +43,7 @@ int main(void)
 	Circle leyec{leye, 0.2};
 	Circle reyec{reye, 0.2};
 	Circle mouth{center.data(), 0.7};
+	
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window)) {
 		/* Render here */
@@ -58,6 +58,9 @@ int main(void)
 			glVertex3fv(a.data());
 		}
 		glVertex3fv(bcircle.begin()->data());
+		glEnd();
+
+		glBegin(GL_TRIANGLE_FAN);
 		glColor3f(1,1,0);
 		for(auto& a : ycircle) {
 			a = translate * a;
@@ -65,6 +68,7 @@ int main(void)
 		}
 		glVertex3fv(ycircle.begin()->data());
 		glEnd();
+		
 		glBegin(GL_TRIANGLE_FAN);
 		glColor3f(0,0,0);
 		for(auto& a : leyec) {
@@ -72,12 +76,14 @@ int main(void)
 			glVertex3fv(a.data());
 		}
 		glEnd();
+		
 		glBegin(GL_TRIANGLE_FAN);
 		for(auto& a : reyec) {
 			a = translate * a;
 			glVertex3fv(a.data());
 		}
 		glEnd();
+		
 		glLineWidth(20);
 		glBegin(GL_LINE_STRIP);
 		auto it = mouth.begin();
