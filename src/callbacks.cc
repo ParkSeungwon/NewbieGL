@@ -1,11 +1,15 @@
 #include<GLFW/glfw3.h>
 #include<iostream>
+#include"matrix.h"
 using namespace std;
 
+Matrix<float> center{0,0,0};
 bool record = false;
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-	if(key == GLFW_KEY_U && action == GLFW_PRESS) cout << 'D';
-	if(key == GLFW_KEY_D && action == GLFW_PRESS) cout << 'U';
+	if(key == GLFW_KEY_A && action == GLFW_PRESS) center[1][1]-=0.1;
+	if(key == GLFW_KEY_S && action == GLFW_PRESS) center[1][2]-=0.1;
+	if(key == GLFW_KEY_D && action == GLFW_PRESS) center[1][1]+=0.1;
+	if(key == GLFW_KEY_W && action == GLFW_PRESS) center[1][2]+=0.1;
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
