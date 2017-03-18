@@ -9,6 +9,7 @@ int main()
 					   {4,1,3,7}, 
 					   {2,6,9,8}};
 	auto m2 = m.transpose();
+	cout << m2.surround(0);
 	cout << m2;
 	try {
 		cout << m.inverse();

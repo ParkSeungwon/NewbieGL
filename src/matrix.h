@@ -181,7 +181,7 @@ public:
 		for(int i=0; i<width*height; i++)  arr[i] = 1;
 	}
 	Matrix<T> surround(T wall = 0) const {
-		Matrix<T> m{width + 1, height +1};
+		Matrix<T> m{width + 2, height + 2};
 		for(int i=0; i<m.width*m.height; i++) m.arr[i] = wall;
 		for(int x=1; x<=width; x++) for(int y=1; y<=height; y++) 
 			m[x+1][y+1] = (*this)[x][y];
