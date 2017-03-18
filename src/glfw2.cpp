@@ -8,14 +8,14 @@
 #include<iostream>
 #include<cmath>
 #include"glutil.h"
-#include"circle.h"
+#include"polygon.h"
 using namespace std;
 
 const int wt = 640;
 const int ht = 480;
 extern Matrix<float> translate;
 
-void draw(Circle& circle) {
+void draw(Polygon& circle) {
 	glBegin(GL_TRIANGLE_FAN);
 	for(auto& a : circle) {
 		a = translate * a;
@@ -31,24 +31,20 @@ int main(void)
 	GLFWwindow* window = glfwCreateWindow(wt, ht, "Smiley Face", NULL, NULL);
 	if (!glinit(window)) return -1;
 	
-	const float theta = 2.0 * M_PI / 20;
-
 	int width, height;
 	glfwGetFramebufferSize(window, &width, &height);
 	glViewport(0, 0, width, height);
 	glortho(2);
-	glColor3f(1,0,0);
 
-	float center[3] = {0,0,0};
-	Circle bcircle{center, 1};
-	Circle ycircle{center, 0.95};
-	Circle leye{center, 0.2};
-	Circle reye{center, 0.2};
-	Circle mouth{center, 0.7};
+	Polygon bcircle{1};//generate circle points
+	Polygon ycircle{0.95};//polygon default is 100 edge polygon which to human eyes
+	Polygon leye{0.2};//looks like a circle
+	Polygon reye{0.2};
+	Polygon mouth{0.7};
 
 	Matrix<float> m{4,4};
 	m = m.gltranslate(-0.3,0.5,0) * m.glscale(0.7,1.1,1);
-	for(auto& a : leye) a = m * a;
+	for(auto& a : leye) a = m * a;//move eye to position, extend vertically
 	m = m.gltranslate(0.3,0.5,0) * m.glscale(0.7,1.1,1);
 	for(auto& a : reye) a = m * a;
 
