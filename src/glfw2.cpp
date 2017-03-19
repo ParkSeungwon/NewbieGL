@@ -8,14 +8,13 @@
 #include<iostream>
 #include<cmath>
 #include"glutil.h"
-#include"polygon.h"
 using namespace std;
 
 const int wt = 640;
 const int ht = 480;
 extern Matrix<float> translate;
 
-void draw(Polygon& circle) {
+void draw(vector<Matrix<float>>& circle) {
 	glBegin(GL_TRIANGLE_FAN);
 	for(auto& a : circle) {
 		a = translate * a;
@@ -36,11 +35,11 @@ int main(void)
 	glViewport(0, 0, width, height);
 	glortho(2);
 
-	Polygon bcircle{1};//generate circle points
-	Polygon ycircle{0.95};//polygon default is 100 edge polygon which to human eyes
-	Polygon leye{0.2};//looks like a circle
-	Polygon reye{0.2};
-	Polygon mouth{0.7};
+	auto bcircle = polygon(1);//generate circle points
+	auto ycircle = polygon(0.95);//polygon default is 100 edge polygon
+	auto leye = polygon(0.2);// which to human eyes looks like a circle
+	auto reye = polygon(0.2);
+	auto mouth = polygon(0.7);
 
 	Matrix<float> m{4,4};
 	m = m.gltranslate(-0.3,0.5,0) * m.glscale(0.7,1.1,1);
