@@ -1,13 +1,9 @@
-#include"matrix.h"
 #include"glutil.h"
 using namespace std;
 
-const int wt =  640, ht = 480;
-extern Matrix<float> rotate;
-extern Matrix<float> translate;
-extern float camera_x, camera_y;
 int main()
 {
+
 	rotate.glrotateY(M_PI/4);
 	translate.gltranslate(0,0,sqrt(2));
 	if (!glfwInit()) return -1;
@@ -15,21 +11,31 @@ int main()
 	if (!glinit(window)) return -1;
 	glortho(3);
 
-	auto pl = polygon(4, 1);
-	auto pl2 = pl;
-	for(int i=0; i<pl.size(); i++) pl2.push_back(translate * pl[i]);
-	for(auto& a : pl2) a = rotate * a;
-	float color[72] = {1,0,0, 1,0,0, 1,0,0,1,0,0,
+	Polygon pl{4};
+	vector<Matrix<float>> pl2{begin(pl), end(pl)};
+	pl = translate * pl;
+	pl2.insert(pl2.end(), begin(pl), end(pl));
+	valarray<Matrix<float>> va{pl2.data(), pl2.size()};
+	va = rotate * va;
+	valarray<float> color{0, 72};
+	color[slice(0,4,3)] = 1;
+	color[slice(13,4,3)] = 1;
+	color[slice(26,4,3)] = 1;
+	color[gslice(36,{4,2},{3,1})] = 1;
+	color[gslice(49,{4,2},{3,1})] = 1;
+	color[gslice(60,{4,2},{3,2})] = 1;
+
+/*	float color[72] = {1,0,0, 1,0,0, 1,0,0,1,0,0,
 		0,1,0, 0,1,0,0,1,0,0,1,0,
 		0,0,1, 0,0,1,0,0,1,0,0,1,
 		1,1,0, 1,1,0,1,1,0,1,1,0,
 		0,1,1, 0,1,1,0,1,1,0,1,1,
 		1,0,1, 1,0,1,1,0,1,1,0,1};
-	int idx[24] = {0,1,2,3, 4,5,6,7, 0,1,5,4, 1,2,6,5, 2,3,7,6, 0,3,7,4};
+*/	int idx[24] = {0,1,2,3, 4,5,6,7, 0,1,5,4, 1,2,6,5, 2,3,7,6, 0,3,7,4};
 	vector<Matrix<float>> v;
 	for(auto& a : idx) v.push_back(pl2[a]);
 
-	auto fc = gl_transfer_data(color, 72 * 4);
+	auto fc = gl_transfer_data(color);
 	auto fv = gl_transfer_data(v);
 	auto fi = gl_transfer_data(idx, sizeof(int)*24, GL_ELEMENT_ARRAY_BUFFER);
 	
@@ -65,4 +71,5 @@ int main()
 	}
 	glfwTerminate();
 
+}
 }

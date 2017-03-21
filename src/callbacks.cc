@@ -2,13 +2,14 @@
 #include<GLFW/glfw3.h>
 #include<iostream>
 #include<vector>
+#include<valarray>
 #include"matrix.h"
 using namespace std;
 Matrix<float> translate{4,4};
 Matrix<float> rotate{4,4};
 static Matrix<float> m{4,4};
 bool record = false;
-
+float camera_x=1, camera_y=1;
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	if(key == GLFW_KEY_LEFT && action == GLFW_PRESS) translate[4][1]-=0.01;
 	if(key == GLFW_KEY_DOWN && action == GLFW_PRESS) translate[4][2]-=0.01;
@@ -19,7 +20,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if(key == GLFW_KEY_S && action == GLFW_PRESS) rotate *= m.glrotateX(-0.01);
 	if(key == GLFW_KEY_D && action == GLFW_PRESS) rotate *= m.glrotateY(0.01);
 	if(key == GLFW_KEY_SPACE && action == GLFW_PRESS) rotate.E();
-
+	if(key == GLFW_KEY_J && action == GLFW_PRESS) camera_x-=0.1;
+	if(key == GLFW_KEY_K && action == GLFW_PRESS) camera_y-=0.1;
+	if(key == GLFW_KEY_L && action == GLFW_PRESS) camera_x+=0.1;
+	if(key == GLFW_KEY_I && action == GLFW_PRESS) camera_y+=0.1;
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
@@ -86,6 +90,19 @@ unsigned int gl_transfer_data(void* p, size_t sz, GLenum mode)
 }
 
 unsigned int gl_transfer_data(const vector<Matrix<float>>& ver, GLenum mode)
+{
+	const int dim = 3;
+	int sz = ver.size();
+	float ar[sz * dim];
+	for(int i=0; i<sz; i++) memcpy(ar + dim * i, ver[i].data(), sizeof(float) * dim);
+	unsigned int vbo;
+	glGenBuffers(1, &vbo);
+	glBindBuffer(mode, vbo);
+	glBufferData(mode, sizeof(ar), ar, GL_STATIC_DRAW);
+	return vbo;
+}
+
+unsigned int gl_transfer_data(const valarray<Matrix<float>>& ver, GLenum mode)
 {
 	const int dim = 3;
 	int sz = ver.size();
