@@ -1,7 +1,7 @@
 CC = g++
 OBJ = $(wildcard *.o)
 EXE = $(patsubst %.x, ../%.x, $(wildcard *.x))
-glLIB = -lGLU -lGL -lglut -lglfw
+glLIB = -lGLEW -lGLU -lGL -lglut -lglfw
 
 all : $(EXE)
 

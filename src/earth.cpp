@@ -4,15 +4,19 @@
 using namespace std;
 
 const int wt =  640, ht = 480;
+extern Matrix<float> rotate;
+extern Matrix<float> translate;
 int main()
 {
+	rotate.glrotateX(0.01);
+	translate.E();
 	if (!glfwInit()) return -1;
 	GLFWwindow* window = glfwCreateWindow(wt, ht, "Smiley Face", NULL, NULL);
 	if (!glinit(window)) return -1;
 	glortho(2);
 
 	vector<Matrix<float>> v;
-	auto pl = polygon(1, 20);
+	auto pl = polygon(20);
 
 	Matrix<float> m{4,4};
 	m.glrotateY(M_PI/20);
@@ -30,7 +34,10 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glBegin(GL_TRIANGLES);
-		for(auto& a : v) glVertex2fv(a.data());
+		for(auto& a : v) {
+			a = translate * rotate * a;
+			glVertex2fv(a.data());
+		}
 		glEnd();
 
 		glfwSwapBuffers(window);
