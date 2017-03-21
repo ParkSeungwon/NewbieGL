@@ -1,6 +1,5 @@
 //#include <glew.h>
 #include"matrix.h"
-#include<GLFW/glfw3.h>
 #include<cstring>
 #include<stdlib.h>		  // srand, rand
 #include<thread>         // std::this_thread::sleep_for
@@ -13,20 +12,18 @@ using namespace std;
 const int wt = 640;
 const int ht = 480;
 extern Matrix<float> translate;
-extern Matrix<float> rotate;
+extern Matrix<float> grotate;
 
-void draw(vector<Matrix<float>>& circle) {
+void draw(valarray<Matrix<float>>& circle) {
+	circle = translate * grotate * circle;
 	glBegin(GL_TRIANGLE_FAN);
-	for(auto& a : circle) {
-		a = translate * rotate * a;
-		glVertex2fv(a.data());
-	}
+	for(int i=0; i<circle.size(); i++) glVertex2fv(circle[i].data());
 	glEnd();
 }
 
 int main(void)
 {
-	rotate.E();
+	grotate.E();
 	translate.gltranslate(0,0,0);
 	if (!glfwInit()) return -1;
 	GLFWwindow* window = glfwCreateWindow(wt, ht, "Smiley Face", NULL, NULL);
@@ -48,6 +45,7 @@ int main(void)
 	for(auto& a : leye) a = m * a;//move eye to position, extend vertically
 	m = m.gltranslate(0.3,0.5,0) * m.glscale(0.7,1.1,1);
 	for(auto& a : reye) a = m * a;
+	glClearColor(1,1,1,1);
 
 
 	/* Loop until the user closes the window */
@@ -66,8 +64,8 @@ int main(void)
 		
 		glLineWidth(30);
 		glBegin(GL_LINE_STRIP);
-		for(auto it = mouth.begin() + 50; it != mouth.end(); it++) {
-			*it = translate * rotate * *it;
+		for(auto it = begin(mouth) + 50; it != end(mouth); it++) {
+			*it = translate * grotate * *it;
 			glVertex2fv(it->data());
 		}
 		glEnd();

@@ -3,11 +3,11 @@
 using namespace std;
 
 const int wt =  640, ht = 480;
-extern Matrix<float> rotate;
+extern Matrix<float> grotate;
 extern Matrix<float> translate;
 int main()
 {
-	rotate.glrotateX(0.01);
+	grotate.glrotateX(0.01);
 	translate.E();
 	if (!glfwInit()) return -1;
 	GLFWwindow* window = glfwCreateWindow(wt, ht, "Smiley Face", NULL, NULL);
@@ -34,7 +34,7 @@ int main()
 
 		glBegin(GL_TRIANGLES);
 		for(auto& a : v) {
-			a = translate * rotate * a;
+			a = translate * grotate * a;
 			glVertex2fv(a.data());
 		}
 		glEnd();

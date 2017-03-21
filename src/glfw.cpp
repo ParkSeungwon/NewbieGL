@@ -1,6 +1,4 @@
-//#include <glew.h>
 #include"matrix.h"
-#include <GLFW/glfw3.h>
 #include <cstring>
 #include <stdlib.h>		  // srand, rand
 #include <thread>         // std::this_thread::sleep_for

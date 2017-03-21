@@ -3,12 +3,12 @@
 using namespace std;
 
 const int wt =  640, ht = 480;
-extern Matrix<float> rotate;
+extern Matrix<float> grotate;
 extern Matrix<float> translate;
 extern float camera_x, camera_y;
 int main()
 {
-	rotate.glrotateY(M_PI/4);
+	grotate.glrotateY(M_PI/4);
 	translate.gltranslate(0,0,sqrt(2));
 	if (!glfwInit()) return -1;
 	GLFWwindow* window = glfwCreateWindow(wt, ht, "Smiley Face", NULL, NULL);
@@ -16,9 +16,10 @@ int main()
 	glortho(3);
 
 	auto pl = polygon(4, 1);
-	auto pl2 = pl;
-	for(int i=0; i<pl.size(); i++) pl2.push_back(translate * pl[i]);
-	for(auto& a : pl2) a = rotate * a;
+	vector<Matrix<float>> pl2{ begin(pl), end(pl)};
+	pl = translate * pl;
+	pl2.insert(pl2.end(), begin(pl), end(pl));
+	for(auto& a : pl2) a = grotate * a;
 	float color[72] = {1,0,0, 1,0,0, 1,0,0,1,0,0,
 		0,1,0, 0,1,0,0,1,0,0,1,0,
 		0,0,1, 0,0,1,0,0,1,0,0,1,

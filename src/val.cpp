@@ -1,23 +1,24 @@
 #include"glutil.h"
 using namespace std;
+extern Matrix<float> grotate;
+extern Matrix<float> translate;
 
 int main()
 {
-
-	rotate.glrotateY(M_PI/4);
+	grotate.glrotateY(M_PI/4);
 	translate.gltranslate(0,0,sqrt(2));
 	if (!glfwInit()) return -1;
-	GLFWwindow* window = glfwCreateWindow(wt, ht, "Smiley Face", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(640, 480, "Smiley Face", NULL, NULL);
 	if (!glinit(window)) return -1;
 	glortho(3);
 
-	Polygon pl{4};
-	vector<Matrix<float>> pl2{begin(pl), end(pl)};
+	auto pl = polygon(4);
+	vector<Matrix<float>> pl2;
+	pl2.insert(pl2.end(), begin(pl), end(pl));
 	pl = translate * pl;
 	pl2.insert(pl2.end(), begin(pl), end(pl));
-	valarray<Matrix<float>> va{pl2.data(), pl2.size()};
-	va = rotate * va;
-	valarray<float> color{0, 72};
+	for(auto& a : pl2) a = grotate * a;
+	valarray<float> color{0.0, 72};
 	color[slice(0,4,3)] = 1;
 	color[slice(13,4,3)] = 1;
 	color[slice(26,4,3)] = 1;
@@ -35,7 +36,9 @@ int main()
 	vector<Matrix<float>> v;
 	for(auto& a : idx) v.push_back(pl2[a]);
 
-	auto fc = gl_transfer_data(color);
+	float fd[72];
+	for(int i=0; i<72; i++) fd[i] = color[i];
+	auto fc = gl_transfer_data(fd, 72*4);
 	auto fv = gl_transfer_data(v);
 	auto fi = gl_transfer_data(idx, sizeof(int)*24, GL_ELEMENT_ARRAY_BUFFER);
 	
@@ -71,5 +74,4 @@ int main()
 	}
 	glfwTerminate();
 
-}
 }

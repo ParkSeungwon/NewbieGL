@@ -1,4 +1,3 @@
-#include<GLFW/glfw3.h>
 #include"turtle.h"
 #include"glutil.h"
 using namespace std;
