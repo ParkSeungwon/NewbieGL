@@ -30,9 +30,9 @@ int main()
 	vector<Matrix<float>> v;
 	for(auto& a : idx) v.push_back(pl2[a]);
 
-	auto fc = gl_transfer_data(color, 72 * 4);
+	auto fc = gl_transfer_data(color, color + 72 * 4);
 	auto fv = gl_transfer_data(v);
-	auto fi = gl_transfer_data(idx, sizeof(int)*24, GL_ELEMENT_ARRAY_BUFFER);
+	auto fi = gl_transfer_data(idx, idx + sizeof(int)*24, GL_ELEMENT_ARRAY_BUFFER);
 	
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT);

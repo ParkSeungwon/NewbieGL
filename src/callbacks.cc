@@ -81,37 +81,3 @@ std::valarray<Matrix<float>> polygon(int points_count, float r)
 	return pts;
 }
 
-unsigned int gl_transfer_data(void* p, size_t sz, GLenum mode)
-{
-	unsigned int vbo;
-	glGenBuffers(1, &vbo);
-	glBindBuffer(mode, vbo);
-	glBufferData(mode, sz, p, GL_STATIC_DRAW);
-	return vbo;
-}
-
-unsigned int gl_transfer_data(const vector<Matrix<float>>& ver, GLenum mode)
-{
-	const int dim = 3;
-	int sz = ver.size();
-	float ar[sz * dim];
-	for(int i=0; i<sz; i++) memcpy(ar + dim * i, ver[i].data(), sizeof(float) * dim);
-	unsigned int vbo;
-	glGenBuffers(1, &vbo);
-	glBindBuffer(mode, vbo);
-	glBufferData(mode, sizeof(ar), ar, GL_STATIC_DRAW);
-	return vbo;
-}
-
-unsigned int gl_transfer_data(const valarray<Matrix<float>>& ver, GLenum mode)
-{
-	const int dim = 3;
-	int sz = ver.size();
-	float ar[sz * dim];
-	for(int i=0; i<sz; i++) memcpy(ar + dim * i, ver[i].data(), sizeof(float) * dim);
-	unsigned int vbo;
-	glGenBuffers(1, &vbo);
-	glBindBuffer(mode, vbo);
-	glBufferData(mode, sizeof(ar), ar, GL_STATIC_DRAW);
-	return vbo;
-}
