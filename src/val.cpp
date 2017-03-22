@@ -20,8 +20,8 @@ int main()
 //	for(int i=0; i<pl.size(); i++) pl2.push_back(pl[i]);
 	pl2.insert(pl2.end(), begin(pl), end(pl));
 	for(auto& a : pl2) a = grotate * a;
-	valarray<float> color{72};
-	color.resize(72);
+	valarray<float> color{72};//does not make 72 size why?
+	color.resize(72);//needed to add this line
 	color[slice(0,4,3)] = 1;
 	color[slice(13,4,3)] = 1;
 	color[slice(26,4,3)] = 1;
