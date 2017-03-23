@@ -35,7 +35,7 @@ int main(void)
 	glortho(2);
 
 	auto bcircle = polygon(100);//generate circle points
-	auto ycircle = polygon(100, 0.95);//polygon default is 100 edge polygon
+	auto ycircle = polygon(100, 0.95);//100 edge polygon
 	auto leye = polygon(100, 0.2);// which to human eyes looks like a circle
 	auto reye = polygon(100, 0.2);
 	auto mouth = polygon(100, 0.7);

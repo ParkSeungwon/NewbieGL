@@ -42,29 +42,20 @@
 \noindent
 \lstset{language=C++, columns=flexible, tabsize=4, frame=shadowbox, showstringspaces=false, breaklines=true, upquote=true, basicstyle=\normalsize}
 
+\section{Draw a cube}
+\includegraphics[width=\textwidth]{2.png}
+\lstinputlisting{src/val.cpp}	
+\section{Draw a cone}
+\includegraphics[width=\textwidth]{1.png}
+\lstinputlisting{src/cone.cpp}	
 
-1. Draw a smiley as pretty as you can. You may google 'smiley face' for more an better references.(5)\\
-Scoring guide\\
-- Draw a color filled face : 1 point\\
-- Draw a smiley mouth : 1 point\\
-- Draw a eyes(left + right) : 2 point\\
-- How much pretty smiley face  : 1 point\\
+\lstinputlisting[caption=glutil.h]{src/glutil.h}
 
-2. Move the smiley by up/down/left/right key inputs. (5)\\
-Scoring guide\\
-- move left : 1 point\\
-- move right : 1 point\\
-- move up : 1 point\\
-- move down : 1 point\\
-- how well did you write the report : 1 point\\
+\lstinputlisting[caption=callbacks.cc : glutil implementation]{src/callbacks.cc}
 
-원을 그리기 위한 클래스로 원위의 점들을 벡터로 가진다.
-\lstinputlisting{src/circle.h}
 
-기본 매트릭스, 위치 이동과 기본 자료형으로 쓰임.
-\lstinputlisting{src/matrix.h}
+\lstinputlisting[caption=Matrix class]{src/matrix.h}
 
-메인 파일
-\lstinputlisting{src/glfw2.cpp}	
+
 	
 \end{document}
