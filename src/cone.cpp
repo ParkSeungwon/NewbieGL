@@ -18,22 +18,26 @@ int main()
 	grotate.glrotateX(5*M_PI/4 + 0.1);
 	for(auto& a : pl2) a = grotate * a;//rotate a little to have a good view
 	grotate.E();
+	auto fv = gl_transfer_data(pl2);
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT);
 		
-		glBegin(GL_TRIANGLE_FAN);
-		for(auto& a : pl2) {
-			glColor3fv(a.data());
-			a = grotate * a;
-			glVertex3fv(a.data());
-		}
-		glEnd();
-		glfwSwapBuffers(window);
+		glBindBuffer(GL_ARRAY_BUFFER, fv);
+		glEnableClientState(GL_COLOR_ARRAY);
+		glColorPointer(3, GL_FLOAT, 0, nullptr);
 
-		glfwPollEvents();
+		glBindBuffer(GL_ARRAY_BUFFER, fv);
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(3, GL_FLOAT, 0, nullptr);//3 float is 1 vertex stride 0, 
 		
+		glDrawArrays(GL_TRIANGLE_FAN, 0, 102);//mode, first, count
+
+		glDisableClientState(GL_COLOR_ARRAY);
+		glDisableClientState(GL_VERTEX_ARRAY);
+
+		glfwSwapBuffers(window);
+		glfwPollEvents();
 	}
 	glfwTerminate();
-
 }
 
