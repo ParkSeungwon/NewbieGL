@@ -3,12 +3,9 @@
 using namespace std;
 
 const int wt =  640, ht = 480;
-extern Matrix<float> grotate;
-extern Matrix<float> translate;
+extern Matrix<float> KeyBindMatrix;
 int main()
 {
-	grotate.glrotateX(0.01);
-	translate.E();
 	if (!glfwInit()) return -1;
 	GLFWwindow* window = glfwCreateWindow(wt, ht, "Smiley Face", NULL, NULL);
 	if (!glinit(window)) return -1;
@@ -30,11 +27,11 @@ int main()
 	glColor3f(1,1,0);
 
 	while (!glfwWindowShouldClose(window)) {
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glBegin(GL_TRIANGLES);
 		for(auto& a : v) {
-			a = translate * grotate * a;
+			a = KeyBindMatrix * a;
 			glVertex2fv(a.data());
 		}
 		glEnd();

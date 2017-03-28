@@ -31,13 +31,12 @@ static void mcopy(float* p, const Matrix<float>& m) {
 static void mcopy(float* p, float m) {
 	*p = m;
 }
-template <typename T> 
-unsigned int gl_transfer_data(const T& v, GLenum mode = GL_ARRAY_BUFFER)
+template <typename T> unsigned gl_transfer_data(const T& v, unsigned vbo = 0,
+		GLenum mode = GL_ARRAY_BUFFER)//if vbo is not 0, then transfer using it
 {//v should offer operator[]
 	int dim = 1;
 	int sz = v.size();
-	unsigned int vbo;
-	glGenBuffers(1, &vbo);
+	if(!vbo) glGenBuffers(1, &vbo);
 	glBindBuffer(mode, vbo);
 
 	if(std::is_class<typename T::value_type>::value) dim = 3;//if Matrix
@@ -46,3 +45,4 @@ unsigned int gl_transfer_data(const T& v, GLenum mode = GL_ARRAY_BUFFER)
 	glBufferData(mode, sizeof(ar), ar, GL_STATIC_DRAW);
 	return vbo;
 }
+

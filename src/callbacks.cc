@@ -5,26 +5,33 @@
 #include<valarray>
 #include"matrix.h"
 using namespace std;
-Matrix<float> translate{4,4};
-Matrix<float> grotate{4,4};
+Matrix<float> KeyBindMatrix{4,4};
 static Matrix<float> m{4,4};
 bool record = false;
 float camera_x=1, camera_y=1;
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-	if(key == GLFW_KEY_LEFT && action == GLFW_PRESS) translate[4][1]-=0.01;
-	if(key == GLFW_KEY_DOWN && action == GLFW_PRESS) translate[4][2]-=0.01;
-	if(key == GLFW_KEY_RIGHT && action == GLFW_PRESS) translate[4][1]+=0.01;
-	if(key == GLFW_KEY_UP && action == GLFW_PRESS) translate[4][2]+=0.01;
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) 
+{// && action == GLFW_PRESS) 
+	switch(key) {
+	case GLFW_KEY_LEFT:
+		KeyBindMatrix = m.gltranslate(-0.01, 0, 0) * KeyBindMatrix; break;
+	case GLFW_KEY_DOWN:
+		KeyBindMatrix = m.gltranslate(0, -0.01, 0) * KeyBindMatrix; break;
+	case GLFW_KEY_RIGHT:
+		KeyBindMatrix = m.gltranslate(0.01, 0, 0) * KeyBindMatrix; break;
+	case GLFW_KEY_UP:
+		KeyBindMatrix = m.gltranslate(0, 0.01, 0) * KeyBindMatrix; break;
 
-	if(key == GLFW_KEY_W && action == GLFW_PRESS) grotate *= m.glrotateX(0.01);
-	if(key == GLFW_KEY_A && action == GLFW_PRESS) grotate *= m.glrotateY(-0.01);
-	if(key == GLFW_KEY_S && action == GLFW_PRESS) grotate *= m.glrotateX(-0.01);
-	if(key == GLFW_KEY_D && action == GLFW_PRESS) grotate *= m.glrotateY(0.01);
-	if(key == GLFW_KEY_SPACE && action == GLFW_PRESS) grotate.E();
-	if(key == GLFW_KEY_J && action == GLFW_PRESS) camera_x-=0.1;
-	if(key == GLFW_KEY_K && action == GLFW_PRESS) camera_y-=0.1;
-	if(key == GLFW_KEY_L && action == GLFW_PRESS) camera_x+=0.1;
-	if(key == GLFW_KEY_I && action == GLFW_PRESS) camera_y+=0.1;
+	case GLFW_KEY_W: KeyBindMatrix = m.glrotateX(0.01) * KeyBindMatrix; break;
+	case GLFW_KEY_A: KeyBindMatrix = m.glrotateY(-0.01) * KeyBindMatrix; break;
+	case GLFW_KEY_S: KeyBindMatrix = m.glrotateX(-0.01) * KeyBindMatrix; break;
+	case GLFW_KEY_D: KeyBindMatrix = m.glrotateY(0.01) * KeyBindMatrix; break;
+
+	case GLFW_KEY_SPACE: KeyBindMatrix.E(); break;
+	case GLFW_KEY_J: camera_x -= 0.1; break;
+	case GLFW_KEY_K: camera_y -= 0.1; break;
+	case GLFW_KEY_L: camera_x += 0.1; break;
+	case GLFW_KEY_I: camera_y += 0.1; break;
+	}
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
@@ -58,6 +65,8 @@ bool glinit(GLFWwindow* window) {
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 	glClearColor(0, 0, 0, 0); // white background
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
 
 	glewExperimental = true; // Needed for core profile
 	if (glewInit() != GLEW_OK) {
@@ -65,6 +74,7 @@ bool glinit(GLFWwindow* window) {
 		glfwTerminate();
 		return false;
 	}
+	KeyBindMatrix.E();
 	return true;
 }
 

@@ -11,20 +11,17 @@ using namespace std;
 
 const int wt = 640;
 const int ht = 480;
-extern Matrix<float> translate;
-extern Matrix<float> grotate;
+extern Matrix<float> KeyBindMatrix;
 
 void draw(valarray<Matrix<float>>& circle) {
-	circle = translate * grotate * circle;
+	circle = KeyBindMatrix * circle;
 	glBegin(GL_TRIANGLE_FAN);
-	for(int i=0; i<circle.size(); i++) glVertex2fv(circle[i].data());
+	for(auto& a : circle) glVertex2fv(a.data());
 	glEnd();
 }
 
 int main(void)
 {
-	grotate.E();
-	translate.gltranslate(0,0,0);
 	if (!glfwInit()) return -1;
 	GLFWwindow* window = glfwCreateWindow(wt, ht, "Smiley Face", NULL, NULL);
 	if (!glinit(window)) return -1;
@@ -42,19 +39,22 @@ int main(void)
 
 	Matrix<float> m{4,4};
 	m = m.gltranslate(-0.3,0.5,0) * m.glscale(0.7,1.1,1);
-	for(auto& a : leye) a = m * a;//move eye to position, extend vertically
+	leye = m * leye;//move eye to position, extend vertically
 	m = m.gltranslate(0.3,0.5,0) * m.glscale(0.7,1.1,1);
-	for(auto& a : reye) a = m * a;
+	reye = m * reye;
+	ycircle = m.gltranslate(0, 0, 0.1) * ycircle;
+	leye = m.gltranslate(0, 0, 1) * leye;
+	reye = m.gltranslate(0, 0, -1) * reye;
+	mouth = m.gltranslate(0, 0, 0.2) * mouth;
 	glClearColor(1,1,1,1);
-
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window)) {
 		/* Render here */
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//TODO: draw here
-		glColor3f(0,0,0);
+		glColor4f(0,0,0,0.5);
 		draw(bcircle);
 		glColor3f(1,1,0);
 		draw(ycircle);
@@ -65,7 +65,7 @@ int main(void)
 		glLineWidth(30);
 		glBegin(GL_LINE_STRIP);
 		for(auto it = begin(mouth) + 50; it != end(mouth); it++) {
-			*it = translate * grotate * *it;
+			*it = KeyBindMatrix * *it;
 			glVertex2fv(it->data());
 		}
 		glEnd();
