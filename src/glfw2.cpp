@@ -36,39 +36,54 @@ int main(void)
 	auto leye = polygon(100, 0.2);// which to human eyes looks like a circle
 	auto reye = polygon(100, 0.2);
 	auto mouth = polygon(100, 0.7);
-
+	valarray<Matrix<float>> black{Matrix<float>{0,0,0}, 100};
+	valarray<Matrix<float>> yellow{Matrix<float>{1,1,0}, 100};
 	Matrix<float> m{4,4};
 	m = m.gltranslate(-0.3,0.5,0) * m.glscale(0.7,1.1,1);
 	leye = m * leye;//move eye to position, extend vertically
 	m = m.gltranslate(0.3,0.5,0) * m.glscale(0.7,1.1,1);
 	reye = m * reye;
-	ycircle = m.gltranslate(0, 0, 0.1) * ycircle;
-	leye = m.gltranslate(0, 0, 1) * leye;
-	reye = m.gltranslate(0, 0, -1) * reye;
-	mouth = m.gltranslate(0, 0, 0.2) * mouth;
+	ycircle = m.gltranslate(0, 0, 0.05) * ycircle;
+	leye = m.gltranslate(0, 0, 0.1) * leye;
+	reye = m.gltranslate(0, 0, 0.1) * reye;
+	mouth = m.gltranslate(0, 0, 0.1) * mouth;
 	glClearColor(1,1,1,1);
+	valarray<Matrix<float>>* p[5];
+	p[0] = &bcircle;
+	p[1] = &ycircle;
+	p[2] = &leye;
+	p[3] = &reye;
+	p[4] = &mouth;
+	unsigned vbo[7];
+	for(int i=0; i<5; i++) vbo[i] = gl_transfer_data(*p[i]);
+	vbo[5] = gl_transfer_data(black);
+	vbo[6] = gl_transfer_data(yellow);
 
+	glLineWidth(20);
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window)) {
 		/* Render here */
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//TODO: draw here
-		glColor4f(0,0,0,0.5);
-		draw(bcircle);
-		glColor3f(1,1,0);
-		draw(ycircle);
-		glColor3f(0,0,0);
-		draw(leye);
-		draw(reye);
-		
-		glLineWidth(30);
-		glBegin(GL_LINE_STRIP);
-		for(auto it = begin(mouth) + 50; it != end(mouth); it++) {
-			*it = KeyBindMatrix * *it;
-			glVertex2fv(it->data());
+		for(int i=0; i<5; i++) *p[i] = KeyBindMatrix * *p[i];
+		for(int i=0; i<5; i++) gl_transfer_data(*p[i], vbo[i]);
+		for(int i=0; i<5; i++) {
+			if(i == 1) glBindBuffer(GL_ARRAY_BUFFER, vbo[6]);
+			else glBindBuffer(GL_ARRAY_BUFFER, vbo[5]);
+			glEnableClientState(GL_COLOR_ARRAY);
+			glColorPointer(3, GL_FLOAT, 0, nullptr);
+
+			glBindBuffer(GL_ARRAY_BUFFER, vbo[i]);
+			glEnableClientState(GL_VERTEX_ARRAY);
+			glVertexPointer(3, GL_FLOAT, 0, nullptr);//3 float is 1 vertex stride 0, 
+
+			if(i == 4) glDrawArrays(GL_LINE_STRIP, 50, 50);
+			else glDrawArrays(GL_TRIANGLE_FAN, 0, 100);//mode, first, count
+			
+			glDisableClientState(GL_COLOR_ARRAY);
+			glDisableClientState(GL_VERTEX_ARRAY);
 		}
-		glEnd();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();//glfwWaitEvents();
