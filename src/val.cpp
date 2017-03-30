@@ -11,7 +11,7 @@ int main()
 	if (!glfwInit()) return -1;
 	GLFWwindow* window = glfwCreateWindow(640, 480, "Color Cube", NULL, NULL);
 	if (!glinit(window)) return -1;
-	glortho(3);
+	glortho(10);
 
 	auto pl = polygon(4);
 	vector<Matrix<float>> pl2;
@@ -33,7 +33,15 @@ int main()
 	auto fv = gl_transfer_data(v);
 	Matrix<float> con{4,4};
 	const float r = 0.7;
-	con = con.gltranslate(0,0,r) * con.glrotateY(0.1) * con.gltranslate(0,0,-r);
+	
+	vector<Matrix<float>> v2{v};
+	con = con.gltranslate(0,3,0) * con.glscale(1,3,1) * con.glrotateZ(M_PI/4);
+	for(auto& a : v) a = con * a;
+	con = con.gltranslate(0,8,0) * con.glrotateZ(0.1);
+	auto fv2 = gl_transfer_data(v2);
+//	for(auto& a : v2) a = con * a;
+//	con.E();
+//	con = con.glrotateX(0.1); 
 	
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -46,7 +54,20 @@ int main()
 		glBindBuffer(GL_ARRAY_BUFFER, fv);
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glVertexPointer(3, GL_FLOAT, 0, nullptr);//3 float is 1 vertex stride 0, 
+		glDrawArrays(GL_QUADS, 0, 24);//mode, first, count
 		
+		glDisableClientState(GL_COLOR_ARRAY);
+		glDisableClientState(GL_VERTEX_ARRAY);
+
+		for(auto& a : v2) a = KeyBindMatrix * con * a;
+		gl_transfer_data(v2, fv2);
+		glBindBuffer(GL_ARRAY_BUFFER, fc);
+		glEnableClientState(GL_COLOR_ARRAY);
+		glColorPointer(3, GL_FLOAT, 0, nullptr);
+
+		glBindBuffer(GL_ARRAY_BUFFER, fv2);
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(3, GL_FLOAT, 0, nullptr);//3 float is 1 vertex stride 0, 
 		glDrawArrays(GL_QUADS, 0, 24);//mode, first, count
 
 		glDisableClientState(GL_COLOR_ARRAY);
