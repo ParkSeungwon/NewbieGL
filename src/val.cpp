@@ -31,21 +31,23 @@ int main()
 
 	auto fc = gl_transfer_data(color);
 	auto fv = gl_transfer_data(v);
-	Matrix<float> con{4,4};
+	Matrix<float> con{4,4}, m{4,4};
 	const float r = 0.7;
 	
-	vector<Matrix<float>> v2{v};
+	vector<Matrix<float>> v2{v}, v3{v};
 	con = con.gltranslate(0,3,0) * con.glscale(1,3,1) * con.glrotateZ(M_PI/4);
 	for(auto& a : v) a = con * a;
-	con = con.gltranslate(0,8,0) * con.glrotateZ(0.1);
+	con = con.gltranslate(0,8,0) * con.glrotateX(0.1);
 	auto fv2 = gl_transfer_data(v2);
 //	for(auto& a : v2) a = con * a;
 //	con.E();
 //	con = con.glrotateX(0.1); 
-	
+	float k = 0.1;
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		for(auto& a : v) a = KeyBindMatrix * a;
+
+		//공전하는 긴 막대
+		for(auto& a : v) a = m.glrotateX(0.1) * a;
 		gl_transfer_data(v, fv);
 		glBindBuffer(GL_ARRAY_BUFFER, fc);
 		glEnableClientState(GL_COLOR_ARRAY);
@@ -59,8 +61,13 @@ int main()
 		glDisableClientState(GL_COLOR_ARRAY);
 		glDisableClientState(GL_VERTEX_ARRAY);
 
-		for(auto& a : v2) a = KeyBindMatrix * con * a;
-		gl_transfer_data(v2, fv2);
+		//스스로 자전하는 큐브
+		int i=0;
+		for(auto& a : v2) a = m.glrotateZ(0.1) * a;
+		v3 = v2;//자체적인 회전을 위한 변환
+		for(auto& a : v3) a = m.glrotateX(k) * m.gltranslate(0,8,0) * a;//이동
+		k+=0.1;//회전각도를 증가
+		gl_transfer_data(v3, fv2);
 		glBindBuffer(GL_ARRAY_BUFFER, fc);
 		glEnableClientState(GL_COLOR_ARRAY);
 		glColorPointer(3, GL_FLOAT, 0, nullptr);
