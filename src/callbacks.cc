@@ -85,6 +85,12 @@ bool glinit(GLFWwindow* window)
 		return false;
 	}
 	KeyBindMatrix.E();
+	cout << "shading language version : " << 
+			glGetString(GL_SHADING_LANGUAGE_VERSION) << endl;
+	cout << glGetString( GL_VENDOR ) << endl;
+	cout << glGetString( GL_RENDERER ) << endl;
+	cout << glGetString( GL_VERSION   ) << endl;
+	cout << glGetString ( GL_SHADING_LANGUAGE_VERSION ) << endl;
 	return true;
 }
 
@@ -120,5 +126,58 @@ void bindNdraw(unsigned color, unsigned vertex, GLenum mode, int first, int coun
 
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+unsigned make_shader_program(const char* v_shader, 
+		const char* f_shader, const char* a_pos)
+{
+	const char** vertex_shader = &v_shader;
+	const char** fragment_shader = &f_shader;
+	unsigned vs = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vs, 1, vertex_shader, NULL);
+	glCompileShader(vs);
+	int status;
+	glGetShaderiv(vs, GL_COMPILE_STATUS, &status);
+	if(status == GL_FALSE) cerr << "compile error in vertex shader" << endl;
+	unsigned fs = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fs, 1, fragment_shader, NULL);
+	glCompileShader(fs);
+	glGetShaderiv(fs, GL_COMPILE_STATUS, &status);
+	if(status == GL_FALSE) cerr << "compile error in fragment shader" << endl;
+
+	unsigned shader_program = glCreateProgram();
+	glAttachShader(shader_program, vs);
+	glAttachShader(shader_program, fs);
+	glBindAttribLocation(shader_program, 0, a_pos);
+	glLinkProgram(shader_program);
+
+	//linking error message
+	int linked = 0;
+	glGetProgramiv(shader_program, GL_LINK_STATUS, &linked);
+	if(!linked)  {
+		int infolen = 0;
+		glGetProgramiv(shader_program, GL_INFO_LOG_LENGTH, &infolen);
+		if(infolen > 1) {
+			char* infoLog = (char*)malloc(sizeof(char) * infolen);
+			glGetProgramInfoLog(shader_program, infolen, NULL, infoLog);
+			cout << "error linking program\n" << infoLog << endl;
+			free(infoLog);
+		}
+		glDeleteProgram(shader_program);
+		return 0;
+	}
+	return shader_program;
+}
+
+void replace(char* str, string anchor, const Matrix<float>& mat)
+{
+	auto m = mat.transpose();
+	float* p = m.data();
+	stringstream ss;
+	for(int i=0; i < m.get_width() * m.get_height() -1; i++) ss << *p++ << ',';
+	ss << *p;
+	string s{str};
+	s.replace(s.find(anchor), anchor.size(), ss.str());
+	strcpy(str, s.data());
 }
 

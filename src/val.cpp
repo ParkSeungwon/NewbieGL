@@ -5,30 +5,51 @@
 using namespace std;
 extern Matrix<float> KeyBindMatrix;
 
+
+static char vertex_shader[1000] = R"(
+#version 130
+uniform float Scale;
+uniform mat4 glModelViewMarix;
+mat4 m1 = mat4(anchor1);
+mat4 m2 = mat4(1.0);
+
+in vec3 a_pos;
+in vec3 a_color;
+
+out vec4 v_color;
+
+void main() {
+	gl_Position = m1 * m2 * vec4(a_pos * Scale, 1.0);
+	v_color = vec4(a_pos, 1);
+}
+)";
+static char fragment_shader[1000] = R"(
+#version 130
+uniform float Scale;
+out vec4 f_color;
+in vec4 v_color;
+void main() {
+//	f_color = vec4(1.0, 0.0, 0.0, 1.0);
+	f_color = v_color * Scale;
+}
+)";
+
 int main()
 {
 	if (!glfwInit()) return -1;
+
+//	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,3);
+//	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,3);
+//	glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);
+//	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
+	
 	GLFWwindow* window = glfwCreateWindow(640, 480, "Color Cube", NULL, NULL);
 	if (!glinit(window)) return -1;
-	glortho(10);
+	glortho(10);	
 
-	const char* vertex_shader = R"(
-#version 330
-in vec3 a_pos
-void main() {
-	gl_Position = vec4(a_pos, 1.0);
-}
-)";
-	const char* fragment_shader = R"(
-#version 330
-out vec4 f_color;
-void main() {
-	f_color = {1.0, 0.0, 0.0, 1.0};
-}
-)";
-
-	
 	vector<Matrix<float>> colors, vertexes, vtx;
+	Matrix<float> mm{4,4};
+	replace(vertex_shader, "anchor1", mm.glrotate(0,0,10)* mm.glscale(0.1,0.1,0.1));
 
 	auto pl = polygon(4);
 	vtx.insert(vtx.end(), begin(pl), end(pl));
@@ -42,8 +63,8 @@ void main() {
 	Matrix<float> clr[] = {{1,0,0}, {0,1,0}, {0,0,1}, {1,1,0}, {1,0,1}, {0,1,1}};
 	for(int i=0; i<6; i++) for(int j=0; j<4; j++) colors.push_back(clr[i]);
 
-	unsigned element[24] = {0,1,2,3,4,5,6,7,8,9,10,
-		11,12,13,14,15,16,17,18,19,20,21,22,23};
+	unsigned element[24];
+	for(int i=0; i<24; i++) element[i] = i;
 
 	unsigned fc = gl_transfer_data(colors);
 	unsigned fv = gl_transfer_data(vertexes);
@@ -53,23 +74,35 @@ void main() {
 	valarray<Matrix<float>> v;
 	float k = 0;
 
-	unsigned vs = glCreateShader(GL_VERTEX_SHADER);
-	unsigned fs = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(vs, 1, &vertex_shader, NULL);
-	glShaderSource(fs, 1, &fragment_shader, NULL);
-	glCompileShader(vs);
-	glCompileShader(fs);
+	gluLookAt(1.2, 0.8, 1.2, 0.5, 0.5, 0.5, 0,1,0);
 
-	unsigned shader_program = glCreateProgram();
-	glAttachShader(shader_program, vs);
-	glAttachShader(shader_program, fs);
-	glBindAttribLocation(shader_program, 0, "a_pos");
-	glLinkProgram(shader_program);
+	///compile shaders
+	cout << vertex_shader << endl;
+	unsigned shader_program = 
+		make_shader_program(vertex_shader, fragment_shader, "a_pos");
+	if(!shader_program) return 0;
 
-	cout << glGetString(GL_SHADING_LANGUAGE_VERSION) << endl;
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		glUseProgram(shader_program);
+
+		int loc = glGetUniformLocation(shader_program, "Scale");
+		if(loc != -1) {
+			static float scale = 0.0f;
+			scale += 0.1f;
+			glUniform1f(loc, sin(scale));
+		}
+
+		glBindBuffer(GL_ARRAY_BUFFER, fv);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+		//attribute 0, xyx3, float, normalized?, stride, offset
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, fe);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glDrawElements(GL_QUADS, 24, GL_UNSIGNED_INT, 0);
+		/*
 		//공전하는 긴 막대
 		v = KeyBindMatrix * m.glrotateX(k) * m.gltranslate(0,3,0) * 
 			m.glscale(1,3,1) * cube;
@@ -81,7 +114,8 @@ void main() {
 		gl_transfer_data(v, fv);
 		bindNdraw(fc, fv, GL_QUADS, 0, 24, fe);
 		k += 0.1;//회전각도를 증가
-		
+		*/
+
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 		this_thread::sleep_for(chrono::milliseconds(50));
