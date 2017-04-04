@@ -101,7 +101,8 @@ std::valarray<Matrix<float>> polygon(int points_count, float r)
 	return pts;
 }
 
-void bindNdraw(unsigned color, unsigned vertex, GLenum mode, int first, int count)
+void bindNdraw(unsigned color, unsigned vertex, GLenum mode, int first, int count,
+		unsigned indices)
 {
 	glBindBuffer(GL_ARRAY_BUFFER, color);
 	glEnableClientState(GL_COLOR_ARRAY);
@@ -110,7 +111,12 @@ void bindNdraw(unsigned color, unsigned vertex, GLenum mode, int first, int coun
 	glBindBuffer(GL_ARRAY_BUFFER, vertex);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, 0, nullptr);//3 float is 1 vertex stride 0, 
-	glDrawArrays(mode, first, count);//mode, first, count
+
+	if(indices) {
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices);
+		glPolygonMode(GL_FRONT, GL_FILL);
+		glDrawElements(mode, count, GL_UNSIGNED_INT, 0);
+	} else glDrawArrays(mode, first, count);//mode, first, count
 
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
