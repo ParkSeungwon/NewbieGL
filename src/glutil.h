@@ -9,6 +9,7 @@
 void glortho(float r);
 void glcolor(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 bool glinit(GLFWwindow* window);
+void bindNdraw(unsigned color, unsigned vertex, GLenum mode, int first, int count);
 std::valarray<Matrix<float>> polygon(int points_count=100, float r=1);
 
 template <typename T>
@@ -45,4 +46,19 @@ template <typename T> unsigned gl_transfer_data(const T& v, unsigned vbo = 0,
 	glBufferData(mode, sizeof(ar), ar, GL_STATIC_DRAW);
 	return vbo;
 }
+/*
+class GLObject
+{
+public:
+	template<typename C, typename V> GLObject(C c, V v) {
+		color_vbo = gl_transfer_data(c);
+		vertex_vbo = gl_transfer_data(v);
+	}
 
+	
+
+
+protected:
+	unsigned color_vbo = 0, vertex_vbo = 0;
+	std::deque<Matrix<float>> matrixes;
+*/

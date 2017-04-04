@@ -4,36 +4,45 @@
 #include<vector>
 #include<valarray>
 #include"matrix.h"
+#define STEP 0.05
 using namespace std;
 Matrix<float> KeyBindMatrix{4,4};
+
 static Matrix<float> m{4,4};
 bool record = false;
 float camera_x=1, camera_y=1;
+
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) 
 {// && action == GLFW_PRESS) 
 	switch(key) {
 	case GLFW_KEY_LEFT:
-		KeyBindMatrix = m.gltranslate(-0.01, 0, 0) * KeyBindMatrix; break;
+		KeyBindMatrix = m.gltranslate(-STEP, 0, 0) * KeyBindMatrix; break;
 	case GLFW_KEY_DOWN:
-		KeyBindMatrix = m.gltranslate(0, -0.01, 0) * KeyBindMatrix; break;
+		KeyBindMatrix = m.gltranslate(0, -STEP, 0) * KeyBindMatrix; break;
 	case GLFW_KEY_RIGHT:
-		KeyBindMatrix = m.gltranslate(0.01, 0, 0) * KeyBindMatrix; break;
+		KeyBindMatrix = m.gltranslate(STEP, 0, 0) * KeyBindMatrix; break;
 	case GLFW_KEY_UP:
-		KeyBindMatrix = m.gltranslate(0, 0.01, 0) * KeyBindMatrix; break;
+		KeyBindMatrix = m.gltranslate(0, STEP, 0) * KeyBindMatrix; break;
+	case GLFW_KEY_Z:
+		KeyBindMatrix = m.gltranslate(0, 0, STEP) * KeyBindMatrix; break;
+	case GLFW_KEY_X:
+		KeyBindMatrix = m.gltranslate(0, 0, -STEP) * KeyBindMatrix; break;
 
-	case GLFW_KEY_W: KeyBindMatrix = m.glrotateX(0.01) * KeyBindMatrix; break;
-	case GLFW_KEY_A: KeyBindMatrix = m.glrotateY(-0.01) * KeyBindMatrix; break;
-	case GLFW_KEY_S: KeyBindMatrix = m.glrotateX(-0.01) * KeyBindMatrix; break;
-	case GLFW_KEY_D: KeyBindMatrix = m.glrotateY(0.01) * KeyBindMatrix; break;
+	case GLFW_KEY_W: KeyBindMatrix = m.glrotateX(STEP) * KeyBindMatrix; break;
+	case GLFW_KEY_A: KeyBindMatrix = m.glrotateY(-STEP) * KeyBindMatrix; break;
+	case GLFW_KEY_S: KeyBindMatrix = m.glrotateX(-STEP) * KeyBindMatrix; break;
+	case GLFW_KEY_D: KeyBindMatrix = m.glrotateY(STEP) * KeyBindMatrix; break;
+	case GLFW_KEY_Q: KeyBindMatrix = m.glrotateZ(-STEP) * KeyBindMatrix; break;
+	case GLFW_KEY_E: KeyBindMatrix = m.glrotateZ(STEP) * KeyBindMatrix; break;
 
 	case GLFW_KEY_SPACE: KeyBindMatrix.E(); break;
-	case GLFW_KEY_J: camera_x -= 0.1; break;
-	case GLFW_KEY_K: camera_y -= 0.1; break;
-	case GLFW_KEY_L: camera_x += 0.1; break;
-	case GLFW_KEY_I: camera_y += 0.1; break;
+
+	case GLFW_KEY_J: camera_x -= STEP; break;
+	case GLFW_KEY_K: camera_y -= STEP; break;
+	case GLFW_KEY_L: camera_x += STEP; break;
+	case GLFW_KEY_I: camera_y += STEP; break;
 	}
 }
-
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
 	double x, y;
@@ -42,7 +51,6 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 		cout << '(' << x / 4 << ',' << y / 4 << ')' << flush;
 	}
 }
-
 void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos) {
 	if(record) cout << xpos << ' ' << ypos << ' ' << flush;
 }
@@ -53,7 +61,9 @@ void glortho(float r) {
 void glcolor(unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
 	glColor4f(float(r)/256, float(g)/256, float(b)/256, float(a)/256);
 }
-bool glinit(GLFWwindow* window) {
+
+bool glinit(GLFWwindow* window) 
+{
 	if(!window) {
 		glfwTerminate();
 		return false;
@@ -64,13 +74,13 @@ bool glinit(GLFWwindow* window) {
 	glfwSetCursorPosCallback(window, cursor_pos_callback);
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
-	glClearColor(0, 0, 0, 0); // white background
+	glClearColor(0, 0, 0, 0); // black background
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
 	glewExperimental = true; // Needed for core profile
 	if (glewInit() != GLEW_OK) {
-		fprintf(stderr, "Failed to initialize GLEW\n");
+		cerr << "Failed to initialize GLEW" << endl;
 		glfwTerminate();
 		return false;
 	}
@@ -89,5 +99,20 @@ std::valarray<Matrix<float>> polygon(int points_count, float r)
 		p = rz * p;
 	}
 	return pts;
+}
+
+void bindNdraw(unsigned color, unsigned vertex, GLenum mode, int first, int count)
+{
+	glBindBuffer(GL_ARRAY_BUFFER, color);
+	glEnableClientState(GL_COLOR_ARRAY);
+	glColorPointer(3, GL_FLOAT, 0, nullptr);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vertex);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(3, GL_FLOAT, 0, nullptr);//3 float is 1 vertex stride 0, 
+	glDrawArrays(mode, first, count);//mode, first, count
+
+	glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
 }
 

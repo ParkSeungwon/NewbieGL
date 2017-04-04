@@ -23,7 +23,6 @@ int main()
 			v.push_back(a);
 		}
 	}	
-	glClearColor(0,0,0,0);
 	glColor3f(1,1,0);
 
 	while (!glfwWindowShouldClose(window)) {
