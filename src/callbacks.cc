@@ -3,6 +3,7 @@
 #include<iostream>
 #include<vector>
 #include<valarray>
+#include<fstream>
 #include"matrix.h"
 #define STEP 0.05
 using namespace std;
@@ -90,7 +91,6 @@ bool glinit(GLFWwindow* window)
 	cout << glGetString( GL_VENDOR ) << endl;
 	cout << glGetString( GL_RENDERER ) << endl;
 	cout << glGetString( GL_VERSION   ) << endl;
-	cout << glGetString ( GL_SHADING_LANGUAGE_VERSION ) << endl;
 	return true;
 }
 
@@ -128,17 +128,20 @@ void bindNdraw(unsigned color, unsigned vertex, GLenum mode, int first, int coun
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-unsigned make_shader_program(const char* v_shader, 
-		const char* f_shader, const char* a_pos)
+unsigned make_shader_program(string v_shader, string f_shader, const char* a_pos)
 {
-	const char** vertex_shader = &v_shader;
-	const char** fragment_shader = &f_shader;
+	auto* vp= v_shader.data();
+	auto* fp = f_shader.data();
+	const char** vertex_shader = &vp;
+	const char** fragment_shader = &fp;
+
 	unsigned vs = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vs, 1, vertex_shader, NULL);
 	glCompileShader(vs);
 	int status;
 	glGetShaderiv(vs, GL_COMPILE_STATUS, &status);
 	if(status == GL_FALSE) cerr << "compile error in vertex shader" << endl;
+	
 	unsigned fs = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fs, 1, fragment_shader, NULL);
 	glCompileShader(fs);
@@ -181,3 +184,20 @@ void replace(char* str, string anchor, const Matrix<float>& mat)
 	strcpy(str, s.data());
 }
 
+void transfer_matrix(unsigned shader_program, const Matrix<float>& m, 
+		const char* var_name)
+{
+	int fd = glGetUniformLocation(shader_program, "KeyBindMatrix");
+	if(fd != -1) {
+		auto a = m.transpose();
+		glUniformMatrix4fv(fd, 1, GL_FALSE, a.data());
+	}
+}
+
+string read_file(string file)
+{
+	string r, s;
+	ifstream f(file);
+	while(getline(f, s)) r += s + '\n';
+	return r;
+}
