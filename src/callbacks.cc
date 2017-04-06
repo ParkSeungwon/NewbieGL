@@ -137,7 +137,7 @@ string read_file(string file)
 	return r;
 }
 
-unsigned make_shader_program(const char* vsh, const char* fsh, const char* a_pos)
+unsigned make_shader_program(const char* vsh, const char* fsh, const char* a_pos, const char* a_color)
 {
 	string v_shader = read_file(vsh);
 	string f_shader = read_file(fsh);
@@ -163,6 +163,7 @@ unsigned make_shader_program(const char* vsh, const char* fsh, const char* a_pos
 	glAttachShader(shader_program, vs);
 	glAttachShader(shader_program, fs);
 	glBindAttribLocation(shader_program, 0, a_pos);
+	glBindAttribLocation(shader_program, 0, a_color);
 	glLinkProgram(shader_program);
 
 	//linking error message
