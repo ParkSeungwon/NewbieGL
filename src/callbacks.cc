@@ -128,9 +128,20 @@ void bindNdraw(unsigned color, unsigned vertex, GLenum mode, int first, int coun
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-unsigned make_shader_program(string v_shader, string f_shader, const char* a_pos)
+string read_file(string file)
 {
-	auto* vp= v_shader.data();
+	string r;
+	char c;
+	ifstream f(file);
+	while(f >> noskipws >> c) r += c;
+	return r;
+}
+
+unsigned make_shader_program(const char* vsh, const char* fsh, const char* a_pos)
+{
+	string v_shader = read_file(vsh);
+	string f_shader = read_file(fsh);
+	auto* vp = v_shader.data();
 	auto* fp = f_shader.data();
 	const char** vertex_shader = &vp;
 	const char** fragment_shader = &fp;
@@ -187,17 +198,10 @@ void replace(char* str, string anchor, const Matrix<float>& mat)
 void transfer_matrix(unsigned shader_program, const Matrix<float>& m, 
 		const char* var_name)
 {
-	int fd = glGetUniformLocation(shader_program, "KeyBindMatrix");
+	int fd = glGetUniformLocation(shader_program, var_name);
 	if(fd != -1) {
 		auto a = m.transpose();
 		glUniformMatrix4fv(fd, 1, GL_FALSE, a.data());
 	}
 }
 
-string read_file(string file)
-{
-	string r, s;
-	ifstream f(file);
-	while(getline(f, s)) r += s + '\n';
-	return r;
-}
