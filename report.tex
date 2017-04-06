@@ -42,21 +42,24 @@
 \noindent
 \lstset{language=C++, columns=flexible, tabsize=4, frame=shadowbox, showstringspaces=false, breaklines=true, upquote=true, basicstyle=\normalsize}
 
-\section{Geometric Transformation}
-Programming Practice\\
-(Write down what you did and how you made the result. Otherwise I don’t know what you did.)\\
-1. Change the size of the box using scale.(3pt)
+\section{Shader Programming}
+1. Send color array to your vertex shader to draw a color box as you did last week. (5pt)
 
-2. Translate the position of the box.(3pt)
-
-3. Revolve the box around the origin.(2pt)
-
-4. Add the box that is revolved along previous box. (1pt) 
-
-5. The added box revolves and rotates like earth. (1pt)
+2. Use uniform matrix 4x4 to rotate your box in vertex shader.(5pt)
 
 \includegraphics[width=\textwidth]{1.png}
-\lstinputlisting{src/val.cpp}	
-소스 코드에 주석을 참조바랍니다.
+
+\lstinputlisting[caption=vertex shader]{src/vertex_shader.glsl}	
+\lstinputlisting[caption=fragment shader]{src/fragment_shader.glsl}	
+\lstinputlisting[caption=메인함수]{src/val.cpp}	
+
+shader 프로그램을 만들고 변수를 보내는 make shader program 이란 함수를 만들었다.\\
+또, 매트릭스 데이터를 보내고 바인드하는 transfer matrix 함수도 만들었다.\\
+내가 만든 매트릭스는 자료구조가 약간 달라 transpose 한 후에 데이터를 보내야 되었다.\\
+밑의 callbacks.cc의 하단에 있으니 참조바랍니다.\\
+
+프로그램은 이전에 만들어두었던 큐브를 그대로 사용하여, 데이터를 세이더에 보내고, 바인드하는 작업을 한다.\\
+세이더에서 입력받을 변수를 선언하고, vbo를 배열로 일렬로 만든 후, 바인드하면 되었다.
+\lstinputlisting[caption=callbacks.cc]{src/callbacks.cc}
 	
 \end{document}

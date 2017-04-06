@@ -163,7 +163,7 @@ unsigned make_shader_program(const char* vsh, const char* fsh, const char* a_pos
 	glAttachShader(shader_program, vs);
 	glAttachShader(shader_program, fs);
 	glBindAttribLocation(shader_program, 0, a_pos);
-	glBindAttribLocation(shader_program, 0, a_color);
+	glBindAttribLocation(shader_program, 1, a_color);
 	glLinkProgram(shader_program);
 
 	//linking error message
