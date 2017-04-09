@@ -184,6 +184,21 @@ unsigned make_shader_program(const char* vsh, const char* fsh, const char* a_pos
 	return shader_program;
 }
 
+void gl_bind_data(unsigned fv, unsigned fc, unsigned fe)
+{
+	unsigned vbo[3] = {fv, fc, fe};
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	//attribute 0, xyz3, float, normalized?, stride, offset
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[2]);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+}
+
 void replace(char* str, string anchor, const Matrix<float>& mat)
 {
 	auto m = mat.transpose();

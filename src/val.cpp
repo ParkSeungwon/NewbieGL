@@ -31,10 +31,9 @@ int main()
 	unsigned element[24];
 	for(int i=0; i<24; i++) element[i] = i;
 
-	unsigned vbo[3];
-	vbo[1] = gl_transfer_data(colors);
-	vbo[0] = gl_transfer_data(vertexes);
-	vbo[2] = gl_transfer_data(element, element + 24, GL_ELEMENT_ARRAY_BUFFER);
+	unsigned fc = gl_transfer_data(colors);
+	unsigned fv = gl_transfer_data(vertexes);
+	unsigned fe = gl_transfer_data(element, element + 24, GL_ELEMENT_ARRAY_BUFFER);
 	
 	const valarray<Matrix<float>> cube{vertexes.data(), vertexes.size()};
 	valarray<Matrix<float>> v;
@@ -53,16 +52,7 @@ int main()
 		transfer_matrix(shader_program, tm, "KeyBindMatrix");
 		k += 0.1;
 
-		glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-		glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-		//attribute 0, xyz3, float, normalized?, stride, offset
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[2]);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		gl_bind_data(fv, fc, fe);
 		glDrawElements(GL_QUADS, 24, GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(window);
