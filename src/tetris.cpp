@@ -18,12 +18,11 @@ int main()
 
 	unsigned fv = gl_transfer_data(tetris.vertexes);
 	unsigned fc = gl_transfer_data(tetris.colors);
-	vector<unsigned> element;
-	for(int j=0,k=1; j<30; j++) for(int i=0; i<15; i++) {
-		auto array = tetris.get_cube_element(i, j, k++ % 6);
-		for(auto a : array) element.push_back(a);
-	}
-	unsigned fe = gl_transfer_index(element);
+	tetris.board[3][4] = 2;
+	tetris.board[4][4] = 5;
+	tetris.board[3][6] = 0;
+	tetris.board[1][9] = 1;
+	unsigned fe = gl_transfer_index(tetris.indices());
 	
 	Matrix<float> m{4,4};
 	///compile shaders
@@ -40,7 +39,7 @@ int main()
 		transfer_matrix(shader_program, tm, "KeyBindMatrix");
 
 		gl_bind_data(fv, fc, fe);
-		glDrawElements(GL_QUADS, element.size(), GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_QUADS, tetris.index_size(), GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

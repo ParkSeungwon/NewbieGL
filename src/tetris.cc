@@ -3,7 +3,7 @@
 #include"tetris.h"
 using namespace std;
 
-Tetris::Tetris(int w, int h) : m0{w+1, h+1}, m1{w+1, h+1}
+Tetris::Tetris(int w, int h) : m0{w+1, h+1}, m1{w+1, h+1}, board{w, h}
 {
 	width = w; height =h;
 	for(int i=0; i<=w; i++) for(int j=0; j<=h; j++) 
@@ -16,6 +16,7 @@ Tetris::Tetris(int w, int h) : m0{w+1, h+1}, m1{w+1, h+1}
 	}
 	for(int k=0; k<6; k++) for(int i=0; i<(w+1)*(h+1)*2; i++) 
 		colors.push_back(color[k]);
+	board = 6;
 }
 
 array<unsigned, 24> Tetris::get_cube_element(int x, int y, int c)
@@ -33,5 +34,20 @@ array<unsigned, 24> Tetris::get_cube_element(int x, int y, int c)
 	return r;
 }
 
-
+const vector<unsigned>& Tetris::indices() 
+{
+	indices_.clear();
+	for(int j=0; j<height; j++) for(int i=0; i<width; i++) {
+		if(board[i+1][j+1] != 6) {
+			auto array = get_cube_element(i, j, board[i+1][j+1]);
+			for(auto a : array) indices_.push_back(a);
+		}
+	}
+	return indices_;
+}
+	
+unsigned Tetris::index_size() 
+{
+	return indices_.size();
+}
 
