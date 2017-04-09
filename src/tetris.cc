@@ -26,7 +26,7 @@ array<unsigned, 24> Tetris::get_cube_element(int x, int y, int c)
 	unsigned cube[8];
 	for(int i=0; i<4; i++) cube[i] = offset + i;
 	for(int i=4; i<8; i++) cube[i] = cube[i-4] + 2 * (height + 1);
-	unsigned idx[24] = {0,1,2,3, 4,5,6,7, 0,1,4,5, 1,2,5,6, 2,3,6,7, 0,3,4,7};
+	unsigned idx[24] = {0,1,3,2, 4,5,7,6, 0,1,5,4, 1,3,7,5, 3,2,6,7, 0,2,6,4};
 	array<unsigned, 24> r;
 	int k = 0;
 	for(auto a : idx) r[k++] = cube[a];

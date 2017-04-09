@@ -15,8 +15,8 @@ public:
 		arr = new T[h * w];
 		for(int i=0; i<w * h; i++) arr[i] = 0;
 	}
-	Matrix() : Matrix(1, 4) {}
-	Matrix<T>& operator=(int n) {
+	
+	Matrix<T>& operator=(T n) {
 		for(int i=0; i<width*height; i++) arr[i] = n;
 		return *this;
 	}
@@ -24,6 +24,8 @@ public:
 	Matrix(T x, T y, T z, T w = 1) : Matrix{1,4} {
 		arr[0] = x; arr[1] = y; arr[2] = z; arr[3] = w;
 	}
+
+	Matrix() : Matrix(0,0,0) {}
 
 	Matrix(std::initializer_list<std::initializer_list<T>> li)
 		: Matrix<T>{static_cast<unsigned short>(li.begin()->size()), 
