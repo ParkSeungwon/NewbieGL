@@ -5,7 +5,7 @@ class Tetris
 public:
 	Tetris(int w, int h);
 	std::vector<Matrix<float>> vertexes, colors;
-	const std::vector<unsigned>& indices();
+	const std::vector<unsigned>& indices();//look at board->construct indices
 	unsigned index_size();
 	Matrix<unsigned> board;
 
@@ -18,5 +18,4 @@ private:
 	std::vector<unsigned> indices_;
 	std::array<unsigned, 24> get_cube_element(int x, int y, int c);
 };
-
 
