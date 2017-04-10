@@ -21,5 +21,6 @@ public:
 	int x, y;
 	int width, height;
 	bool overlap(int x, int y, const Block& block);
+	void game_over();
 };
 

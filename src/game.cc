@@ -103,8 +103,8 @@ Game::Game(int w, int h) : board{w, h}
 {
 	width = w;
 	height = h;
-	x = w / 2 - 2; 
-	y = h + 1;
+	x = w / 2 - 1; 
+	y = 1;
 	board = ' ';
 	put_block();
 }
@@ -130,7 +130,6 @@ void Game::left()
 	} else {
 		if(block.left()) if(overlap(x, y, block)) block.right();
 	}
-	cout << x << ' ' << y << block.block;
 	put_block();
 }
 
@@ -148,13 +147,15 @@ void Game::right()
 void Game::down()
 {
 	remove_block();
-	if(y > 4) {
-		if(!overlap(x, y-1, block)) y--;
+	if(y < height - 3) {
+		if(!overlap(x, y+1, block)) y++;
 	} else {
 		if(!block.down() || overlap(x, y+1, block)) {//concrete old, gen new block
 			put_block();
-			x = width / 2 - 2; y = height-1;
-			Block temp; block = temp;
+			x = width / 2 - 1; y = 1;
+			Block temp; 
+			if(overlap(x, y, temp)) game_over();
+			else block = temp;
 		} 
 	} 
 	put_block();
@@ -176,4 +177,7 @@ bool Game::overlap(int x, int y, const Block& block)
 	return false;
 }
 
-
+void Game::game_over()
+{
+	cout << "game over" << endl;
+}

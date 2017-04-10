@@ -11,5 +11,23 @@ int main()
 	cout << g.board;
 	g.left();
 	cout << g.board;
+	g.left();
+	cout << g.board;
+	g.down();
+	cout << g.board;
+	g.down();
+	cout << g.board;
+	g.down();
+	cout << g.board;
+	g.down();
+	cout << g.board;
+	g.down();
+	cout << g.board;
+	g.down();
+	cout << g.board;
+	g.down();
+	cout << g.board;
+	g.down();
+	cout << g.board;
 }
 
