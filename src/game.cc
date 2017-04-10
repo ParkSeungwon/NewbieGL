@@ -149,6 +149,13 @@ void Game::down()
 	remove_block();
 	if(y < height - 3) {
 		if(!overlap(x, y+1, block)) y++;
+		else {
+			put_block();
+			x = width / 2 - 1; y = 1;
+			Block temp; 
+			if(overlap(x, y, temp)) game_over();
+			else block = temp;
+		}
 	} else {
 		if(!block.down() || overlap(x, y+1, block)) {//concrete old, gen new block
 			put_block();
@@ -187,12 +194,12 @@ Matrix<unsigned> Game::change()
 	Matrix<unsigned> m{width, height};
 	for(int i=0; i<width; i++) for(int j=0; j<height; j++) {
 		switch(board[i+1][j+1]) {
-			case 'r': m[i+i][height-j] = 0; break;
-			case 'g': m[i+i][height-j] = 1; break;
-			case 'b': m[i+i][height-j] = 2; break;
-			case 't': m[i+i][height-j] = 3; break;
-			case 'p': m[i+i][height-j] = 4; break;
-			case 'y': m[i+i][height-j] = 5; break;
+			case 'r': m[i+1][height-j] = 0; break;
+			case 'g': m[i+1][height-j] = 1; break;
+			case 'b': m[i+1][height-j] = 2; break;
+			case 't': m[i+1][height-j] = 3; break;
+			case 'p': m[i+1][height-j] = 4; break;
+			case 'y': m[i+1][height-j] = 5; break;
 			default: m[i+1][height-j] = 6;
 		}
 	}

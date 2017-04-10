@@ -17,10 +17,10 @@ Game* PGAME;
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) 
 {// && action == GLFW_PRESS) 
 	switch(key) {
-	case GLFW_KEY_LEFT: PGAME->left(); break;
+	case GLFW_KEY_LEFT: if(action == GLFW_PRESS) PGAME->left(); break;
 	case GLFW_KEY_DOWN: PGAME->down(); break;
-	case GLFW_KEY_RIGHT: PGAME->right(); break;
-	case GLFW_KEY_UP: PGAME->rotate(); break;
+	case GLFW_KEY_RIGHT: if(action == GLFW_PRESS) PGAME->right(); break;
+	case GLFW_KEY_UP: if(action == GLFW_PRESS) PGAME->rotate(); break;
 	case GLFW_KEY_Z:
 		KeyBindMatrix = m.gltranslate(0, 0, STEP) * KeyBindMatrix; break;
 	case GLFW_KEY_X:
