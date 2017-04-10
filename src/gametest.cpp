@@ -3,18 +3,13 @@ using namespace std;
 
 int main()
 {
-	Block b;
-	cout << b.block;
-	b.right();
-	cout << b.block;
-	b.right();
-	cout << b.block;
-	b.left();
-	cout << b.block;
-	b.left();
-	cout << b.block;
-	b.left();
-	cout << b.block;
-
+	Game g(6,6);
+	cout << g.board;
+	g.left();
+	cout << g.board;
+	g.left();
+	cout << g.board;
+	g.left();
+	cout << g.board;
 }
 

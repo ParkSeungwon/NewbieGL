@@ -4,7 +4,7 @@ class Block
 {
 public:
 	Block();
-	void rotate(), left(), right();
+	bool rotate(), left(), right(), down(), up();
 	Matrix<char> block;
 
 protected:
@@ -16,7 +16,10 @@ public:
 	Game(int w, int h);
 	Matrix<char> board;
 	Block block;
-	void left(), right(), down();
+	void left(), right(), down(), rotate();
+	void remove_block(), put_block();
 	int x, y;
+	int width, height;
+	bool overlap(int x, int y, const Block& block);
 };
 
