@@ -117,8 +117,22 @@ void Game::remove_block()
 
 void Game::put_block()
 {
-	for(int i=0; i<4; i++) for(int j=0; j<4; j++) 
+	for(int i=0; i<4; i++) for(int j=0; j<4; j++) //put block
 		if(block.block[i+1][j+1] != ' ') board[x+i][y+j] = block.block[i+1][j+1];
+}
+
+void Game::clear_line()
+{
+	for(int i=height; i>0; i--) {//clear line
+		bool line_clear = true;
+		for(int j=1; j<=width; j++) if(board[j][i] == ' ') line_clear = false;
+		if(line_clear) {
+			for(int m=i; m>1; m--) for(int n=1; n<=width; n++) 
+				board[n][m] = board[n][m-1];
+			for(int n=1; n<=width; n++) board[n][1] = ' ';
+			i++;
+		}
+	}
 }
 
 void Game::left()
@@ -151,6 +165,7 @@ void Game::down()
 		if(!overlap(x, y+1, block)) y++;
 		else {
 			put_block();
+			clear_line();
 			x = width / 2 - 1; y = 1;
 			Block temp; 
 			if(overlap(x, y, temp)) game_over();
@@ -162,6 +177,7 @@ void Game::down()
 		else {
 			if(down && overlap(x, y, block)) block.up();
 			put_block();
+			clear_line();
 			x = width / 2 - 1; y = 1;
 			Block temp; 
 			if(overlap(x, y, temp)) game_over();

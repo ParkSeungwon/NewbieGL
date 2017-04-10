@@ -23,5 +23,6 @@ public:
 	bool overlap(int x, int y, const Block& block);
 	void game_over();
 	Matrix<unsigned> change();
+	void clear_line();
 };
 
