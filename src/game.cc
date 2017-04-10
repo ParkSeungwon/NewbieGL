@@ -157,7 +157,10 @@ void Game::down()
 			else block = temp;
 		}
 	} else {
-		if(!block.down() || overlap(x, y+1, block)) {//concrete old, gen new block
+		bool down = block.down();
+		if(down && !overlap(x, y, block)) ;
+		else {
+			if(down && overlap(x, y, block)) block.up();
 			put_block();
 			x = width / 2 - 1; y = 1;
 			Block temp; 
