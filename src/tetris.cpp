@@ -3,9 +3,11 @@
 #include<iostream>
 #include"glutil.h"
 #include"tetris.h"
+#include"game.h"
 
 using namespace std;
 extern Matrix<float> KeyBindMatrix;
+extern Game* PGAME;
 
 int main()
 {
@@ -18,12 +20,11 @@ int main()
 
 	unsigned fv = gl_transfer_data(tetris.vertexes);
 	unsigned fc = gl_transfer_data(tetris.colors);
-	tetris.board[3][4] = 2;
-	tetris.board[4][4] = 5;
-	tetris.board[3][6] = 0;
-	tetris.board[1][9] = 1;
 	unsigned fe = gl_transfer_index(tetris.indices());
 	
+	Game game{15,30};
+	PGAME = &game;
+
 	Matrix<float> m{4,4};
 	///compile shaders
 	unsigned shader_program = 
@@ -37,6 +38,8 @@ int main()
 		glUseProgram(shader_program);
 		auto tm = m.glscale(0.1,0.064,0.1) * KeyBindMatrix;
 		transfer_matrix(shader_program, tm, "KeyBindMatrix");
+		tetris.board = game.change();
+		gl_transfer_index(tetris.indices(), fe);
 
 		gl_bind_data(fv, fc, fe);
 		glDrawElements(GL_QUADS, tetris.index_size(), GL_UNSIGNED_INT, 0);

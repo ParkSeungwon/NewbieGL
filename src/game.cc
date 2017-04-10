@@ -181,3 +181,20 @@ void Game::game_over()
 {
 	cout << "game over" << endl;
 }
+
+Matrix<unsigned> Game::change()
+{
+	Matrix<unsigned> m{width, height};
+	for(int i=0; i<width; i++) for(int j=0; j<height; j++) {
+		switch(board[i+1][j+1]) {
+			case 'r': m[i+i][height-j] = 0; break;
+			case 'g': m[i+i][height-j] = 1; break;
+			case 'b': m[i+i][height-j] = 2; break;
+			case 't': m[i+i][height-j] = 3; break;
+			case 'p': m[i+i][height-j] = 4; break;
+			case 'y': m[i+i][height-j] = 5; break;
+			default: m[i+1][height-j] = 6;
+		}
+	}
+	return m;
+}
