@@ -35,6 +35,10 @@ int main()
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		if(glfwGetTime() > 1) {
+			glfwSetTime(0);
+			game.down();
+		}
 		glUseProgram(shader_program);
 		auto tm = m.glscale(0.1,0.064,0.1) * KeyBindMatrix;
 		transfer_matrix(shader_program, tm, "KeyBindMatrix");
