@@ -8,7 +8,6 @@ int main()
 	GLFWwindow* window = glfwCreateWindow(500, 500, "turtle", NULL, NULL);
 	if(!glinit(window)) return -1;
 
-	glClearColor(0,0,0,1);
 	glColor3f(1,1,0);
 	glortho(1.5);
 

@@ -196,7 +196,7 @@ void gl_bind_data(unsigned fv, unsigned fc, unsigned fe)
 	//attribute 0, xyz3, float, normalized?, stride, offset
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[2]);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glPolygonMode(GL_FRONT, GL_FILL);
 }
 
 void replace(char* str, string anchor, const Matrix<float>& mat)
