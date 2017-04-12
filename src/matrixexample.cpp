@@ -8,10 +8,9 @@ int main()
 		{1, 3, 2},
 		{0, 1, 1}
 	};
-	cout << m3 << m3.det() << endl;
 	cout << m3.I();
-	cout << 1 / 0.3 << endl;
-	for(int i=0; i<3; i++) for(int j=0; j<3; j++) cout << m3.M(i+1, j+1).det() << endl;
+	cout << m3.M(2,3);
+	cout << m3.M(3,3);
 }
 
 
