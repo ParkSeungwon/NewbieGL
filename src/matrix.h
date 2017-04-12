@@ -274,6 +274,34 @@ private:
 		}
 		return x;
 	}
+public:
+	Matrix<T> M(int x, int y) const {//x, y 열과 행을 제외한 행렬
+		if(width != height) throw "should be square";
+		Matrix<T> m{width-1, width-1};
+		for(int i=1; i<x; i++) for(int j=i; j<y; j++) m[i][j] = (*this)[i][j];
+		for(int i=x+1; i<=width; i++) for(int j=y+1; j<=width; j++) 
+			m[i-1][j-1] = (*this)[i][j];
+		for(int i=1; i<x; i++) for(int j=y+1; j<=width; j++) m[i][j-1] = (*this)[i][j];
+		for(int i=x+1; i<=width; i++) for(int j=1; j<y; j++) m[i-1][j] = (*this)[i][j];
+		return m;
+	}
+
+	T det() const {
+		if(width == 1) return *data();
+		T sum = 0;
+		for(int i=1, j=1; i<=width; i++, j*=-1) 
+			sum += j * (*this)[i][1] * M(i, 1).det();
+	}
+	Matrix<T> I() const {
+		T ad_bc = det();
+		if(!ad_bc) throw "no inverse";
+		Matrix<T> m{width, width};
+		for(int i=1; i<=width; i++) for(int j=1; j<=width; j++) 
+			m[i][j] = ((i+j % 2) ? -1 : 1) * M(j, i).det() / ad_bc;
+		return m;
+	}
+
+
 };
 
 template <typename T> std::ostream& operator<<(std::ostream& o, const Matrix<T>& r){

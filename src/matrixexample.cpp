@@ -3,19 +3,15 @@ using namespace std;
 
 int main()
 {
-	Matrix<float> m1{4,4};
-	Matrix<float> m2 = {
-		{1,0,0,0},
-		{0,1,0,0},
-		{0,0,1,0},
-		{0,0,0,1}
+	Matrix<float> m3 = {
+		{1, 2, 3},
+		{1, 3, 2},
+		{0, 1, 1}
 	};
-	m2[2][2] = 3;
-	cout << m2;
-	m1.glrotateX(M_PI/3);
-	cout << m1;
-	auto m3 = m1 * m2;
-	cout << m3;
+	cout << m3 << m3.det() << endl;
+	cout << m3.I();
+	cout << 1 / 0.3 << endl;
+	for(int i=0; i<3; i++) for(int j=0; j<3; j++) cout << m3.M(i+1, j+1).det() << endl;
 }
 
 
