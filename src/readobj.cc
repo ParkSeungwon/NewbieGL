@@ -1,4 +1,5 @@
 #include<fstream>
+#include<limits>
 #include"readobj.h"
 using namespace std;
 
@@ -7,7 +8,6 @@ ObjReader::ObjReader(string file)
 	string s;
 	ifstream f(file);
 	while(getline(f, s)) {
-		if(s[0] == '#') continue;
 		stringstream ss;
 		ss << s;
 		ss >> s;
@@ -18,7 +18,7 @@ ObjReader::ObjReader(string file)
 		} else if(s == "f") {
 			unsigned a, b; 
 			char c;
-			while(ss >> a >> c >> c >> b) indices.push_back(a);
+			while(ss >> a >> c >> c >> b) indices.push_back(a-1);
 		}
 	}
 	range[0] = range[1] = range[2] = numeric_limits<float>::max();
