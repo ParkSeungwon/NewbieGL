@@ -154,10 +154,10 @@ vector<string> in_variable_name(string v_shader) {
 	return v;
 }
 
-unsigned make_shader_program(const char* vsh, const char* fsh, const char* a_pos, const char* a_color)
+unsigned make_shader_program(const char* vsh, const char* fsh)
 {
-	string v_shader = read_file(vsh);
-	string f_shader = read_file(fsh);
+	const string v_shader = read_file(vsh);
+	const string f_shader = read_file(fsh);
 	auto* vp = v_shader.data();
 	auto* fp = f_shader.data();
 	const char** vertex_shader = &vp;
@@ -179,8 +179,8 @@ unsigned make_shader_program(const char* vsh, const char* fsh, const char* a_pos
 	unsigned shader_program = glCreateProgram();
 	glAttachShader(shader_program, vs);
 	glAttachShader(shader_program, fs);
-	glBindAttribLocation(shader_program, 0, a_pos);
-	glBindAttribLocation(shader_program, 1, a_color);
+	auto v = in_variable_name(v_shader);
+	for(int i=0; i<v.size(); i++) glBindAttribLocation(shader_program, i, v[i].data());
 	glLinkProgram(shader_program);
 
 	//linking error message
@@ -214,18 +214,6 @@ void gl_bind_data(unsigned fv, unsigned fc, unsigned fe)
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[2]);
 	glPolygonMode(GL_FRONT, GL_FILL);
-}
-
-void replace(char* str, string anchor, const Matrix<float>& mat)
-{
-	auto m = mat.transpose();
-	float* p = m.data();
-	stringstream ss;
-	for(int i=0; i < m.get_width() * m.get_height() -1; i++) ss << *p++ << ',';
-	ss << *p;
-	string s{str};
-	s.replace(s.find(anchor), anchor.size(), ss.str());
-	strcpy(str, s.data());
 }
 
 void transfer_matrix(unsigned shader_program, const Matrix<float>& m, 

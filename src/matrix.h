@@ -300,6 +300,7 @@ private:
 		T sum = 0;
 		for(int i=1, j=1; i<=width; i++, j*=-1) 
 			sum += j * (*this)[i][1] * M(i, 1).det();
+		return sum;
 	}
 
 };

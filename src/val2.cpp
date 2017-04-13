@@ -10,7 +10,7 @@ int main(int ac, char** av)
 {
 	if (!glfwInit()) return -1;
 
-	GLFWwindow* window = glfwCreateWindow(640, 480, "Color Cube", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(1024, 768, "Color Cube", NULL, NULL);
 	if (!glinit(window)) return -1;
 
 	Matrix<float> mm{4,4};
@@ -29,8 +29,7 @@ int main(int ac, char** av)
 	mm = scale;
 	///compile shaders
 	unsigned shader_program = 
-		make_shader_program("src/vertex_shader.glsl", "src/fragment_shader.glsl",
-				"a_pos", "a_color");
+		make_shader_program("src/vertex_shader.glsl", "src/fragment_shader.glsl");
 	if(!shader_program) return 0;
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

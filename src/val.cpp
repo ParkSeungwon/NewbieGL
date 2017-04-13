@@ -40,8 +40,7 @@ int main()
 
 	///compile shaders
 	unsigned shader_program = 
-		make_shader_program("src/vertex_shader.glsl", "src/fragment_shader.glsl",
-				"a_pos", "a_color");
+		make_shader_program("src/vertex_shader.glsl", "src/fragment_shader.glsl");
 	if(!shader_program) return 0;
 	float k = 0;
 	while (!glfwWindowShouldClose(window)) {
