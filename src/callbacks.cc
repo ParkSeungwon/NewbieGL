@@ -137,6 +137,23 @@ string read_file(string file)
 	return r;
 }
 
+vector<string> in_variable_name(string v_shader) {
+	vector<string> v;
+	stringstream ss;
+	ss << v_shader;
+	string s;
+	while(getline(ss, s)) {
+		stringstream ss2;
+		ss2 << s;
+		ss2 >> s;
+		if(s == "in") {
+			ss >> s >> s;
+			v.push_back(s);
+		}
+	}
+	return v;
+}
+
 unsigned make_shader_program(const char* vsh, const char* fsh, const char* a_pos, const char* a_color)
 {
 	string v_shader = read_file(vsh);

@@ -283,7 +283,7 @@ private:
 		}
 		return x;
 	}
-public:
+
 	Matrix<T> M(int x, int y) const {//x, y 열과 행을 제외한 행렬
 		if(width != height) throw "should be square";
 		Matrix<T> m{width-1, width-1};

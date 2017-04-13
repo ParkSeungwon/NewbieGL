@@ -16,7 +16,7 @@ int main(int ac, char** av)
 	Matrix<float> mm{4,4};
 
 	ObjReader obj3d(av[1]);
-	vector<Matrix<float>> color{obj3d.vertexes.size(), Matrix<float>{1,1,0}};
+	vector<Matrix<float>> color{obj3d.vertexes.size(), Matrix<float>{1,0,0}};
 	unsigned fv = gl_transfer_data(obj3d.vertexes);
 	unsigned fc = gl_transfer_data(color);
 	unsigned fe = gl_transfer_index(obj3d.indices);

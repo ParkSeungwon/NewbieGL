@@ -41,25 +41,30 @@
 \pagenumbering{gobble}
 \noindent
 \lstset{language=C++, columns=flexible, tabsize=4, frame=shadowbox, showstringspaces=false, breaklines=true, upquote=true, basicstyle=\normalsize}
+\newpage
+\section*{Lab 6. Modeling}
 
-\section{Shader Programming}
-1. Send color array to your vertex shader to draw a color box as you did last week. (5pt)
+Programming Practice
+\subsection{Transform your ironman model to make it look correctly. (5pt)}
+\lstinputlisting[caption=obj파일 리더 헤더파일]{src/readobj.h}
+\lstinputlisting[caption=obj파일 리더 구현부]{src/readobj.cc}
+\lstinputlisting[caption=실행파일]{src/val2.cpp}
+대부분의 모듈은 이미 지난 시간에 제출한 것을 재활용해서 다시 올리지 않습니다.
 
-2. Use uniform matrix 4x4 to rotate your box in vertex shader.(5pt)
-
+\includegraphics[width=\textwidth]{3.png}
+파일명을 인자로 해서 obj 파일을 읽어들이는 방식으로 했다.\\
+scale만을 조절해서 아이언맨을 표시할 수 있었다.
+\subsection{Use Blender (or other modeling software) to model a simple (and probably cute) 3D smiley. Export it to an OBJ file and read it in YOUR program. (5pt)}
+\lstinputlisting[caption=위의 실행 파일에서 눈을 검게 하고 구를 노란색으로 하기 위해 한 줄만을 첨가했다.]{src/val3.cpp}
 \includegraphics[width=\textwidth]{1.png}
 
-\lstinputlisting[caption=vertex shader]{src/vertex_shader.glsl}	
-\lstinputlisting[caption=fragment shader]{src/fragment_shader.glsl}	
-\lstinputlisting[caption=메인함수]{src/val.cpp}	
+입이 있다는 것을 표현하기 위해 옆으로 돌린 모습.\\
+블렌더가 익숙하지 않아 예쁜 모양은 나오지 않았지만, 얼굴을 구로 눈을 디스크로 입을 토루스로 표현해보았다.\\
+입의 색깔이 같은 색이라 정면에서는 보이지 않아 옆으로 돌려보았다.
 
-shader 프로그램을 만들고 변수를 보내는 make shader program 이란 함수를 만들었다.\\
-또, 매트릭스 데이터를 보내고 바인드하는 transfer matrix 함수도 만들었다.\\
-내가 만든 매트릭스는 자료구조가 약간 달라 transpose 한 후에 데이터를 보내야 되었다.\\
-밑의 callbacks.cc의 하단에 있으니 참조바랍니다.\\
+\includegraphics[width=\textwidth]{2.png}
 
-프로그램은 이전에 만들어두었던 큐브를 그대로 사용하여, 데이터를 세이더에 보내고, 바인드하는 작업을 한다.\\
-세이더에서 입력받을 변수를 선언하고, vbo를 배열로 일렬로 만든 후, 바인드하면 되었다.
-\lstinputlisting[caption=callbacks.cc]{src/callbacks.cc}
-	
+정면에서 본 모습\\삼각형으로 만들어 obj를 구현하는 데에는 성공했다.\\
+Ugly!! 죄송합니다...
+
 \end{document}
