@@ -4,14 +4,19 @@
 #include"globj.h"
 using namespace std;
 
-void GLObject::vertexes(const vector<Matrix<float>>& v, unsigned vbo) 
+GLObject::GLObject(unsigned prog) 
 {
-	this->vbo[0] = transfer_data(v, vbo);
+	shader_program_ = prog;
 }
 
-void GLObject::colors(const vector<Matrix<float>>& v, unsigned vbo) 
+void GLObject::vertexes(const vector<Matrix<float>>& v, const char* n, unsigned vbo) 
 {
-	this->vbo[1] = transfer_data(v, vbo);
+	this->vbo[0] = transfer_data(v, n, vbo);
+}
+
+void GLObject::colors(const vector<Matrix<float>>& v, const char* n, unsigned vbo) 
+{
+	this->vbo[1] = transfer_data(v, n, vbo);
 }
 
 void GLObject::indices(const vector<unsigned>& v, unsigned vbo)
@@ -23,7 +28,7 @@ void GLObject::indices(const vector<unsigned>& v, unsigned vbo)
 	this->vbo[2] = vbo;
 }
 
-void GLObject::read_obj_file(string file)
+void GLObject::read_obj_file(string file, const char* var_name)
 {
 	vector<Matrix<float>> ver;
 	vector<unsigned> ind;
@@ -43,11 +48,12 @@ void GLObject::read_obj_file(string file)
 			while(ss >> a >> c >> c >> b) ind.push_back(a-1);
 		}
 	}
-	vertexes(ver);
+	vertexes(ver, var_name);
 	indices(ind);
 }	
 
-unsigned GLObject::transfer_data(const vector<Matrix<float>>& v, unsigned vbo) 
+unsigned GLObject::transfer_data(const vector<Matrix<float>>& v, const char* var,
+		unsigned vbo) 
 {
 	int sz = v.size();
 	if(!vbo) glGenBuffers(1, &vbo);
@@ -56,5 +62,9 @@ unsigned GLObject::transfer_data(const vector<Matrix<float>>& v, unsigned vbo)
 	float ar[sz * 3];
 	for(int i=0; i<sz; i++) memcpy(ar + 3*i, v[i].data(), 3 * sizeof(float));
 	glBufferData(GL_ARRAY_BUFFER, sizeof(ar), ar, GL_STATIC_DRAW);
+
+	unsigned loc = glGetAttribLocation(shader_program_, var);
+	glEnableVertexAttribArray(loc);
+	glVertexAttribPointer(loc, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	return vbo;
 }

@@ -147,7 +147,8 @@ vector<string> in_variable_name(string v_shader) {
 		ss2 << s;
 		ss2 >> s;
 		if(s == "in") {
-			ss >> s >> s;
+			ss2 >> s >> s;
+			if(s.back() == ';') s.back() = '\0';
 			v.push_back(s);
 		}
 	}
@@ -180,8 +181,10 @@ unsigned make_shader_program(const char* vsh, const char* fsh)
 	glAttachShader(shader_program, vs);
 	glAttachShader(shader_program, fs);
 	auto v = in_variable_name(v_shader);
-	for(int i=0; i<v.size(); i++) glBindAttribLocation(shader_program, i, v[i].data());
+	//for(int i=0; i<v.size(); i++) glBindAttribLocation(shader_program, i, v[i].data());
+	for(auto a : v) cout << a << endl;
 	glLinkProgram(shader_program);
+	cout << "location is " << glGetAttribLocation(shader_program, v[0].data()) << endl;
 
 	//linking error message
 	int linked = 0;
@@ -203,16 +206,17 @@ unsigned make_shader_program(const char* vsh, const char* fsh)
 
 void gl_bind_data(unsigned fv, unsigned fc, unsigned fe)
 {
-	unsigned vbo[3] = {fv, fc, fe};
-	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+//	unsigned vbo[3] = {fv, fc, fe};
+	glBindBuffer(GL_ARRAY_BUFFER, fv);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+	
+	glBindBuffer(GL_ARRAY_BUFFER, fc);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	//attribute 0, xyz3, float, normalized?, stride, offset
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[2]);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, fe);
 	glPolygonMode(GL_FRONT, GL_FILL);
 }
 
