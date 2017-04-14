@@ -1,12 +1,16 @@
 #include<fstream>
 #include<GL/glew.h>
-//#include<GLFW/glfw3.h>
 #include"globj.h"
 using namespace std;
 
 GLObject::GLObject(unsigned prog) 
 {
 	shader_program_ = prog;
+}
+
+void GLObject::mode(GLenum md) 
+{
+	mode_ = md;
 }
 
 void GLObject::vertexes(const vector<Matrix<float>>& v, const char* n, unsigned vbo) 
@@ -19,6 +23,14 @@ void GLObject::colors(const vector<Matrix<float>>& v, const char* n, unsigned vb
 	this->vbo[1] = transfer_data(v, n, vbo);
 }
 
+GLObject::operator Matrix<float>()
+{
+	Matrix<float> m{4,4};
+	m.E();
+	for(auto& a : matrixes_) m *= a;
+	return m;
+}
+
 void GLObject::indices(const vector<unsigned>& v, unsigned vbo)
 {
 	if(!vbo) glGenBuffers(1, &vbo);
@@ -29,7 +41,7 @@ void GLObject::indices(const vector<unsigned>& v, unsigned vbo)
 	this->vbo[2] = vbo;
 }
 
-void GLObject::draw()
+void GLObject::operator()()
 {
 	glDrawElements(mode_, index_size_, GL_UNSIGNED_INT, 0);
 }
@@ -72,6 +84,7 @@ unsigned GLObject::transfer_data(const vector<Matrix<float>>& v, const char* var
 
 	unsigned loc = glGetAttribLocation(shader_program_, var);
 	glEnableVertexAttribArray(loc);
+	cout << var << " : " << loc << endl;
 	glVertexAttribPointer(loc, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	return vbo;
 }

@@ -180,11 +180,7 @@ unsigned make_shader_program(const char* vsh, const char* fsh)
 	unsigned shader_program = glCreateProgram();
 	glAttachShader(shader_program, vs);
 	glAttachShader(shader_program, fs);
-	auto v = in_variable_name(v_shader);
-	//for(int i=0; i<v.size(); i++) glBindAttribLocation(shader_program, i, v[i].data());
-	for(auto a : v) cout << a << endl;
 	glLinkProgram(shader_program);
-	cout << "location is " << glGetAttribLocation(shader_program, v[0].data()) << endl;
 
 	//linking error message
 	int linked = 0;

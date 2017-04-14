@@ -22,12 +22,15 @@ int main(int ac, char** av)
 	unsigned sz = obj3d.read_obj_file(av[1], "a_pos");
 	vector<Matrix<float>> color{sz, Matrix<float>{1,0,0}};
 	obj3d.colors(color, "a_color");
-	
+	Matrix<float> m{4,4};
+	obj3d.matrixes_.push_front(m.glscale(0.5,0.5,0.5));
+	obj3d.matrixes_.push_front(m.gltranslate(0.3,0,0));
+
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		transfer_matrix(shader_program, KeyBindMatrix, "KeyBindMatrix");
-		obj3d.draw();
+		transfer_matrix(shader_program, KeyBindMatrix * obj3d, "KeyBindMatrix");
+		obj3d();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
