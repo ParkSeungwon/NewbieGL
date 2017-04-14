@@ -20,6 +20,7 @@ int main(int ac, char** av)
 	unsigned fv = gl_transfer_data(obj3d.vertexes);
 	unsigned fc = gl_transfer_data(color);
 	unsigned fe = gl_transfer_index(obj3d.indices);
+	gl_bind_data(fv, fc, fe);
 	float mid[3] = {obj3d.range[3] - obj3d.range[0], 
 					obj3d.range[4] - obj3d.range[1],
 					obj3d.range[5] - obj3d.range[2]};
@@ -31,14 +32,13 @@ int main(int ac, char** av)
 	unsigned shader_program = 
 		make_shader_program("src/vertex_shader.glsl", "src/fragment_shader.glsl");
 	if(!shader_program) return 0;
+	glUseProgram(shader_program);
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		glUseProgram(shader_program);
 		auto tm = KeyBindMatrix * scale;
 		transfer_matrix(shader_program, tm, "KeyBindMatrix");
 
-		gl_bind_data(fv, fc, fe);
 		glDrawElements(GL_TRIANGLES, obj3d.indices.size(), GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(window);
