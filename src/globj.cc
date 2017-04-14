@@ -25,10 +25,16 @@ void GLObject::indices(const vector<unsigned>& v, unsigned vbo)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned) * v.size(), 
 			v.data(), GL_STATIC_DRAW);
+	index_size_ = v.size();
 	this->vbo[2] = vbo;
 }
 
-void GLObject::read_obj_file(string file, const char* var_name)
+void GLObject::draw()
+{
+	glDrawElements(mode_, index_size_, GL_UNSIGNED_INT, 0);
+}
+
+unsigned GLObject::read_obj_file(string file, const char* var_name)
 {
 	vector<Matrix<float>> ver;
 	vector<unsigned> ind;
@@ -50,6 +56,7 @@ void GLObject::read_obj_file(string file, const char* var_name)
 	}
 	vertexes(ver, var_name);
 	indices(ind);
+	return ver.size();
 }	
 
 unsigned GLObject::transfer_data(const vector<Matrix<float>>& v, const char* var,

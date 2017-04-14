@@ -7,7 +7,8 @@ class GLObject
 {
 public:
 	GLObject(unsigned shader_program);
-	void read_obj_file(std::string filename, const char* var_name_in_shader);
+	unsigned read_obj_file(std::string filename, const char* var_name_in_shader);
+	void draw();
 
 	//setters
 	void vertexes(const std::vector<Matrix<float>>& verts, 
@@ -30,6 +31,8 @@ protected:
 	std::string ver_name, frag_name;
 
 private:
+	GLenum mode_ = GL_TRIANGLES;
+	unsigned index_size_;
 	unsigned vbo[3];
 	unsigned transfer_data(const std::vector<Matrix<float>>& v, const char* var,
 			unsigned vbo=0);
