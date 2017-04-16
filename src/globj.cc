@@ -13,14 +13,14 @@ void GLObject::mode(GLenum md)
 	mode_ = md;
 }
 
-void GLObject::vertexes(const vector<Matrix<float>>& v, const char* n, unsigned vbo) 
+unsigned GLObject::vertexes(const vector<Matrix<float>>& v, const char* n, unsigned vbo) 
 {
-	this->vbo[0] = transfer_data(v, n, vbo);
+	return transfer_data(v, n, vbo);
 }
 
-void GLObject::colors(const vector<Matrix<float>>& v, const char* n, unsigned vbo) 
+unsigned GLObject::colors(const vector<Matrix<float>>& v, const char* n, unsigned vbo) 
 {
-	this->vbo[1] = transfer_data(v, n, vbo);
+	return transfer_data(v, n, vbo);
 }
 
 GLObject::operator Matrix<float>()
@@ -31,14 +31,14 @@ GLObject::operator Matrix<float>()
 	return m;
 }
 
-void GLObject::indices(const vector<unsigned>& v, unsigned vbo)
+unsigned GLObject::indices(const vector<unsigned>& v, unsigned vbo)
 {
 	if(!vbo) glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned) * v.size(), 
 			v.data(), GL_STATIC_DRAW);
 	index_size_ = v.size();
-	this->vbo[2] = vbo;
+	return vbo;
 }
 
 void GLObject::operator()()

@@ -24,12 +24,16 @@ int main(int ac, char** av)
 	obj3d.colors(color, "a_color");
 	Matrix<float> m{4,4};
 	obj3d.matrixes_.push_front(m.glscale(0.5,0.5,0.5));
-	obj3d.matrixes_.push_front(m.gltranslate(0.3,0,0));
+//	obj3d.matrixes_.push_front(m.glortho(-4,0,-2,2,-2,2));
+//	obj3d.matrixes_.push_front(m.gltranslate(0.5,0.5,0.5));
+	cout << m ;
 
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		transfer_matrix(shader_program, KeyBindMatrix * obj3d, "KeyBindMatrix");
+		obj3d();
+		transfer_matrix(shader_program, KeyBindMatrix * m.gltranslate(0.5,0,0) * obj3d, "KeyBindMatrix");
 		obj3d();
 
 		glfwSwapBuffers(window);

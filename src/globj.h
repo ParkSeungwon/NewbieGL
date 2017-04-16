@@ -14,12 +14,12 @@ public:
 
 	//setters
 	void mode(GLenum md);
-	void vertexes(const std::vector<Matrix<float>>& verts, 
+	unsigned vertexes(const std::vector<Matrix<float>>& verts, 
 			const char* variable_name_in_shder, unsigned vbo=0);
-	void colors(const std::vector<Matrix<float>>& cols, 
+	unsigned colors(const std::vector<Matrix<float>>& cols, 
 			const char* variable_name_in_shder, unsigned vbo=0);
-	void normals(const std::vector<Matrix<float>>& norms, unsigned vbo=0);
-	void indices(const std::vector<unsigned>& ids, unsigned vbo=0);
+	unsigned normals(const std::vector<Matrix<float>>& norms, unsigned vbo=0);
+	unsigned indices(const std::vector<unsigned>& ids, unsigned vbo=0);
 
 protected:
 	unsigned shader_program_;
@@ -27,7 +27,6 @@ protected:
 private:
 	GLenum mode_ = GL_TRIANGLES;
 	unsigned index_size_;
-	unsigned vbo[3];
 	unsigned transfer_data(const std::vector<Matrix<float>>& v, const char* var,
 			unsigned vbo=0);
 };

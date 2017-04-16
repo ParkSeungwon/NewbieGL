@@ -193,6 +193,18 @@ public:
 		return *this;
 	}
 
+	Matrix<T> glortho(T left, T right, T bottom, T top, T far, T near) {
+		if(width != 4 || height != 4) throw "should be 4x4";
+		E();
+		(*this)[1][1] = 2 / (right - left);
+		(*this)[2][2] = 2 / (top - bottom);
+		(*this)[3][3] = -2 / (far - near);
+		(*this)[4][1] = -(left + right) / (right - left);
+		(*this)[4][2] = -(top + bottom) / (top - bottom);
+		(*this)[4][3] = -(far + near) / (far - near);
+		return *this;
+	}
+
 	Matrix<T> One() const {
 		for(int i=0; i<width*height; i++)  arr[i] = 1;
 	}

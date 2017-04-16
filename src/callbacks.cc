@@ -85,6 +85,12 @@ bool glinit(GLFWwindow* window)
 		glfwTerminate();
 		return false;
 	}
+	if (glewIsSupported("GL_VERSION_3_3"))
+        printf("Ready for OpenGL 3.3\n");
+    else {
+        printf("OpenGL 3.3 not supported\n");
+        exit(1);
+    }
 	KeyBindMatrix.E();
 	cout << "shading language version : " << 
 			glGetString(GL_SHADING_LANGUAGE_VERSION) << endl;
@@ -220,9 +226,6 @@ void transfer_matrix(unsigned shader_program, const Matrix<float>& m,
 		const char* var_name)
 {
 	int fd = glGetUniformLocation(shader_program, var_name);
-	if(fd != -1) {
-		auto a = m.transpose();
-		glUniformMatrix4fv(fd, 1, GL_FALSE, a.data());
-	}
+	if(fd != -1) glUniformMatrix4fv(fd, 1, GL_FALSE, m.data());
 }
 
