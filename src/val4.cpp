@@ -18,12 +18,21 @@ int main(int ac, char** av)
 	if(!shader_program) return 0;
 	glUseProgram(shader_program);
 
-	GLObject obj3d(shader_program);
-	unsigned sz = obj3d.read_obj_file(av[1], "a_pos");
+	GLObject obj3d;
+	unsigned sz = obj3d.read_obj_file("monkey.obj");
 	vector<Matrix<float>> color{sz, Matrix<float>{1,0,0}};
-	obj3d.colors(color, "a_color");
+	obj3d.colors(color);
 	Matrix<float> m{4,4};
-	obj3d.matrixes_.push_front(m.glscale(0.5,0.5,0.5));
+	obj3d.matrix(m.glscale(0.5,0.5,0.5));
+	GLObject ironman;
+	sz = ironman.read_obj_file("ironman.obj");
+	vector<Matrix<float>> col{sz, Matrix<float>{1,1,0}};
+	ironman.colors(col);
+	ironman.matrix(m.gltranslate(0.3,-0.2,0) * m.glscale(0.01,0.01,0.01));
+	GLObjs objs(shader_program);
+	objs += ironman;
+	objs += obj3d;
+	objs.transfer_all("a_pos", "a_color");
 //	obj3d.matrixes_.push_front(m.glortho(-4,0,-2,2,-2,2));
 //	obj3d.matrixes_.push_front(m.gltranslate(0.5,0.5,0.5));
 	cout << m ;
@@ -31,10 +40,10 @@ int main(int ac, char** av)
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		transfer_matrix(shader_program, KeyBindMatrix * obj3d, "KeyBindMatrix");
-		obj3d();
-		transfer_matrix(shader_program, KeyBindMatrix * m.gltranslate(0.5,0,0) * obj3d, "KeyBindMatrix");
-		obj3d();
+		transfer_matrix(shader_program, KeyBindMatrix * objs[0], "KeyBindMatrix");
+		objs(0);
+		transfer_matrix(shader_program, KeyBindMatrix * objs[1], "KeyBindMatrix");
+		objs(1);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
