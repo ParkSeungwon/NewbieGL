@@ -23,27 +23,47 @@ int main(int ac, char** av)
 	vector<Matrix<float>> color{sz, Matrix<float>{1,0,0}};
 	obj3d.colors(color);
 	Matrix<float> m{4,4};
-	obj3d.matrix(m.glscale(0.5,0.5,0.5));
+	obj3d.matrix(m.glscale(0.3,0.3,0.3));
 	GLObject ironman;
 	sz = ironman.read_obj_file("ironman.obj");
 	vector<Matrix<float>> col{sz, Matrix<float>{1,1,0}};
 	ironman.colors(col);
-	ironman.matrix(m.gltranslate(0.3,-0.2,0) * m.glscale(0.01,0.01,0.01));
+	ironman.matrix(m.glrotateX(-M_PI/2) * m.gltranslate(0.3,-0.2,0) * m.glscale(0.01,0.01,0.01));
+	GLObject cube;
+	Matrix<float> ve[8] = {{0,0,0}, {1,0,0}, {1,1,0}, {0,1,0},
+				  		  {0,0,1}, {1,0,1}, {1,1,1}, {0,1,1}};
+	vector<Matrix<float>> v, c;
+	int idx[24] = {0,1,2,3, 4,5,6,7, 0,4,5,1, 1,5,6,2, 2,6,7,3, 0,4,7,3};
+	for(auto a : idx) v.push_back(ve[a]);
+	for(int i=0; i<8; i++) for(int j=0; j<4; j++) {
+		if(i==0 || i==6) continue;
+		c.push_back(ve[i]);
+	}
+	vector<unsigned> id;
+	for(int i=0; i<24; i++) id.push_back(i);
+	cube.vertexes(v);
+	cube.colors(c);
+	cube.indices(id);
+	cube.matrix(m.glscale(0.1,0.1,0.1) * m.glortho(0,1,0,1,0,1));
+	cube.mode(GL_QUADS);
+	
 	GLObjs objs(shader_program);
 	objs += ironman;
 	objs += obj3d;
+	objs += cube;
 	objs.transfer_all("a_pos", "a_color");
-//	obj3d.matrixes_.push_front(m.glortho(-4,0,-2,2,-2,2));
-//	obj3d.matrixes_.push_front(m.gltranslate(0.5,0.5,0.5));
-	cout << m ;
 
+	float k = 0;
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		transfer_matrix(shader_program, KeyBindMatrix * objs[0], "KeyBindMatrix");
-		objs(0);
-		transfer_matrix(shader_program, KeyBindMatrix * objs[1], "KeyBindMatrix");
-		objs(1);
+		for(int i=0; i<2; i++) {
+			transfer_matrix(shader_program, KeyBindMatrix * objs[i], "KeyBindMatrix");
+			objs(i);
+		}
+		transfer_matrix(shader_program, KeyBindMatrix * m.glrotateX(k) * objs[2], "KeyBindMatrix");
+		objs(2);
+		k += 0.1;
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

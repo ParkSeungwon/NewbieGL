@@ -52,6 +52,7 @@ GLObjs& GLObjs::operator+=(const GLObject& r)
 	auto idx = r.indices_;
 	for(auto& a : idx) a += sz;
 	indices_.insert(indices_.end(), idx.begin(), idx.end());
+
 	index_chunks_.push_back(r.indices_.size());
 	modes_.push_back(r.mode_);
 	matrixes_.push_back(r.matrix_);
