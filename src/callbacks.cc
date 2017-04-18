@@ -78,6 +78,11 @@ bool glinit(GLFWwindow* window)
 	glClearColor(0, 0, 0, 0); // black background
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_NORMALIZE);
+	glShadeModel(GL_SMOOTH);
+	glDisable(GL_COLOR_MATERIAL);
 
 	glewExperimental = true; // Needed for core profile
 	if (glewInit() != GLEW_OK) {

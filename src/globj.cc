@@ -18,8 +18,7 @@ unsigned GLObject::read_obj_file(string file)
 	string s;
 	ifstream f(file);
 	while(getline(f, s)) {
-		stringstream ss;
-		ss << s;
+		stringstream ss{s};
 		ss >> s;
 		if(s == "v") {
 			float x,  y, z;
