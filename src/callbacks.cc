@@ -78,10 +78,10 @@ bool glinit(GLFWwindow* window)
 	glClearColor(0, 0, 0, 0); // black background
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	glEnable(GL_NORMALIZE);
-	glShadeModel(GL_SMOOTH);
+	//glEnable(GL_LIGHTING);
+	//glEnable(GL_LIGHT0);
+//	glEnable(GL_NORMALIZE);
+//	glShadeModel(GL_SMOOTH);
 	glDisable(GL_COLOR_MATERIAL);
 
 	glewExperimental = true; // Needed for core profile
@@ -234,3 +234,23 @@ void transfer_matrix(unsigned shader_program, const Matrix<float>& m,
 	if(fd != -1) glUniformMatrix4fv(fd, 1, GL_FALSE, m.data());
 }
 
+void set_light(const Matrix<float>& light_source)
+{
+	auto m = light_source.transpose();
+	float* p = m.data();
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, p);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, p+4);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, p+8);
+	glLightfv(GL_LIGHT0, GL_POSITION, p+12);
+}
+
+void set_material(const Matrix<float>& material, float shininess)
+{
+	auto m = material.transpose();
+	float* p = m.data();
+	glMaterialfv(GL_FRONT, GL_AMBIENT, p);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, p+4);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, p+8);
+	glMaterialfv(GL_FRONT, GL_EMISSION, p+12);
+	glMaterialf(GL_FRONT, GL_SHININESS, shininess);
+}

@@ -6,6 +6,8 @@
 #include<type_traits>
 #include"matrix.h"
 
+void set_light(const Matrix<float>& light_source);
+void set_material(const Matrix<float>& material, float shininess);
 void glortho(float r);
 void glcolor(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 bool glinit(GLFWwindow* window);

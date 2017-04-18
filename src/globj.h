@@ -19,6 +19,7 @@ public:
 	void normals(std::vector<Matrix<float>>&& norms);
 	void indices(const std::vector<unsigned>& ids);
 	void indices(std::vector<unsigned>&& ids);
+	void normals();
 
 protected:
 	std::vector<Matrix<float>> vertexes_, colors_, normals_;
@@ -26,6 +27,9 @@ protected:
 	Matrix<float> matrix_;
 	GLenum mode_ = GL_TRIANGLES;
 	friend class GLObjs;
+
+private:
+	Matrix<float> cross(const Matrix<float>& v1, const Matrix<float>& v2);
 };
 
 class GLObjs : public GLObject
@@ -36,14 +40,14 @@ public:
 	void operator()(int n);
 	Matrix<float> operator[](int n);
 	GLObjs& operator+=(const GLObject& r);
-	void transfer_all(const char* v_var, const char* c_var);
+	void transfer_all(const char* v_var, const char* c_var, const char* n_var);
 
 protected:
 	unsigned shader_program_;
 	std::vector<unsigned> index_chunks_;
 	std::vector<Matrix<float>> matrixes_;
 	std::vector<GLenum> modes_;
-	unsigned vbo[3];
+	unsigned vbo[4];
 
 private:
 	unsigned transfer_data(const std::vector<Matrix<float>>& v, const char* var,

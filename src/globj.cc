@@ -12,7 +12,36 @@ void GLObject::colors(const vector<Matrix<float>>& v) { colors_ = v; }
 void GLObject::colors(vector<Matrix<float>>&& v) { colors_ = move(v); }
 void GLObject::indices(const vector<unsigned>& v) { indices_ = v; }
 void GLObject::indices(vector<unsigned>&& v) { indices_ = move(v); }
+void GLObject::normals()
+{///should come after setting mode
+	normals_.resize(vertexes_.size());
+	int face;
+	switch(mode_) {
+		case GL_TRIANGLES: face = 3; break;
+		case GL_QUADS: face = 4; break;
+	}
+	try{
+		for(int i=0; i<vertexes_.size(); i+=face) {
+			auto v1 = vertexes_[i+1] - vertexes_[i];
+			auto v2 = vertexes_[i+2] - vertexes_[i+1];
+			auto n = cross(v1, v2);
+			for(int j=0; j<face; j++) normals_[i+j] = normals_[i+j] + n;
+		}
+	} catch(const char* e) { cerr << e << endl; }
+	//for(auto& a : normals_) a /= a[1][4];
+}
 
+Matrix<float> GLObject::cross(const Matrix<float>& v1, const Matrix<float>& v2)
+{
+	Matrix<float> m{v1[1][2] * v2[1][3] - v1[1][3] * v2[1][2],
+					v1[1][3] * v2[1][1] - v1[1][1] * v2[1][3],
+					v1[1][1] * v2[1][2] - v1[1][2] * v2[1][1]};
+	float r = sqrt(m[1][1] * m[1][1] + m[1][2] * m[1][2] + m[1][3] * m[1][3]);
+	m = m * (1.0f/r);
+	m[1][4] = 1;
+	return m;
+}
+							 
 unsigned GLObject::read_obj_file(string file)
 {
 	string s;
@@ -45,7 +74,7 @@ GLObjs& GLObjs::operator+=(const GLObject& r)
 	auto sz = vertexes_.size();
 	vertexes_.insert(vertexes_.end(), r.vertexes_.begin(), r.vertexes_.end());
 	colors_.insert(colors_.end(), r.colors_.begin(), r.colors_.end());
-	//normals_.insert(normals_.end(), r.normals_.begin(), r.normals_.end());
+	normals_.insert(normals_.end(), r.normals_.begin(), r.normals_.end());
 	unsigned sum = 0;
 	for(auto a : index_chunks_) sum += a;
 	auto idx = r.indices_;
@@ -57,12 +86,12 @@ GLObjs& GLObjs::operator+=(const GLObject& r)
 	matrixes_.push_back(r.matrix_);
 }
 
-void GLObjs::transfer_all(const char* v_var, const char* c_var)
+void GLObjs::transfer_all(const char* v_var, const char* c_var, const char* n_var)
 {
 	vbo[0] = transfer_data(vertexes_, v_var);
 	vbo[1] = transfer_data(colors_, c_var);
-//	vbo[2] = transfer_data(normals_, n_var);
-	vbo[2] = indices(indices_);
+	vbo[2] = transfer_data(normals_, n_var);
+	vbo[3] = indices(indices_);
 	cout << indices_.size() << endl;
 }
 

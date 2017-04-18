@@ -24,34 +24,34 @@ int main(int ac, char** av)
 	obj3d.colors(color);
 	Matrix<float> m{4,4};
 	obj3d.matrix(m.glscale(0.3,0.3,0.3));
+	obj3d.normals();
 	GLObject ironman;
 	sz = ironman.read_obj_file("ironman.obj");
 	vector<Matrix<float>> col{sz, Matrix<float>{1,1,0}};
 	ironman.colors(col);
 	ironman.matrix(m.glrotateX(-M_PI/2) * m.gltranslate(0.3,-0.2,0) * m.glscale(0.01,0.01,0.01));
-	GLObject cube;
-	Matrix<float> ve[8] = {{0,0,0}, {1,0,0}, {1,1,0}, {0,1,0},
-				  		  {0,0,1}, {1,0,1}, {1,1,1}, {0,1,1}};
-	vector<Matrix<float>> v, c;
-	int idx[24] = {0,1,2,3, 4,5,6,7, 0,4,5,1, 1,5,6,2, 2,6,7,3, 0,4,7,3};
-	for(auto a : idx) v.push_back(ve[a]);
-	for(int i=0; i<8; i++) for(int j=0; j<4; j++) {
-		if(i==0 || i==6) continue;
-		c.push_back(ve[i]);
-	}
-	vector<unsigned> id;
-	for(int i=0; i<24; i++) id.push_back(i);
-	cube.vertexes(v);
-	cube.colors(c);
-	cube.indices(id);
-	cube.matrix(m.glscale(0.1,0.1,0.1) * m.glortho(0,1,0,1,0,1));
-	cube.mode(GL_QUADS);
-	
+	ironman.normals();
+
 	GLObjs objs(shader_program);
 	objs += ironman;
 	objs += obj3d;
-	objs += cube;
-	objs.transfer_all("a_pos", "a_color");
+	objs.transfer_all("a_pos", "a_color", "norm");
+
+	Matrix<float> light = {
+		{0.1, 0.1, 0.1, 1}, //ambient
+		{1, 1, 1, 1}, //diffuse
+		{1, 1, 1, 1}, //specular
+		{0, 0.3, 0, 1} //position 1 means a point 0 means a vector light
+	};
+	Matrix<float> material = {
+		{1, 0.1, 0.1, 1}, //ambient
+		{1, 0.1, 0.1, 1}, //diffuse
+		{0.2, 0.2, 0.2, 1}, //specular
+		{0, 0, 0, 1} //emission
+	};
+
+//	set_light(light);
+//	set_material(material, 10);
 
 	float k = 0;
 	while (!glfwWindowShouldClose(window)) {
@@ -61,9 +61,6 @@ int main(int ac, char** av)
 			transfer_matrix(shader_program, KeyBindMatrix * objs[i], "KeyBindMatrix");
 			objs(i);
 		}
-		transfer_matrix(shader_program, KeyBindMatrix * m.glrotateX(k) * objs[2], "KeyBindMatrix");
-		objs(2);
-		k += 0.1;
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
