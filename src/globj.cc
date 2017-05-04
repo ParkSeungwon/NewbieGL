@@ -14,16 +14,18 @@ void GLObject::indices(const vector<unsigned>& v) { indices_ = v; }
 void GLObject::indices(vector<unsigned>&& v) { indices_ = move(v); }
 void GLObject::normals()
 {///should come after setting mode
+	if(normals_.size() == vertexes_.size()) return;
 	normals_.resize(vertexes_.size());
 	int face;
 	switch(mode_) {
 		case GL_TRIANGLES: face = 3; break;
 		case GL_QUADS: face = 4; break;
+		default: face = 3;
 	}
 	try{
 		for(int i=0; i<vertexes_.size(); i+=face) {
 			auto v1 = vertexes_[i+1] - vertexes_[i];
-			auto v2 = vertexes_[i+2] - vertexes_[i+1];
+			auto v2 = vertexes_[i+2] - vertexes_[i];
 			auto n = cross(v1, v2);
 			for(int j=0; j<face; j++) normals_[i+j] = normals_[i+j] + n;
 		}
@@ -44,6 +46,7 @@ Matrix<float> GLObject::cross(const Matrix<float>& v1, const Matrix<float>& v2)
 							 
 unsigned GLObject::read_obj_file(string file)
 {
+	int face = 0;
 	string s;
 	ifstream f(file);
 	while(getline(f, s)) {
@@ -54,9 +57,17 @@ unsigned GLObject::read_obj_file(string file)
 			ss >> x >> y >> z;
 			vertexes_.push_back(Matrix<float>{x,y,z});
 		} else if(s == "f") {
-			unsigned a, b; 
-			char c;
-			while(ss >> a >> c >> c >> b) indices_.push_back(a-1);
+			while(getline(ss, s, '/')) {
+				indices_.push_back(stoi(s)-1);
+				getline(ss, s, ' ');
+				face++;
+			}
+			if(face == 3) mode(GL_TRIANGLES);
+			else if(face == 4) mode(GL_QUADS);
+		} else if(s == "vn") {
+			float x, y, z;
+			ss >> x >> y >> z;
+			normals_.push_back(Matrix<float>{x, y, z});
 		}
 	}
 	cout << file << indices_.size() << endl;
@@ -67,16 +78,16 @@ unsigned GLObject::read_obj_file(string file)
 GLObjs::GLObjs(unsigned prog) 
 {
 	shader_program_ = prog;
+	glPolygonMode(GL_FRONT, GL_FILL);
 }
 
-GLObjs& GLObjs::operator+=(const GLObject& r)
+GLObjs& GLObjs::operator+=(GLObject& r)
 {
+	r.normals();
 	auto sz = vertexes_.size();
 	vertexes_.insert(vertexes_.end(), r.vertexes_.begin(), r.vertexes_.end());
 	colors_.insert(colors_.end(), r.colors_.begin(), r.colors_.end());
 	normals_.insert(normals_.end(), r.normals_.begin(), r.normals_.end());
-	unsigned sum = 0;
-	for(auto a : index_chunks_) sum += a;
 	auto idx = r.indices_;
 	for(auto& a : idx) a += sz;
 	indices_.insert(indices_.end(), idx.begin(), idx.end());

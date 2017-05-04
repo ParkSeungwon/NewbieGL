@@ -15,8 +15,6 @@ public:
 	void vertexes(std::vector<Matrix<float>>&& verts);
 	void colors(const std::vector<Matrix<float>>& cols);
 	void colors(std::vector<Matrix<float>>&& cols);
-	void normals(const std::vector<Matrix<float>>& norms);
-	void normals(std::vector<Matrix<float>>&& norms);
 	void indices(const std::vector<unsigned>& ids);
 	void indices(std::vector<unsigned>&& ids);
 	void normals();
@@ -32,14 +30,14 @@ private:
 	Matrix<float> cross(const Matrix<float>& v1, const Matrix<float>& v2);
 };
 
-class GLObjs : public GLObject
+class GLObjs : protected GLObject
 {
 public:
 	GLObjs(unsigned shader_program);
 	unsigned indices(const std::vector<unsigned>& v, unsigned vbo=0);
 	void operator()(int n);
 	Matrix<float> operator[](int n);
-	GLObjs& operator+=(const GLObject& r);
+	GLObjs& operator+=(GLObject& r);
 	void transfer_all(const char* v_var, const char* c_var, const char* n_var);
 
 protected:

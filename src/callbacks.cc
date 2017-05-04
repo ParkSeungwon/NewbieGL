@@ -16,25 +16,25 @@ float camera_x=1, camera_y=1;
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) 
 {// && action == GLFW_PRESS) 
 	switch(key) {
-	case GLFW_KEY_LEFT:
+	case GLFW_KEY_A:
 		KeyBindMatrix = m.gltranslate(-STEP, 0, 0) * KeyBindMatrix; break;
 	case GLFW_KEY_DOWN:
 		KeyBindMatrix = m.gltranslate(0, -STEP, 0) * KeyBindMatrix; break;
-	case GLFW_KEY_RIGHT:
+	case GLFW_KEY_D:
 		KeyBindMatrix = m.gltranslate(STEP, 0, 0) * KeyBindMatrix; break;
 	case GLFW_KEY_UP:
 		KeyBindMatrix = m.gltranslate(0, STEP, 0) * KeyBindMatrix; break;
-	case GLFW_KEY_Z:
+	case GLFW_KEY_W:
 		KeyBindMatrix = m.gltranslate(0, 0, STEP) * KeyBindMatrix; break;
-	case GLFW_KEY_X:
+	case GLFW_KEY_S:
 		KeyBindMatrix = m.gltranslate(0, 0, -STEP) * KeyBindMatrix; break;
 
-	case GLFW_KEY_W: KeyBindMatrix = m.glrotateX(STEP) * KeyBindMatrix; break;
-	case GLFW_KEY_A: KeyBindMatrix = m.glrotateY(-STEP) * KeyBindMatrix; break;
-	case GLFW_KEY_S: KeyBindMatrix = m.glrotateX(-STEP) * KeyBindMatrix; break;
-	case GLFW_KEY_D: KeyBindMatrix = m.glrotateY(STEP) * KeyBindMatrix; break;
-	case GLFW_KEY_Q: KeyBindMatrix = m.glrotateZ(-STEP) * KeyBindMatrix; break;
-	case GLFW_KEY_E: KeyBindMatrix = m.glrotateZ(STEP) * KeyBindMatrix; break;
+//	case GLFW_KEY_W: KeyBindMatrix = m.glrotateX(STEP) * KeyBindMatrix; break;
+//	case GLFW_KEY_A: KeyBindMatrix = m.glrotateY(-STEP) * KeyBindMatrix; break;
+//	case GLFW_KEY_S: KeyBindMatrix = m.glrotateX(-STEP) * KeyBindMatrix; break;
+//	case GLFW_KEY_D: KeyBindMatrix = m.glrotateY(STEP) * KeyBindMatrix; break;
+	case GLFW_KEY_Q: KeyBindMatrix = m.glrotateY(-STEP) * KeyBindMatrix; break;
+	case GLFW_KEY_E: KeyBindMatrix = m.glrotateY(STEP) * KeyBindMatrix; break;
 
 	case GLFW_KEY_SPACE: KeyBindMatrix.E(); break;
 
@@ -52,6 +52,11 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 		cout << '(' << x / 4 << ',' << y / 4 << ')' << flush;
 	}
 }
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+	KeyBindMatrix = m.glscale(1+yoffset, 1+yoffset, 1+yoffset) * KeyBindMatrix;
+}
+
 void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos) {
 	if(record) cout << xpos << ' ' << ypos << ' ' << flush;
 }
@@ -73,15 +78,16 @@ bool glinit(GLFWwindow* window)
 	glfwSetKeyCallback(window, key_callback);
 	glfwSetMouseButtonCallback(window, mouse_button_callback);
 	glfwSetCursorPosCallback(window, cursor_pos_callback);
+	glfwSetScrollCallback(window, scroll_callback);
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 	glClearColor(0, 0, 0, 0); // black background
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
-	//glEnable(GL_LIGHTING);
-	//glEnable(GL_LIGHT0);
-//	glEnable(GL_NORMALIZE);
-//	glShadeModel(GL_SMOOTH);
+//	glEnable(GL_LIGHTING);
+//	glEnable(GL_LIGHT0);
+	glEnable(GL_NORMALIZE);
+	glShadeModel(GL_SMOOTH);
 	glDisable(GL_COLOR_MATERIAL);
 
 	glewExperimental = true; // Needed for core profile
@@ -90,8 +96,7 @@ bool glinit(GLFWwindow* window)
 		glfwTerminate();
 		return false;
 	}
-	if (glewIsSupported("GL_VERSION_3_3"))
-        printf("Ready for OpenGL 3.3\n");
+	if (glewIsSupported("GL_VERSION_3_3")) printf("Ready for OpenGL 3.3\n");
     else {
         printf("OpenGL 3.3 not supported\n");
         exit(1);
@@ -102,6 +107,7 @@ bool glinit(GLFWwindow* window)
 	cout << glGetString( GL_VENDOR ) << endl;
 	cout << glGetString( GL_RENDERER ) << endl;
 	cout << glGetString( GL_VERSION   ) << endl;
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	return true;
 }
 

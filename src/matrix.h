@@ -5,8 +5,9 @@
 #include<cassert>
 #include<iostream>
 #include<iomanip>
+#include<cxcore.hpp>
 #include"combi.h"
-
+///
 template <typename T> class Matrix
 {
 public:
@@ -46,6 +47,19 @@ public:
 		width = r.width; height = r.height;
 	}
 	
+	Matrix(const cv::Mat& m) : Matrix<T>{static_cast<unsigned short>(m.cols), 
+		static_cast<unsigned short>(m.rows)} {
+		for(int x=1; x<=width; x++) for(int y=1; y<=height; y++) 
+			(*this)[x][y] = m.at<T>(y-1, x-1);
+	}
+
+	operator cv::Mat() {
+		cv::Mat mat {cv::Mat_<T>{height, width}};
+		for(int x=1; x<=width; x++) for(int y=1; y<=height; y++) 
+			mat.at<T>(y-1, x-1) = (*this)[x][y];
+		return mat;
+	}
+
 	virtual ~Matrix() {if(arr) delete [] arr;}
 
 	///getters
@@ -205,6 +219,18 @@ public:
 		return *this;
 	}
 
+	Matrix<T> glprojection(T left, T right, T bottom, T top, T far, T near) {
+		if(width != 4 || height != 4) throw "should be 4x4";
+		E();
+		(*this)[1][1] = 2 * near / (right - left);
+		(*this)[2][2] = 2 * near / (top - bottom);
+		(*this)[3][3] = -(far + near) / (far - near);
+		(*this)[3][1] = (left + right) / (right - left);
+		(*this)[3][2] = (top + bottom) / (top - bottom);
+		(*this)[4][3] = -2 * far * near / (far - near);
+		(*this)[3][4] = -1;
+		return *this;
+	}
 	Matrix<T> One() const {
 		for(int i=0; i<width*height; i++)  arr[i] = 1;
 	}

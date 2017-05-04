@@ -42,29 +42,61 @@
 \noindent
 \lstset{language=C++, columns=flexible, tabsize=4, frame=shadowbox, showstringspaces=false, breaklines=true, upquote=true, basicstyle=\normalsize}
 \newpage
-\section*{Lab 6. Modeling}
+\section*{Lab 9. Viewing}
+	
+\begin{verbatim}
+Use 'keyboard' to change your view like mouse controls do in the example code.
+	
+	- 'Q / E' : rotation (imagine that you are a game character of a FPS game. 
+				Q turns your head left, E turns your head right) (2pt)
+	- 'W' : move forward to the object (2pt)
+	- 'S' : move backward from the object (2pt)
+	- 'A' : side step left (imagine one more time that you are a FPS 
+			game character) (2pt)
+	- 'D' : side step right (imagine one more time that you are a FPS 
+			game character) (2pt)
 
-Programming Practice
-\subsection{Transform your ironman model to make it look correctly. (5pt)}
-\lstinputlisting[caption=obj파일 리더 헤더파일]{src/readobj.h}
-\lstinputlisting[caption=obj파일 리더 구현부]{src/readobj.cc}
-\lstinputlisting[caption=실행파일]{src/val2.cpp}
-대부분의 모듈은 이미 지난 시간에 제출한 것을 재활용해서 다시 올리지 않습니다.
+머리를 돌리는 것은 Y축을 기준으로 회전하는 것과 같고, 가까이 다가가는 것과 멀어지는 것은 scale과 같고, 좌우로 움직이는 것은 translation과 같다.
+기존에 구현했던 callback을 조금 고치는 것으로 가능했다.
+KeyBindMatrix는 메인화일에서 물체들을 변환한다.
+또한 프로젝션 매트릭스를 이용해야 접근과 멀어짐, 좌우 회전이 더욱 실감난다.
+\end{verbatim}
 
-\includegraphics[width=\textwidth]{3.png}
-파일명을 인자로 해서 obj 파일을 읽어들이는 방식으로 했다.\\
-scale만을 조절해서 아이언맨을 표시할 수 있었다.
-\subsection{Use Blender (or other modeling software) to model a simple (and probably cute) 3D smiley. Export it to an OBJ file and read it in YOUR program. (5pt)}
-\lstinputlisting[caption=위의 실행 파일에서 눈을 검게 하고 구를 노란색으로 하기 위해 한 줄만을 첨가했다.]{src/val3.cpp}
-\includegraphics[width=\textwidth]{1.png}
+\begin{lstlisting}
+	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) 
+	{// && action == GLFW_PRESS) 
+		switch(key) {
+			case GLFW_KEY_A:
+			KeyBindMatrix = m.gltranslate(-STEP, 0, 0) * KeyBindMatrix; break;
+			case GLFW_KEY_DOWN:
+			KeyBindMatrix = m.gltranslate(0, -STEP, 0) * KeyBindMatrix; break;
+			case GLFW_KEY_D:
+			KeyBindMatrix = m.gltranslate(STEP, 0, 0) * KeyBindMatrix; break;
+			case GLFW_KEY_UP:
+			KeyBindMatrix = m.gltranslate(0, STEP, 0) * KeyBindMatrix; break;
+			case GLFW_KEY_W:
+			KeyBindMatrix = m.gltranslate(0, 0, STEP) * KeyBindMatrix; break;
+			case GLFW_KEY_S:
+			KeyBindMatrix = m.gltranslate(0, 0, -STEP) * KeyBindMatrix; break;
+			
+			//	case GLFW_KEY_W: KeyBindMatrix = m.glrotateX(STEP) * KeyBindMatrix; break;
+			//	case GLFW_KEY_A: KeyBindMatrix = m.glrotateY(-STEP) * KeyBindMatrix; break;
+			//	case GLFW_KEY_S: KeyBindMatrix = m.glrotateX(-STEP) * KeyBindMatrix; break;
+			//	case GLFW_KEY_D: KeyBindMatrix = m.glrotateY(STEP) * KeyBindMatrix; break;
+			case GLFW_KEY_Q: KeyBindMatrix = m.glrotateY(-STEP) * KeyBindMatrix; break;
+			case GLFW_KEY_E: KeyBindMatrix = m.glrotateY(STEP) * KeyBindMatrix; break;
+			
+			case GLFW_KEY_SPACE: KeyBindMatrix.E(); break;
+			
+			case GLFW_KEY_J: camera_x -= STEP; break;
+			case GLFW_KEY_K: camera_y -= STEP; break;
+			case GLFW_KEY_L: camera_x += STEP; break;
+			case GLFW_KEY_I: camera_y += STEP; break;
+		}
+	}
+\end{lstlisting}
+\lstinputlisting[caption=main]{src/val4.cpp}
 
-입이 있다는 것을 표현하기 위해 옆으로 돌린 모습.\\
-블렌더가 익숙하지 않아 예쁜 모양은 나오지 않았지만, 얼굴을 구로 눈을 디스크로 입을 토루스로 표현해보았다.\\
-입의 색깔이 같은 색이라 정면에서는 보이지 않아 옆으로 돌려보았다.
-
-\includegraphics[width=\textwidth]{2.png}
-
-정면에서 본 모습\\삼각형으로 만들어 obj를 구현하는 데에는 성공했다.\\
-Ugly!! 죄송합니다...
+\includegraphics[width=\textwidth]{1.png}	
 
 \end{document}
