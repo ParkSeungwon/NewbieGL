@@ -89,6 +89,7 @@ bool glinit(GLFWwindow* window)
 	glEnable(GL_NORMALIZE);
 	glShadeModel(GL_SMOOTH);
 	glDisable(GL_COLOR_MATERIAL);
+	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 
 	glewExperimental = true; // Needed for core profile
 	if (glewInit() != GLEW_OK) {

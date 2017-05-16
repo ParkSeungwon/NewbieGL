@@ -53,7 +53,7 @@ int main(int ac, char** av)
 	objs += ironman;
 	objs += obj3d;
 	objs += cube;
-	objs.transfer_all("a_pos", "a_color", "norm");
+	objs.transfer_all("a_pos", "a_color", "norm", "a_uv");
 
 
 	Matrix<float> light = {

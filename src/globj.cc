@@ -76,16 +76,24 @@ unsigned GLObject::read_obj_file(string file)
 }	
 
 unsigned GLObject::read_texture(string file)
-{
+{///cube map texture
 	using namespace cv;
 	Mat image = imread(file);
+	int sq = min(image.cols/4, image.rows/3);
+	Rect 					r1(sq, 0, sq, sq), 
+		 r2(0, sq, sq, sq), r3(sq, sq, sq, sq), r4(2*sq,sq,sq,sq), r5(3*sq,sq,sq,sq), 
+		 					r6(sq, 2*sq, sq, sq);
 	unsigned vbo;
 	glGenTextures(1, &vbo);
 	//glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, vbo);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.cols, image.rows, 0, GL_BGR, GL_UNSIGNED_BYTE, image.data);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);	
+	glBindTexture(GL_TEXTURE_CUBE_MAP, vbo);
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGB, sq, sq, 0, GL_BGR, GL_UNSIGNED_BYTE, image(r1).data);
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGB, sq, sq, 0, GL_BGR, GL_UNSIGNED_BYTE, image(r2).data);
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGB, sq, sq, 0, GL_BGR, GL_UNSIGNED_BYTE, image(r3).data);
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGB, sq, sq, 0, GL_BGR, GL_UNSIGNED_BYTE, image(r4).data);
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGB, sq, sq, 0, GL_BGR, GL_UNSIGNED_BYTE, image(r5).data);
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGB, sq, sq, 0, GL_BGR, GL_UNSIGNED_BYTE, image(r6).data);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	return vbo;
 }
 

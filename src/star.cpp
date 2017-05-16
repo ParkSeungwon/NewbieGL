@@ -43,7 +43,7 @@ int main()
 
 	GLObjs stage{shader_program};
 	stage += star;
-	stage.transfer_all("a_pos", "a_color", "norm");
+	stage.transfer_all("a_pos", "a_color", "norm", "a_uv");
 
 	extern Matrix<float> KeyBindMatrix;
 	while(!glfwWindowShouldClose(window)) {

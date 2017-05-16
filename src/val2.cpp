@@ -22,7 +22,7 @@ int main(int ac, char** av)
 	obj3d.read_obj_file(av[1]);
 	GLObjs stage{shader_program};
 	stage += obj3d;
-	stage.transfer_all("a_pos", "a_color", "norm");
+	stage.transfer_all("a_pos", "a_color", "norm", "a_uv");
 	Matrix<float> light = {
 		{0.2, 0.2, 0.2, 1}, //ambient
 		{1, 1, 1, 1}, //diffuse

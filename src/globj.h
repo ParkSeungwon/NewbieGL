@@ -39,7 +39,7 @@ public:
 	void operator()(int n);
 	Matrix<float> operator[](int n);
 	GLObjs& operator+=(GLObject& r);
-	void transfer_all(const char* v_var, const char* c_var, const char* n_var);
+	void transfer_all(const char* v_var, const char* c_var, const char* n_var, const char* t_var);
 
 protected:
 	unsigned shader_program_;
