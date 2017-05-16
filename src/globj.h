@@ -7,6 +7,7 @@ class GLObject
 public:
 	GLObject();
 	unsigned read_obj_file(std::string filename);
+	unsigned read_texture(std::string filename);
 
 	//setters
 	void mode(GLenum md);
@@ -20,7 +21,7 @@ public:
 	void normals();
 
 protected:
-	std::vector<Matrix<float>> vertexes_, colors_, normals_;
+	std::vector<Matrix<float>> vertexes_, colors_, normals_, tex_uv_;
 	std::vector<unsigned> indices_;
 	Matrix<float> matrix_;
 	GLenum mode_ = GL_TRIANGLES;
@@ -45,7 +46,7 @@ protected:
 	std::vector<unsigned> index_chunks_;
 	std::vector<Matrix<float>> matrixes_;
 	std::vector<GLenum> modes_;
-	unsigned vbo[4];
+	unsigned vbo[5];
 
 private:
 	unsigned transfer_data(const std::vector<Matrix<float>>& v, const char* var,

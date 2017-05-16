@@ -7,7 +7,7 @@
 #include<iomanip>
 #include<cxcore.hpp>
 #include"combi.h"
-///
+
 template <typename T> class Matrix
 {
 public:

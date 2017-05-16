@@ -1,5 +1,6 @@
 #include<fstream>
 #include<GL/glew.h>
+#include<highgui.h>
 #include"globj.h"
 using namespace std;
 
@@ -74,6 +75,19 @@ unsigned GLObject::read_obj_file(string file)
 	return vertexes_.size();
 }	
 
+unsigned GLObject::read_texture(string file)
+{
+	using namespace cv;
+	Mat image = imread(file);
+	unsigned vbo;
+	glGenTextures(1, &vbo);
+	//glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, vbo);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.cols, image.rows, 0, GL_BGR, GL_UNSIGNED_BYTE, image.data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);	
+	return vbo;
+}
 
 GLObjs::GLObjs(unsigned prog) 
 {
@@ -88,6 +102,7 @@ GLObjs& GLObjs::operator+=(GLObject& r)
 	vertexes_.insert(vertexes_.end(), r.vertexes_.begin(), r.vertexes_.end());
 	colors_.insert(colors_.end(), r.colors_.begin(), r.colors_.end());
 	normals_.insert(normals_.end(), r.normals_.begin(), r.normals_.end());
+	tex_uv_.insert(tex_uv_.end(), r.tex_uv_.begin(), r.tex_uv_.end());
 	auto idx = r.indices_;
 	for(auto& a : idx) a += sz;
 	indices_.insert(indices_.end(), idx.begin(), idx.end());
@@ -97,12 +112,13 @@ GLObjs& GLObjs::operator+=(GLObject& r)
 	matrixes_.push_back(r.matrix_);
 }
 
-void GLObjs::transfer_all(const char* v_var, const char* c_var, const char* n_var)
+void GLObjs::transfer_all(const char* v_var, const char* c_var, const char* n_var, const char* t_var)
 {
 	vbo[0] = transfer_data(vertexes_, v_var);
 	vbo[1] = transfer_data(colors_, c_var);
 	vbo[2] = transfer_data(normals_, n_var);
-	vbo[3] = indices(indices_);
+	vbo[3] = transfer_data(tex_uv_, t_var);
+	vbo[4] = indices(indices_);
 	cout << indices_.size() << endl;
 }
 

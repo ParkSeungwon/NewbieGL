@@ -1,9 +1,11 @@
 #version 130
 uniform mat4 LIGHT;
 uniform mat4 KeyBindMatrix;
+uniform sampler2D TEXTURE
 in vec3 color;
 in vec4 NN;
 in vec3 pos;
+in vec2 f_uv;
 out vec4 f_color;
 
 vec3 ambient = LIGHT[0].xyz;
