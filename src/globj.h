@@ -55,4 +55,5 @@ protected:
 private:
 	unsigned transfer_data(const std::vector<Matrix<float>>& v, const char* var,
 			unsigned vbo=0);
+	unsigned read_texture();
 };

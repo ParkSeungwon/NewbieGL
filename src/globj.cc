@@ -100,7 +100,7 @@ unsigned GLObjs::transfer_data(const vector<Matrix<float>>& v, const char* var,
 
 	unsigned loc = glGetAttribLocation(shader_program_, var);
 	glEnableVertexAttribArray(loc);
-	cout << var << " : " << loc << endl;
+	cout << var << " : " << loc << ", " << v.size() <<endl;
 	glVertexAttribPointer(loc, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	return vbo;
 }

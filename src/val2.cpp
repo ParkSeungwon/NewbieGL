@@ -19,11 +19,11 @@ int main(int ac, char** av)
 	glUseProgram(shader_program);
 
 	GLObject obj3d;
-	obj3d.read_obj_file(av[1]);
-	obj3d.read_texture("b.jpg");
+	auto sz = obj3d.read_obj_file(av[1]);
+	obj3d.colors(vector<Matrix<float>>{sz,{0,0,1}});
 	GLObjs stage{shader_program};
 	stage += obj3d;
-	stage.transfer_all("a_pos", "a_color", "norm", "a_uv");
+	stage.transfer_all();
 	Matrix<float> light = {
 		{0.2, 0.2, 0.2, 1}, //ambient
 		{1, 1, 1, 1}, //diffuse

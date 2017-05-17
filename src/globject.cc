@@ -13,7 +13,7 @@ void GLObject::colors(const vector<Matrix<float>>& v) { colors_ = v; }
 void GLObject::colors(vector<Matrix<float>>&& v) { colors_ = move(v); }
 void GLObject::indices(const vector<unsigned>& v) { indices_ = v; }
 void GLObject::indices(vector<unsigned>&& v) { indices_ = move(v); }
-void GLObject::texture_file(string f) { file_name_ = f; }
+void GLObject::texture_file(string f) { texture_file_ = f; }
 void GLObject::normals()
 {///should come after setting mode
 	if(normals_.size() == vertexes_.size()) return;
@@ -33,7 +33,7 @@ void GLObject::normals()
 		}
 	} catch(const char* e) { cerr << e << endl; }
 	for(auto& a : normals_) {
-		a /= sqrt(a[1][1]*a[1][1] + a[1][2]*a[1][2] + a[1][3]*a[1][3]);
+		a = a * (1.0f / sqrt(a[1][1]*a[1][1] + a[1][2]*a[1][2] + a[1][3]*a[1][3]));
 		a[1][4] = 1;
 	}
 	normalize_vertex();
@@ -76,14 +76,14 @@ unsigned GLObject::read_obj_file(string file)
 			normals_.push_back(Matrix<float>{x, y, z});
 		}
 	}
-	cout << file << indices_.size() << endl;
+	cout << file << "\'s indices size : " << indices_.size() << endl;
 	return vertexes_.size();
 }	
 
 
 void GLObject::colors()
 {
-	if(file_name_ == "") return;
+	if(texture_file_ == "") return;
 	colors_.clear();
 	for(auto& a : normals_) {//-1 ~ 1 cube로 계산 뒤 0~1로 변형
 		float x = a[1][1], y = a[1][2], z = a[1][3];//find biggest abs->vertex coord
@@ -91,6 +91,8 @@ void GLObject::colors()
 		else if(abs(y)>abs(z) && abs(y)>abs(x)) colors_.push_back({x, y>0?1:-1, z});
 		else colors_.push_back({x, y, z>0?1:-1});
 	}
+	for(auto& a : colors_) a = a * 0.5 + Matrix<float>{0.5, 0.5, 0.5};
+	cout << "colors_ size : " << colors_.size() << endl;
 }
 
 void GLObject::normalize_vertex()
