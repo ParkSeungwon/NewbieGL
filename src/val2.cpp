@@ -20,6 +20,7 @@ int main(int ac, char** av)
 
 	GLObject obj3d;
 	obj3d.read_obj_file(av[1]);
+	obj3d.read_texture("b.jpg");
 	GLObjs stage{shader_program};
 	stage += obj3d;
 	stage.transfer_all("a_pos", "a_color", "norm", "a_uv");

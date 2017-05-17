@@ -7,7 +7,6 @@ class GLObject
 public:
 	GLObject();
 	unsigned read_obj_file(std::string filename);
-	unsigned read_texture(std::string filename);
 
 	//setters
 	void mode(GLenum md);
@@ -18,17 +17,21 @@ public:
 	void colors(std::vector<Matrix<float>>&& cols);
 	void indices(const std::vector<unsigned>& ids);
 	void indices(std::vector<unsigned>&& ids);
-	void normals();
+	void texture_file(std::string filename);
 
 protected:
-	std::vector<Matrix<float>> vertexes_, colors_, normals_, tex_uv_;
+	void normals();
+	void colors();//for texture mapping if filename is specified
+	std::vector<Matrix<float>> vertexes_, colors_, normals_;
 	std::vector<unsigned> indices_;
 	Matrix<float> matrix_;
 	GLenum mode_ = GL_TRIANGLES;
+	std::string texture_file_;
 	friend class GLObjs;
 
 private:
 	Matrix<float> cross(const Matrix<float>& v1, const Matrix<float>& v2);
+	void normalize_vertex();
 };
 
 class GLObjs : protected GLObject
@@ -39,14 +42,15 @@ public:
 	void operator()(int n);
 	Matrix<float> operator[](int n);
 	GLObjs& operator+=(GLObject& r);
-	void transfer_all(const char* v_var, const char* c_var, const char* n_var, const char* t_var);
+	void transfer_all();
 
 protected:
 	unsigned shader_program_;
 	std::vector<unsigned> index_chunks_;
 	std::vector<Matrix<float>> matrixes_;
 	std::vector<GLenum> modes_;
-	unsigned vbo[5];
+	std::vector<std::string> texture_files_;
+	unsigned vbo[4];
 
 private:
 	unsigned transfer_data(const std::vector<Matrix<float>>& v, const char* var,
