@@ -89,6 +89,7 @@ bool glinit(GLFWwindow* window)
 	glEnable(GL_NORMALIZE);
 	glShadeModel(GL_SMOOTH);
 	glDisable(GL_COLOR_MATERIAL);
+	glEnable(GL_TEXTURE_CUBE_MAP);
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 
 	glewExperimental = true; // Needed for core profile
@@ -125,27 +126,6 @@ std::valarray<Matrix<float>> polygon(int points_count, float r)
 	return pts;
 }
 
-void bindNdraw(unsigned color, unsigned vertex, GLenum mode, int first, int count,
-		unsigned indices)
-{
-	glBindBuffer(GL_ARRAY_BUFFER, color);
-	glEnableClientState(GL_COLOR_ARRAY);
-	glColorPointer(3, GL_FLOAT, 0, nullptr);
-
-	glBindBuffer(GL_ARRAY_BUFFER, vertex);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, nullptr);//3 float is 1 vertex stride 0, 
-
-	if(indices) {
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices);
-		glPolygonMode(GL_FRONT, GL_FILL);
-		glDrawElements(mode, count, GL_UNSIGNED_INT, 0);
-	} else glDrawArrays(mode, first, count);//mode, first, count
-
-	glDisableClientState(GL_COLOR_ARRAY);
-	glDisableClientState(GL_VERTEX_ARRAY);
-}
-
 string read_file(string file)
 {
 	string r;
@@ -153,24 +133,6 @@ string read_file(string file)
 	ifstream f(file);
 	while(f >> noskipws >> c) r += c;
 	return r;
-}
-
-vector<string> in_variable_name(string v_shader) {
-	vector<string> v;
-	stringstream ss;
-	ss << v_shader;
-	string s;
-	while(getline(ss, s)) {
-		stringstream ss2;
-		ss2 << s;
-		ss2 >> s;
-		if(s == "in") {
-			ss2 >> s >> s;
-			if(s.back() == ';') s.back() = '\0';
-			v.push_back(s);
-		}
-	}
-	return v;
 }
 
 unsigned make_shader_program(const char* vsh, const char* fsh)
@@ -217,47 +179,9 @@ unsigned make_shader_program(const char* vsh, const char* fsh)
 	}
 	return shader_program;
 }
-
-void gl_bind_data(unsigned fv, unsigned fc, unsigned fe)
-{
-//	unsigned vbo[3] = {fv, fc, fe};
-	glBindBuffer(GL_ARRAY_BUFFER, fv);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-	
-	glBindBuffer(GL_ARRAY_BUFFER, fc);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-	//attribute 0, xyz3, float, normalized?, stride, offset
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, fe);
-	glPolygonMode(GL_FRONT, GL_FILL);
-}
-
 void transfer_matrix(unsigned shader_program, const Matrix<float>& m, 
 		const char* var_name)
 {
 	int fd = glGetUniformLocation(shader_program, var_name);
 	if(fd != -1) glUniformMatrix4fv(fd, 1, GL_FALSE, m.data());
-}
-
-void set_light(const Matrix<float>& light_source)
-{
-	auto m = light_source.transpose();
-	float* p = m.data();
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, p);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, p+4);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, p+8);
-	glLightfv(GL_LIGHT0, GL_POSITION, p+12);
-}
-
-void set_material(const Matrix<float>& material, float shininess)
-{
-	auto m = material.transpose();
-	float* p = m.data();
-	glMaterialfv(GL_FRONT, GL_AMBIENT, p);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, p+4);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, p+8);
-	glMaterialfv(GL_FRONT, GL_EMISSION, p+12);
-	glMaterialf(GL_FRONT, GL_SHININESS, shininess);
 }

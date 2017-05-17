@@ -48,7 +48,7 @@ unsigned GLObjs::read_texture()
 	};
 	unsigned vbo;
 	glGenTextures(1, &vbo);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, vbo);
+//	glActivateTexture(GL_TEXTURE0)
 	for(int i=0; i<texture_files_.size(); i++) {
 		Mat image = imread(texture_files_[i]);
 //	int sq = min(image.cols/4, image.rows/3);
@@ -60,8 +60,8 @@ unsigned GLObjs::read_texture()
 				GL_BGR, GL_UNSIGNED_BYTE, image.data);
 	}
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	int loc = glGetUniformLocation(shader_program_, "TEXTURE");
-	glEnableVertexAttribArray(loc);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, vbo);
+	glUniform1i(glGetUniformLocation(shader_program_, "TEXTURE"), 0);
 	return vbo;
 }
 
