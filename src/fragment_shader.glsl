@@ -5,7 +5,6 @@ uniform samplerCube TEXTURE;
 in vec3 color;
 in vec4 NN;
 in vec3 pos;
-in vec3 f_uv;
 out vec4 f_color;
 
 vec3 ambient = LIGHT[0].xyz;
@@ -22,7 +21,8 @@ void main() {
 	vec3 V = normalize(view);
 	vec3 R = -V + 2 * dot(N, V) * N;
 
-	vec4 texture = textureCube(TEXTURE, f_uv);
+	vec3 color2 = vec3(0.0f,0.0f,1.0f);
+	vec4 texture = textureCube(TEXTURE, color2);
 	f_color = vec4(texture.xyz * (0.1 * ambient + 0.8 * diffuse * dot(L, N) + specular * pow(dot(V, R), 25)), 1.0);
 }
 

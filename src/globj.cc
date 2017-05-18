@@ -13,7 +13,10 @@ GLObjs::GLObjs(unsigned prog)
 GLObjs& GLObjs::operator+=(GLObject& r)
 {
 	r.normals();
-	r.colors();
+	r.colors();//if texture
+	if(r.indices_.empty()) for(int i=0; i<r.vertexes_.size(); i++) //if no indices
+		r.indices_.push_back(i);
+//	for(int i=0; i<10; i++) cout << r.vertexes_[i] << r.colors_[i] << r.normals_[i];
 	auto sz = vertexes_.size();
 	vertexes_.insert(vertexes_.end(), r.vertexes_.begin(), r.vertexes_.end());
 	colors_.insert(colors_.end(), r.colors_.begin(), r.colors_.end());
@@ -48,9 +51,10 @@ unsigned GLObjs::read_texture()
 	};
 	unsigned vbo;
 	glGenTextures(1, &vbo);
-//	glActivateTexture(GL_TEXTURE0)
-	for(int i=0; i<texture_files_.size(); i++) {
-		Mat image = imread(texture_files_[i]);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, vbo);
+	for(int i=0; i<6; i++) {
+		Mat image = imread("b.jpg");
 //	int sq = min(image.cols/4, image.rows/3);
 //	Rect 					r1(sq, 0, sq, sq), 
 //		 r2(0, sq, sq, sq), r3(sq, sq, sq, sq), r4(2*sq,sq,sq,sq), r5(3*sq,sq,sq,sq), 
@@ -60,7 +64,7 @@ unsigned GLObjs::read_texture()
 				GL_BGR, GL_UNSIGNED_BYTE, image.data);
 	}
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, vbo);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glUniform1i(glGetUniformLocation(shader_program_, "TEXTURE"), 0);
 	return vbo;
 }

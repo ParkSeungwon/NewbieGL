@@ -42,61 +42,26 @@
 \noindent
 \lstset{language=C++, columns=flexible, tabsize=4, frame=shadowbox, showstringspaces=false, breaklines=true, upquote=true, basicstyle=\normalsize}
 \newpage
-\section*{Lab 9. Viewing}
+\section*{Lab 11. Texturing}
 	
 \begin{verbatim}
-Use 'keyboard' to change your view like mouse controls do in the example code.
-	
-	- 'Q / E' : rotation (imagine that you are a game character of a FPS game. 
-				Q turns your head left, E turns your head right) (2pt)
-	- 'W' : move forward to the object (2pt)
-	- 'S' : move backward from the object (2pt)
-	- 'A' : side step left (imagine one more time that you are a FPS 
-			game character) (2pt)
-	- 'D' : side step right (imagine one more time that you are a FPS 
-			game character) (2pt)
+Lab 11. Texturing
 
-머리를 돌리는 것은 Y축을 기준으로 회전하는 것과 같고, 가까이 다가가는 것과 멀어지는 것은 scale과 같고, 좌우로 움직이는 것은 translation과 같다.
-기존에 구현했던 callback을 조금 고치는 것으로 가능했다.
-KeyBindMatrix는 메인화일에서 물체들을 변환한다.
-또한 프로젝션 매트릭스를 이용해야 접근과 멀어짐, 좌우 회전이 더욱 실감난다.
+Programming Practice
+1. Download a 3D model from thingiverse.
+
+2. Convert it to an OBJ file.
+
+3. Render it with phong shading. (3pts) 
+
+4. Map a texture on it. You may use any image you like. (4pts) 
+
+5. Animate texture. (3pts)
+
+* Note: you are going to study bump mapping next week.
+
 \end{verbatim}
 
-\begin{lstlisting}
-	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) 
-	{// && action == GLFW_PRESS) 
-		switch(key) {
-			case GLFW_KEY_A:
-			KeyBindMatrix = m.gltranslate(-STEP, 0, 0) * KeyBindMatrix; break;
-			case GLFW_KEY_DOWN:
-			KeyBindMatrix = m.gltranslate(0, -STEP, 0) * KeyBindMatrix; break;
-			case GLFW_KEY_D:
-			KeyBindMatrix = m.gltranslate(STEP, 0, 0) * KeyBindMatrix; break;
-			case GLFW_KEY_UP:
-			KeyBindMatrix = m.gltranslate(0, STEP, 0) * KeyBindMatrix; break;
-			case GLFW_KEY_W:
-			KeyBindMatrix = m.gltranslate(0, 0, STEP) * KeyBindMatrix; break;
-			case GLFW_KEY_S:
-			KeyBindMatrix = m.gltranslate(0, 0, -STEP) * KeyBindMatrix; break;
-			
-			//	case GLFW_KEY_W: KeyBindMatrix = m.glrotateX(STEP) * KeyBindMatrix; break;
-			//	case GLFW_KEY_A: KeyBindMatrix = m.glrotateY(-STEP) * KeyBindMatrix; break;
-			//	case GLFW_KEY_S: KeyBindMatrix = m.glrotateX(-STEP) * KeyBindMatrix; break;
-			//	case GLFW_KEY_D: KeyBindMatrix = m.glrotateY(STEP) * KeyBindMatrix; break;
-			case GLFW_KEY_Q: KeyBindMatrix = m.glrotateY(-STEP) * KeyBindMatrix; break;
-			case GLFW_KEY_E: KeyBindMatrix = m.glrotateY(STEP) * KeyBindMatrix; break;
-			
-			case GLFW_KEY_SPACE: KeyBindMatrix.E(); break;
-			
-			case GLFW_KEY_J: camera_x -= STEP; break;
-			case GLFW_KEY_K: camera_y -= STEP; break;
-			case GLFW_KEY_L: camera_x += STEP; break;
-			case GLFW_KEY_I: camera_y += STEP; break;
-		}
-	}
-\end{lstlisting}
-\lstinputlisting[caption=main]{src/val4.cpp}
 
-\includegraphics[width=\textwidth]{1.png}	
 
 \end{document}

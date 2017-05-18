@@ -2,12 +2,16 @@
 #define GLEW_STATIC
 
 // Headers
-#include <GL/glew.h>
-#include <SFML/Window.hpp>
+#include<iostream>
+#include<highgui.h>
+#include"glutil.h"
+#include"globj.h"
+using namespace std;
+extern Matrix<float> KeyBindMatrix;
 
 // Shader sources
 const GLchar* vertexSource = R"glsl(
-    #version 150 core
+    #version 130
     in vec2 position;
     in vec3 color;
     in vec2 texcoord;
@@ -21,7 +25,7 @@ const GLchar* vertexSource = R"glsl(
     }
 )glsl";
 const GLchar* fragmentSource = R"glsl(
-    #version 150 core
+    #version 130
     in vec3 Color;
     in vec2 Texcoord;
     out vec4 outColor;
@@ -35,15 +39,9 @@ const GLchar* fragmentSource = R"glsl(
 
 int main()
 {
-    sf::ContextSettings settings;
-    settings.depthBits = 24;
-    settings.stencilBits = 8;
-
-    sf::Window window(sf::VideoMode(800, 600, 32), "OpenGL", sf::Style::Titlebar | sf::Style::Close, settings);
-
-    // Initialize GLEW
-    glewExperimental = GL_TRUE;
-    glewInit();
+	if (!glfwInit()) return -1;
+	GLFWwindow* window = glfwCreateWindow(1024, 768, "Color Cube", NULL, NULL);
+	if (!glinit(window)) return -1;
 
     // Create Vertex Array Object
     GLuint vao;
@@ -112,14 +110,11 @@ int main()
     GLuint textures[2];
     glGenTextures(2, textures);
 
-    int width, height;
-    unsigned char* image;
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, textures[0]);
-        image = SOIL_load_image("sample.png", &width, &height, 0, SOIL_LOAD_RGB);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-        SOIL_free_image_data(image);
+        auto image = cv::imread("b.jpg");
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.cols, image.rows, 0, GL_BGR, GL_UNSIGNED_BYTE, image.data);
     glUniform1i(glGetUniformLocation(shaderProgram, "texKitten"), 0);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -129,9 +124,8 @@ int main()
 
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, textures[1]);
-        image = SOIL_load_image("sample2.png", &width, &height, 0, SOIL_LOAD_RGB);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-        SOIL_free_image_data(image);
+        image = cv::imread("3.png");
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.cols, image.rows, 0, GL_BGR, GL_UNSIGNED_BYTE, image.data);
     glUniform1i(glGetUniformLocation(shaderProgram, "texPuppy"), 1);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -139,29 +133,16 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    bool running = true;
-    while (running)
-    {
-        sf::Event windowEvent;
-        while (window.pollEvent(windowEvent))
-        {
-            switch (windowEvent.type)
-            {
-            case sf::Event::Closed:
-                running = false;
-                break;
-            }
-        }
+	while (!glfwWindowShouldClose(window)) {
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Clear the screen to black
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
 
         // Draw a rectangle from the 2 triangles using 6 indices
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         // Swap buffers
-        window.display();
+		glfwSwapBuffers(window);
+		glfwPollEvents();
     }
 
     glDeleteTextures(2, textures);
@@ -175,7 +156,6 @@ int main()
 
     glDeleteVertexArrays(1, &vao);
 
-    window.close();
 
     return 0;
 }

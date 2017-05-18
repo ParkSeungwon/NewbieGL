@@ -4,7 +4,9 @@
 #include"globj.h"
 using namespace std;
 
-GLObject::GLObject() : matrix_{4,4} {}
+GLObject::GLObject() : matrix_{4,4} {
+	matrix_.E();
+}
 void GLObject::matrix(const Matrix<float>& m) { matrix_ = m; }
 void GLObject::mode(GLenum md) { mode_ = md; }
 void GLObject::vertexes(const vector<Matrix<float>>& v) { vertexes_ = v; }
@@ -36,7 +38,6 @@ void GLObject::normals()
 		a = a * (1.0f / sqrt(a[1][1]*a[1][1] + a[1][2]*a[1][2] + a[1][3]*a[1][3]));
 		a[1][4] = 1;
 	}
-	normalize_vertex();
 }
 
 Matrix<float> GLObject::cross(const Matrix<float>& v1, const Matrix<float>& v2)
@@ -85,20 +86,33 @@ void GLObject::colors()
 {
 	if(texture_file_ == "") return;
 	colors_.clear();
-	for(auto& a : normals_) {//-1 ~ 1 cube로 계산 뒤 0~1로 변형
-		float x = a[1][1], y = a[1][2], z = a[1][3];//find biggest abs->vertex coord
-		if(abs(x) > abs(y) && abs(x) > abs(z)) colors_.push_back({x>0?1:-1, y, z});
-		else if(abs(y)>abs(z) && abs(y)>abs(x)) colors_.push_back({x, y>0?1:-1, z});
-		else colors_.push_back({x, y, z>0?1:-1});
+	normalize_vertex();
+	for(int i=0; i<normals_.size(); i++) {
+		float x = normals_[i][1][1];
+		float y = normals_[i][1][2];
+		float z = normals_[i][1][3];//find biggest abs->vertex coord
+		float vx = vertexes_[i][1][1];
+		float vy = vertexes_[i][1][2];
+		float vz = vertexes_[i][1][3];
+
+		if(abs(x) > abs(y) && abs(x) > abs(z)) colors_.push_back({x>0?1:-1, vy, vz});
+		else if(abs(y)>abs(z) && abs(y)>abs(x)) colors_.push_back({vx, y>0?1:-1, vz});
+		else colors_.push_back({vx, vy, z>0?1:-1});
 	}
-	for(auto& a : colors_) a = a * 0.5 + Matrix<float>{0.5, 0.5, 0.5};
 	cout << "colors_ size : " << colors_.size() << endl;
+	for(auto& a : colors_) {
+		assert(a[1][1] >= -1 && a[1][1] <= 1);
+		assert(a[1][2] >= -1 && a[1][2] <= 1);
+		assert(a[1][3] >= -1 && a[1][3] <= 1);
+	}
 }
 
 void GLObject::normalize_vertex()
 {
 	float xmin, xmax, ymin, ymax, zmin, zmax;
-	xmin = xmax = ymin = ymax = zmin = zmax = vertexes_[0][1][1];
+	xmin = xmax = vertexes_[0][1][1];
+	ymin = ymax = vertexes_[0][1][2];
+	zmin = zmax = vertexes_[0][1][3];
 	for(auto& a : vertexes_) {
 		if(xmin > a[1][1]) xmin = a[1][1];
 		if(xmax < a[1][1]) xmax = a[1][1];
@@ -115,11 +129,16 @@ void GLObject::normalize_vertex()
 		a[1][1] -= xmin;
 		a[1][2] -= ymin;
 		a[1][3] -= zmin;
+		for(int i=1; i<4; i++) {
+			a[1][i] /= rate;
+			a[1][i] -= 0.5;
+			a[1][i] *= 2;
+		}
 	}
 	for(auto& a : vertexes_) {
-		a[1][1] /= rate;
-		a[1][2] /= rate;
-		a[1][3] /= rate;
+		assert(a[1][1] >= -1 && a[1][1] <= 1);
+		assert(a[1][2] >= -1 && a[1][2] <= 1);
+		assert(a[1][3] >= -1 && a[1][3] <= 1);
 	}
 }
 

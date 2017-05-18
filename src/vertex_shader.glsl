@@ -13,6 +13,5 @@ void main() {
 	NN = KeyBindMatrix * vec4(normals_, 0.0f);
 	color = colors_;
 	pos = vertexes_;
-	f_uv = reflect(vertexes_, NN.xyz);
 }
 

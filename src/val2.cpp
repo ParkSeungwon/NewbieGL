@@ -18,9 +18,12 @@ int main(int ac, char** av)
 	if(!shader_program) return 0;
 	glUseProgram(shader_program);
 
+	auto vv = polygon(3, 1);
 	GLObject obj3d;
+//	obj3d.vertexes(vv);
 	auto sz = obj3d.read_obj_file(av[1]);
-	obj3d.colors(vector<Matrix<float>>{sz,{0,0,1}});
+//	obj3d.colors({sz, {.5,1,.5}});
+	obj3d.texture_file("b.jpg");
 	GLObjs stage{shader_program};
 	stage += obj3d;
 	stage.transfer_all();
@@ -31,13 +34,12 @@ int main(int ac, char** av)
 		{0, 0, 2, 1} //position 1 means a point 0 means a vector light
 	};
 	transfer_matrix(shader_program, light.transpose(), "LIGHT");
-	Matrix<float> scale{4,4}, translate{4,4};
 	
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		auto tm = KeyBindMatrix * scale;
-		transfer_matrix(shader_program, tm, "KeyBindMatrix");
+		transfer_matrix(shader_program, light.glprojection(-1,1,-1,1,-1,1) *
+				KeyBindMatrix, "KeyBindMatrix");
 
 		stage(0);
 
