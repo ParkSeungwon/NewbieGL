@@ -2,6 +2,7 @@
 uniform mat4 LIGHT;
 uniform mat4 KeyBindMatrix;
 uniform samplerCube TEXTURE;
+uniform sampler2D TEXTURE2D;
 in vec3 color;
 in vec4 NN;
 in vec3 pos;
@@ -21,8 +22,9 @@ void main() {
 	vec3 V = normalize(view);
 	vec3 R = -V + 2 * dot(N, V) * N;
 
-	vec3 color2 = vec3(0.0f,0.0f,1.0f);
-	vec4 texture = textureCube(TEXTURE, color2);
+//	vec3 color2 = vec3(0.0f,0.0f,1.0f);
+//	vec4 texture = textureCube(TEXTURE, color2);
+	vec4 texture = texture(TEXTURE2D, color.xy + vec2(0.1f,0.1f));
 	f_color = vec4(texture.xyz * (0.1 * ambient + 0.8 * diffuse * dot(L, N) + specular * pow(dot(V, R), 25)), 1.0);
 }
 

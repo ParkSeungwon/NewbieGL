@@ -49,10 +49,10 @@ unsigned GLObjs::read_texture()
 		GL_TEXTURE_CUBE_MAP_POSITIVE_Y, GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
 		GL_TEXTURE_CUBE_MAP_POSITIVE_Z, GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
 	};
-	unsigned vbo;
-	glGenTextures(1, &vbo);
+	unsigned vbo[2];
+	glGenTextures(2, vbo);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, vbo);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, vbo[0]);
 	for(int i=0; i<6; i++) {
 		Mat image = imread("b.jpg");
 //	int sq = min(image.cols/4, image.rows/3);
@@ -66,7 +66,16 @@ unsigned GLObjs::read_texture()
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glUniform1i(glGetUniformLocation(shader_program_, "TEXTURE"), 0);
-	return vbo;
+	
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, vbo[1]);
+	Mat im = imread("b.jpg");
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, im.cols, im.rows, 0, GL_BGR, GL_UNSIGNED_BYTE, im.data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glUniform1i(glGetUniformLocation(shader_program_, "TEXTURE2D"), 1);
+
+	return vbo[0];
 }
 
 unsigned GLObjs::indices(const vector<unsigned>& v, unsigned vbo)
