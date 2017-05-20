@@ -23,7 +23,7 @@ int main(int ac, char** av)
 //	obj3d.vertexes(vv);
 	auto sz = obj3d.read_obj_file(av[1]);
 //	obj3d.colors({sz, {.5,1,.5}});
-	obj3d.texture_file("b.jpg");
+	obj3d.texture_file("wi.jpg");
 	GLObjs stage{shader_program};
 	stage += obj3d;
 	stage.transfer_all();

@@ -41,41 +41,29 @@ void GLObjs::transfer_all()
 	cout << indices_.size() << endl;
 }
 
-unsigned GLObjs::read_texture()
+unsigned* GLObjs::read_texture()
 {///cube map texture
 	using namespace cv;
-	int cubewall[6] = {
-		GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
-		GL_TEXTURE_CUBE_MAP_POSITIVE_Y, GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
-		GL_TEXTURE_CUBE_MAP_POSITIVE_Z, GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
-	};
-	unsigned vbo[2];
-	glGenTextures(2, vbo);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, vbo[0]);
-	for(int i=0; i<6; i++) {
-		Mat image = imread("b.jpg");
+	int n = texture_files_.size();
+	unsigned vbo[n];
+	glGenTextures(n, vbo);
+	for(int i=0; i<texture_files_.size(); i++) { 
+		if(texture_files_[i] == "") continue;
+		Mat im = imread(texture_files_[i]);
+		glActiveTexture(GL_TEXTURE0 + i);
+		glBindTexture(GL_TEXTURE_2D, vbo[i]);
 //	int sq = min(image.cols/4, image.rows/3);
 //	Rect 					r1(sq, 0, sq, sq), 
 //		 r2(0, sq, sq, sq), r3(sq, sq, sq, sq), r4(2*sq,sq,sq,sq), r5(3*sq,sq,sq,sq), 
 //		 					r6(sq, 2*sq, sq, sq);
 	//glActiveTexture(GL_TEXTURE0);
-		glTexImage2D(cubewall[i], 0, GL_RGB, image.cols, image.rows, 0, 
-				GL_BGR, GL_UNSIGNED_BYTE, image.data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, im.cols, im.rows, 0, GL_BGR, GL_UNSIGNED_BYTE, im.data);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		char tex[] = "TEXTURE0"; tex[7] += i;
+		glUniform1i(glGetUniformLocation(shader_program_, tex), i);
 	}
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glUniform1i(glGetUniformLocation(shader_program_, "TEXTURE"), 0);
-	
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, vbo[1]);
-	Mat im = imread("b.jpg");
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, im.cols, im.rows, 0, GL_BGR, GL_UNSIGNED_BYTE, im.data);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glUniform1i(glGetUniformLocation(shader_program_, "TEXTURE2D"), 1);
-
-	return vbo[0];
+	return vbo;
 }
 
 unsigned GLObjs::indices(const vector<unsigned>& v, unsigned vbo)
@@ -96,6 +84,7 @@ void GLObjs::operator()(int n)
 {
 	unsigned offset = 0;
 	for(int i=0; i<n; i++) offset += index_chunks_[i];
+	glActiveTexture(GL_TEXTURE0 + n);//???
 	glDrawElements(modes_[n], index_chunks_[n], GL_UNSIGNED_INT, 
 			(void*)(offset * sizeof(unsigned)));
 }

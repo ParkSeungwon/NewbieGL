@@ -95,10 +95,20 @@ void GLObject::colors()
 		float vy = vertexes_[i][1][2];
 		float vz = vertexes_[i][1][3];
 
-		if(abs(x) > abs(y) && abs(x) > abs(z)) colors_.push_back({x>0?1:-1, vy, vz});
-		else if(abs(y)>abs(z) && abs(y)>abs(x)) colors_.push_back({vx, y>0?1:-1, vz});
-		else colors_.push_back({vx, vy, z>0?1:-1});
+//		if(abs(x) > abs(y) && abs(x) > abs(z)) colors_.push_back({x>0?1:-1, vy, vz});
+//		else if(abs(y)>abs(z) && abs(y)>abs(x)) colors_.push_back({vx, y>0?1:-1, vz});
+//		else colors_.push_back({vx, vy, z>0?1:-1});
+
+		if(abs(x) > abs(y) && abs(x) > abs(z)) //map to 육면체 전개도 
+			colors_.push_back({x > 0 ? 0.5 - (vz + 1) / 8 : (vz + 1) / 8, 
+					1.0f / 3 + (vy + 1) / 6, 0});
+		else if(abs(y)>abs(z) && abs(y)>abs(x)) 
+			colors_.push_back({0.25 + (vx + 1) / 8, 
+					y > 0 ? (vz + 1) / 6 : 2.0f / 3 - (vz + 1) / 6, 0});
+		else colors_.push_back({z > 0 ? 0.25 + (vx + 1) / 8 : 0.75 - (vx + 1) / 8,
+				1.0f / 3 + (vy + 1) / 6, 0});
 	}
+
 	cout << "colors_ size : " << colors_.size() << endl;
 	for(auto& a : colors_) {
 		assert(a[1][1] >= -1 && a[1][1] <= 1);
