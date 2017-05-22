@@ -20,16 +20,17 @@ int main(int ac, char** av)
 
 	GLObject obj3d;
 	unsigned sz = obj3d.read_obj_file("BuddhaSculpture.obj");
-	vector<Matrix<float>> color{sz, {1,0,0}};
-	obj3d.colors(color);
+	obj3d.texture_file("brick.png");
+//	obj3d.colors(color);
 	Matrix<float> m{4,4};
-	obj3d.matrix(m.glrotateX(M_PI/2) * m.glrotateX(M_PI) * m.glscale(0.01,0.01,0.01));
+	obj3d.matrix(m.glrotateX(M_PI/2) * m.glrotateX(M_PI) * m.glscale(0.3,0.3,0.3));
 
 	GLObject ironman;
 	sz = ironman.read_obj_file("ironman.obj");
-	vector<Matrix<float>> col{sz, {1,1,0}};
-	ironman.colors(col);
-	ironman.matrix(m.glrotateX(-M_PI/2) * m.gltranslate(0.3,-0.2,0) * m.glscale(0.01,0.01,0.01));
+	ironman.texture_file("google.jpg");
+//	vector<Matrix<float>> col{sz, {1,1,0}};
+//	ironman.colors(col);
+	ironman.matrix(m.glrotateX(-M_PI/2) * m.gltranslate(0.3,-0.2,0) * m.glscale(0.8,0.8,0.8));
 
 	GLObject cube;
 	Matrix<float> ve[8] = {{0,0,0}, {1,0,0}, {1,1,0}, {0,1,0},
@@ -70,9 +71,9 @@ int main(int ac, char** av)
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		transfer_matrix(shader_program,  proj * KeyBindMatrix * objs[0], "KeyBindMatrix");
+		transfer_matrix(shader_program, KeyBindMatrix*objs[0], "KeyBindMatrix");
 		objs(0);
-		transfer_matrix(shader_program, proj * KeyBindMatrix * objs[1], "KeyBindMatrix");
+		transfer_matrix(shader_program, KeyBindMatrix*objs[1], "KeyBindMatrix");
 		objs(1);
 		transfer_matrix(shader_program, proj * KeyBindMatrix * m.glrotateY(k) * m.gltranslate(0,0.5,0.4) * m.glrotateX(k) * objs[2], "KeyBindMatrix");
 		objs(2);

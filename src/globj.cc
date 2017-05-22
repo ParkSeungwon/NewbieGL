@@ -2,6 +2,7 @@
 #include<GL/glew.h>
 #include<highgui.h>
 #include"globj.h"
+#include"glutil.h"
 using namespace std;
 
 GLObjs::GLObjs(unsigned prog) 
@@ -85,6 +86,9 @@ void GLObjs::operator()(int n)
 	unsigned offset = 0;
 	for(int i=0; i<n; i++) offset += index_chunks_[i];
 	glActiveTexture(GL_TEXTURE0 + n);//???
+	Matrix<float> m{4,4};
+	m[1][1] = n;
+	transfer_matrix(shader_program_, m, "nTex");
 	glDrawElements(modes_[n], index_chunks_[n], GL_UNSIGNED_INT, 
 			(void*)(offset * sizeof(unsigned)));
 }

@@ -2,6 +2,8 @@
 *~
 *.swp
 *.swo
+*.jpg
+*.png
 test
 # Compiled Object files
 *.slo

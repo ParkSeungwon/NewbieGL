@@ -23,7 +23,7 @@ int main(int ac, char** av)
 //	obj3d.vertexes(vv);
 	auto sz = obj3d.read_obj_file(av[1]);
 //	obj3d.colors({sz, {.5,1,.5}});
-	obj3d.texture_file("wi.jpg");
+	obj3d.texture_file("google.jpg");
 	GLObjs stage{shader_program};
 	stage += obj3d;
 	stage.transfer_all();
@@ -38,8 +38,7 @@ int main(int ac, char** av)
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		transfer_matrix(shader_program, light.glprojection(-1,1,-1,1,-1,1) *
-				KeyBindMatrix, "KeyBindMatrix");
+		transfer_matrix(shader_program, KeyBindMatrix, "KeyBindMatrix");
 
 		stage(0);
 

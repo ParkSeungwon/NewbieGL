@@ -7,7 +7,7 @@ in vec3 normals_;
 out vec3 color;
 out vec4 NN;
 out vec3 pos;
-out vec3 f_uv;
+//out vec3 f_uv;
 void main() {
 	gl_Position = KeyBindMatrix * vec4(vertexes_, 1.0);
 	NN = KeyBindMatrix * vec4(normals_, 0.0f);

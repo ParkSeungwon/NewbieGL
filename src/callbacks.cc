@@ -16,25 +16,25 @@ float camera_x=1, camera_y=1;
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) 
 {// && action == GLFW_PRESS) 
 	switch(key) {
-	case GLFW_KEY_A:
+	case GLFW_KEY_LEFT:
 		KeyBindMatrix = m.gltranslate(-STEP, 0, 0) * KeyBindMatrix; break;
 	case GLFW_KEY_DOWN:
 		KeyBindMatrix = m.gltranslate(0, -STEP, 0) * KeyBindMatrix; break;
-	case GLFW_KEY_D:
+	case GLFW_KEY_RIGHT:
 		KeyBindMatrix = m.gltranslate(STEP, 0, 0) * KeyBindMatrix; break;
 	case GLFW_KEY_UP:
 		KeyBindMatrix = m.gltranslate(0, STEP, 0) * KeyBindMatrix; break;
-	case GLFW_KEY_W:
-		KeyBindMatrix = m.gltranslate(0, 0, STEP) * KeyBindMatrix; break;
-	case GLFW_KEY_S:
-		KeyBindMatrix = m.gltranslate(0, 0, -STEP) * KeyBindMatrix; break;
+	case GLFW_KEY_Z:
+		KeyBindMatrix = m.glscale(1+STEP, 1+STEP, 1+STEP) * KeyBindMatrix; break;
+	case GLFW_KEY_X:
+		KeyBindMatrix = m.glscale(1-STEP, 1-STEP, 1-STEP) * KeyBindMatrix; break;
 
-//	case GLFW_KEY_W: KeyBindMatrix = m.glrotateX(STEP) * KeyBindMatrix; break;
-//	case GLFW_KEY_A: KeyBindMatrix = m.glrotateY(-STEP) * KeyBindMatrix; break;
-//	case GLFW_KEY_S: KeyBindMatrix = m.glrotateX(-STEP) * KeyBindMatrix; break;
-//	case GLFW_KEY_D: KeyBindMatrix = m.glrotateY(STEP) * KeyBindMatrix; break;
-	case GLFW_KEY_Q: KeyBindMatrix = m.glrotateY(-STEP) * KeyBindMatrix; break;
-	case GLFW_KEY_E: KeyBindMatrix = m.glrotateY(STEP) * KeyBindMatrix; break;
+	case GLFW_KEY_W: KeyBindMatrix = m.glrotateX(STEP) * KeyBindMatrix; break;
+	case GLFW_KEY_A: KeyBindMatrix = m.glrotateY(-STEP) * KeyBindMatrix; break;
+	case GLFW_KEY_S: KeyBindMatrix = m.glrotateX(-STEP) * KeyBindMatrix; break;
+	case GLFW_KEY_D: KeyBindMatrix = m.glrotateY(STEP) * KeyBindMatrix; break;
+	case GLFW_KEY_Q: KeyBindMatrix = m.glrotateZ(-STEP) * KeyBindMatrix; break;
+	case GLFW_KEY_E: KeyBindMatrix = m.glrotateZ(STEP) * KeyBindMatrix; break;
 
 	case GLFW_KEY_SPACE: KeyBindMatrix.E(); break;
 
