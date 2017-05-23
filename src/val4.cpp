@@ -12,18 +12,12 @@ int main(int ac, char** av)
 	GLFWwindow* window = glfwCreateWindow(1024, 768, "Color Cube", NULL, NULL);
 	if (!glinit(window)) return -1;
 
-	///compile shaders
-	unsigned shader_program = 
-		make_shader_program("src/vertex_shader.glsl", "src/fragment_shader.glsl");
-	if(!shader_program) return 0;
-	glUseProgram(shader_program);
-
 	GLObject obj3d;
 	unsigned sz = obj3d.read_obj_file("BuddhaSculpture.obj");
 	obj3d.texture_file("brick.png");
 //	obj3d.colors(color);
 	Matrix<float> m{4,4};
-	obj3d.matrix(m.glrotateX(M_PI/2) * m.glrotateX(M_PI) * m.glscale(0.3,0.3,0.3));
+	obj3d.matrix(m.gltranslate(-0.5,0,0)*m.glrotateY(M_PI/2)*m.glrotateX(M_PI/2) * m.glrotateX(M_PI) * m.glscale(0.3,0.3,0.3));
 
 	GLObject ironman;
 	sz = ironman.read_obj_file("ironman.obj");
@@ -49,6 +43,12 @@ int main(int ac, char** av)
 	cube.indices(id);
 	cube.matrix(m.glscale(0.1,0.1,0.1) * m.glortho(0,1,0,1,0,1));
 	cube.mode(GL_QUADS);
+
+	///compile shaders
+	unsigned shader_program = 
+		make_shader_program("src/vertex_shader.glsl", "src/fragment_shader.glsl");
+	if(!shader_program) return 0;
+	glUseProgram(shader_program);
 
 	GLObjs objs(shader_program);
 	objs += ironman;

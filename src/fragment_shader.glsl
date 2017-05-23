@@ -18,7 +18,7 @@ vec3 view = vec3(0,0,3);
 void main() {
 	vec4 lp = vec4(light_pos, 1);
 	lp = KeyBindMatrix * lp;
-	vec3 N = normalize(NN.xyz);
+	vec3 N = normalize(sin(NN.xyz*30));
 	vec3 L = normalize(lp.xyz - pos);
 	vec3 V = normalize(view);
 	vec3 R = -V + 2 * dot(N, V) * N;
