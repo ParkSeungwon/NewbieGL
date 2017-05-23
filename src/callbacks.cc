@@ -135,10 +135,8 @@ string read_file(string file)
 	return r;
 }
 
-unsigned make_shader_program(const char* vsh, const char* fsh)
+unsigned make_shader_program(string v_shader, string f_shader)
 {
-	const string v_shader = read_file(vsh);
-	const string f_shader = read_file(fsh);
 	auto* vp = v_shader.data();
 	auto* fp = f_shader.data();
 	const char** vertex_shader = &vp;

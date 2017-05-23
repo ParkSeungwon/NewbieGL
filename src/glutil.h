@@ -13,7 +13,7 @@ void glcolor(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 bool glinit(GLFWwindow* window);
 void bindNdraw(unsigned color, unsigned vertex, GLenum mode, int first, int count, unsigned indices = 0);
 std::vector<Matrix<float>> polygon(int points_count=100, float r=1);
-unsigned make_shader_program(const char* v_file,const char* f_file);
+unsigned make_shader_program(std::string v, std::string f);
 void replace(char* str, std::string anchor, const Matrix<float>& mat);
 void transfer_matrix(unsigned shader_program, const Matrix<float>& m, const char* var_name);
 void gl_bind_data(unsigned fv, unsigned fc, unsigned fe);

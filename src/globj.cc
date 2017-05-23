@@ -5,9 +5,63 @@
 #include"glutil.h"
 using namespace std;
 
-GLObjs::GLObjs(unsigned prog) 
+static string vshader = R"(
+#version 130
+uniform mat4 KeyBindMatrix;
+in vec3 vertexes_;
+in vec3 colors_;
+in vec3 normals_;
+
+out vec3 color;
+out vec4 normal;
+out vec3 vertex;
+
+void main() {
+	gl_Position = KeyBindMatrix * vec4(vertexes_, 1.0);
+	normal = KeyBindMatrix * vec4(normals_, 0.0f);
+	color = colors_;
+	vertex = vertexes_;
+}
+)";
+
+static string fshader1 = R"(
+#version 130
+uniform mat4 LIGHT;
+uniform mat4 KeyBindMatrix;
+uniform mat4 INFO;
+)";
+static string fshader2 = R"(
+in vec3 color;
+in vec4 normal;
+in vec3 vertex;
+out vec4 f_color;
+
+vec3 ambient = LIGHT[0].xyz;
+vec3 diffuse = LIGHT[1].xyz;
+vec3 specular = LIGHT[2].xyz;
+vec3 light_pos = LIGHT[3].xyz;
+vec3 view = vec3(0,0,3);
+
+void main() {
+	vec4 lp = vec4(light_pos, 1);
+	lp = KeyBindMatrix * lp;
+	vec3 N = normalize(normal.xyz);
+	vec3 L = normalize(lp.xyz - vertex);
+	vec3 V = normalize(view);
+	vec3 R = -V + 2 * dot(N, V) * N;
+
+	vec3 shade = 0.1*ambient + 0.8*diffuse*dot(L, N) + specular*pow(dot(V, R), 25);
+	
+	vec4 col;
+	if(INFO[0].x < 0) col = vec4(color, 1.0);
+)";
+static string fshader3 = R"(
+	f_color = vec4(col.rgb * shade, col.a);
+}
+)";
+
+GLObjs::GLObjs() 
 {
-	shader_program_ = prog;
 	glPolygonMode(GL_FRONT, GL_FILL);
 }
 
@@ -32,39 +86,60 @@ GLObjs& GLObjs::operator+=(GLObject& r)
 	texture_files_.push_back(r.texture_file_);
 }
 
-void GLObjs::transfer_all()
+void GLObjs::light(const Matrix<float>& light) 
 {
-	read_texture();
+	transfer_matrix(shader_program_, light.transpose(), "LIGHT");
+}
+
+void GLObjs::matrix(const Matrix<float>& m) 
+{
+	transfer_matrix(shader_program_, m, "KeyBindMatrix");
+}
+
+unsigned GLObjs::transfer_all()
+{
+	unsigned r = read_texture();
 	vbo[0] = transfer_data(vertexes_, "vertexes_");
 	vbo[1] = transfer_data(colors_, "colors_");
 	vbo[2] = transfer_data(normals_, "normals_");
 	vbo[3] = indices(indices_);
 	cout << indices_.size() << endl;
+	return r;
 }
 
-unsigned* GLObjs::read_texture()
+unsigned GLObjs::read_texture()
 {///cube map texture
 	using namespace cv;
 	int n = texture_files_.size();
 	unsigned vbo[n];
 	glGenTextures(n, vbo);
+	string s1, s2;
+	for(int i=0; i<n; i++) if(texture_files_[i] != "") {
+		cout << texture_files_[i] << endl;
+		s1 += "uniform sampler2D TEXTURE";
+		s1 += to_string(i) + ";\n";
+		s2 += "\telse if(INFO[0].x ==";
+		s2 += to_string(i) + ") col = texture(TEXTURE" + to_string(i) + ", color.xy);\n";
+	}
+	
+	string fshader = fshader1 + s1 + fshader2 + s2 + fshader3;
+	cout << vshader << fshader;
+	shader_program_ = make_shader_program(vshader, fshader);
+	if(!shader_program_) return 0;
+	glUseProgram(shader_program_);
+
 	for(int i=0; i<texture_files_.size(); i++) { 
 		if(texture_files_[i] == "") continue;
 		Mat im = imread(texture_files_[i]);
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, vbo[i]);
-//	int sq = min(image.cols/4, image.rows/3);
-//	Rect 					r1(sq, 0, sq, sq), 
-//		 r2(0, sq, sq, sq), r3(sq, sq, sq, sq), r4(2*sq,sq,sq,sq), r5(3*sq,sq,sq,sq), 
-//		 					r6(sq, 2*sq, sq, sq);
-	//glActiveTexture(GL_TEXTURE0);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, im.cols, im.rows, 0, GL_BGR, GL_UNSIGNED_BYTE, im.data);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		char tex[] = "TEXTURE0"; tex[7] += i;
 		glUniform1i(glGetUniformLocation(shader_program_, tex), i);
 	}
-	return vbo;
+	return shader_program_;
 }
 
 unsigned GLObjs::indices(const vector<unsigned>& v, unsigned vbo)
@@ -87,8 +162,9 @@ void GLObjs::operator()(int n)
 	for(int i=0; i<n; i++) offset += index_chunks_[i];
 	glActiveTexture(GL_TEXTURE0 + n);//???
 	Matrix<float> m{4,4};
-	m[1][1] = n;
-	transfer_matrix(shader_program_, m, "nTex");
+	if(texture_files_[n] == "") m[1][1] = -1;
+	else m[1][1] = n;
+	transfer_matrix(shader_program_, m, "INFO");
 	glDrawElements(modes_[n], index_chunks_[n], GL_UNSIGNED_INT, 
 			(void*)(offset * sizeof(unsigned)));
 }

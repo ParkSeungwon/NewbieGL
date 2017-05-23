@@ -37,12 +37,14 @@ private:
 class GLObjs : protected GLObject
 {
 public:
-	GLObjs(unsigned shader_program);
+	GLObjs();
 	unsigned indices(const std::vector<unsigned>& v, unsigned vbo=0);
 	void operator()(int n);
 	Matrix<float> operator[](int n);
 	GLObjs& operator+=(GLObject& r);
-	void transfer_all();
+	unsigned transfer_all();
+	void light(const Matrix<float>& light);//after transfer 
+	void matrix(const Matrix<float>& r);
 
 protected:
 	unsigned shader_program_;
@@ -55,5 +57,5 @@ protected:
 private:
 	unsigned transfer_data(const std::vector<Matrix<float>>& v, const char* var,
 			unsigned vbo=0);
-	unsigned* read_texture();
+	unsigned read_texture();
 };

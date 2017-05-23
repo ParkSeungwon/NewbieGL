@@ -15,15 +15,12 @@ int main(int ac, char** av)
 	GLObject obj3d;
 	unsigned sz = obj3d.read_obj_file("BuddhaSculpture.obj");
 	obj3d.texture_file("brick.png");
-//	obj3d.colors(color);
 	Matrix<float> m{4,4};
 	obj3d.matrix(m.gltranslate(-0.5,0,0)*m.glrotateY(M_PI/2)*m.glrotateX(M_PI/2) * m.glrotateX(M_PI) * m.glscale(0.3,0.3,0.3));
 
 	GLObject ironman;
 	sz = ironman.read_obj_file("ironman.obj");
 	ironman.texture_file("google.jpg");
-//	vector<Matrix<float>> col{sz, {1,1,0}};
-//	ironman.colors(col);
 	ironman.matrix(m.glrotateX(-M_PI/2) * m.gltranslate(0.3,-0.2,0) * m.glscale(0.8,0.8,0.8));
 
 	GLObject cube;
@@ -44,18 +41,11 @@ int main(int ac, char** av)
 	cube.matrix(m.glscale(0.1,0.1,0.1) * m.glortho(0,1,0,1,0,1));
 	cube.mode(GL_QUADS);
 
-	///compile shaders
-	unsigned shader_program = 
-		make_shader_program("src/vertex_shader.glsl", "src/fragment_shader.glsl");
-	if(!shader_program) return 0;
-	glUseProgram(shader_program);
-
-	GLObjs objs(shader_program);
+	GLObjs objs;
 	objs += ironman;
 	objs += obj3d;
 	objs += cube;
 	objs.transfer_all();
-
 
 	Matrix<float> light = {
 		{0.2, 0.2, 0.2, 1}, //ambient
@@ -63,7 +53,7 @@ int main(int ac, char** av)
 		{1, 1, 1, 1}, //specular
 		{0, 0, 2, 1} //position 1 means a point 0 means a vector light
 	};
-	transfer_matrix(shader_program, light.transpose(), "LIGHT");
+	objs.light(light);
 	Matrix<float> proj{4,4};
 	proj.glprojection(-1,1,-1,1,-1,1);
 
@@ -71,11 +61,11 @@ int main(int ac, char** av)
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		transfer_matrix(shader_program, KeyBindMatrix*objs[0], "KeyBindMatrix");
+		objs.matrix(KeyBindMatrix * objs[0]);
 		objs(0);
-		transfer_matrix(shader_program, KeyBindMatrix*objs[1], "KeyBindMatrix");
+		objs.matrix(KeyBindMatrix * objs[1]);
 		objs(1);
-		transfer_matrix(shader_program, proj * KeyBindMatrix * m.glrotateY(k) * m.gltranslate(0,0.5,0.4) * m.glrotateX(k) * objs[2], "KeyBindMatrix");
+		objs.matrix(proj * KeyBindMatrix * m.glrotateY(k) * m.gltranslate(0,0.5,0.4) * m.glrotateX(k) * objs[2]);
 		objs(2);
 
 		k+= 0.1;
