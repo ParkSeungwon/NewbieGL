@@ -104,6 +104,12 @@ unsigned GLObjs::transfer_all()
 	vbo[2] = transfer_data(normals_, "normals_");
 	vbo[3] = indices(indices_);
 	cout << indices_.size() << endl;
+	light({//default light
+		{0.2, 0.2, 0.2, 1}, //ambient
+		{1, 1, 1, 1}, //diffuse
+		{1, 1, 1, 1}, //specular
+		{0, 0, 2, 1} //position 1 means a point 0 means a vector light
+	});
 	return r;
 }
 
@@ -114,7 +120,7 @@ unsigned GLObjs::read_texture()
 	unsigned vbo[n];
 	glGenTextures(n, vbo);
 	string s1, s2;
-	for(int i=0; i<n; i++) if(texture_files_[i] != "") {
+	for(int i=0; i<n; i++) if(texture_files_[i] != "") {//insert to shader program
 		cout << texture_files_[i] << endl;
 		s1 += "uniform sampler2D TEXTURE";
 		s1 += to_string(i) + ";\n";
@@ -157,7 +163,7 @@ Matrix<float> GLObjs::operator[](int n)
 }
 
 void GLObjs::operator()(int n)
-{
+{//draw nth object
 	unsigned offset = 0;
 	for(int i=0; i<n; i++) offset += index_chunks_[i];
 	glActiveTexture(GL_TEXTURE0 + n);//???

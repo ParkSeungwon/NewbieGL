@@ -12,29 +12,21 @@ int main(int ac, char** av)
 	GLFWwindow* window = glfwCreateWindow(1024, 768, "Color Cube", NULL, NULL);
 	if (!glinit(window)) return -1;
 
-	auto vv = polygon(3, 1);
 	GLObject obj3d;
-//	obj3d.vertexes(vv);
 	auto sz = obj3d.read_obj_file(av[1]);
-//	obj3d.colors({sz, {.5,1,.5}});
-	obj3d.texture_file("google.jpg");
+	obj3d.texture_file(av[2]);
 	GLObjs stage;
 	stage += obj3d;
 	stage.transfer_all();
-	Matrix<float> light = {
-		{0.2, 0.2, 0.2, 1}, //ambient
-		{1, 1, 1, 1}, //diffuse
-		{1, 1, 1, 1}, //specular
-		{0, 0, 2, 1} //position 1 means a point 0 means a vector light
-	};
-	stage.light(light);
 	
+	Matrix<float> m{4,4};
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		stage.matrix(KeyBindMatrix);
-
-		stage(0);
+		
+		for(int i=0; i<10; i++) for(int j=0; j<10; j++) {
+			stage.matrix(KeyBindMatrix * m.gltranslate(-1+0.2*i, -1+0.2*j, 0) * m.glscale(0.1,0.1,0.1));
+			stage(0);
+		}
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

@@ -60,19 +60,3 @@ template <typename T> unsigned gl_transfer_data(const T& v, unsigned vbo = 0)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(ar), ar, GL_STATIC_DRAW);
 	return vbo;
 }
-/*
-class GLObject
-{
-public:
-	template<typename C, typename V> GLObject(C c, V v) {
-		color_vbo = gl_transfer_data(c);
-		vertex_vbo = gl_transfer_data(v);
-	}
-
-	
-
-
-protected:
-	unsigned color_vbo = 0, vertex_vbo = 0;
-	std::deque<Matrix<float>> matrixes;
-*/

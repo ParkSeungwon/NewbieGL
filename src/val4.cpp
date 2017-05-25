@@ -36,24 +36,23 @@ int main(int ac, char** av)
 	vector<unsigned> id;
 	for(int i=0; i<24; i++) id.push_back(i);
 	cube.vertexes(v);
-	cube.colors(c);
+	//cube.colors(c);
+	cube.texture_file("google.jpg");
 	cube.indices(id);
 	cube.matrix(m.glscale(0.1,0.1,0.1) * m.glortho(0,1,0,1,0,1));
 	cube.mode(GL_QUADS);
 
+	GLObject ship;
+	ship.read_obj_file("space_frigate_6.obj");
+	ship.texture_file("steel.png");
+
 	GLObjs objs;
 	objs += ironman;
 	objs += obj3d;
+	objs += ship;
 	objs += cube;
 	objs.transfer_all();
 
-	Matrix<float> light = {
-		{0.2, 0.2, 0.2, 1}, //ambient
-		{1, 1, 1, 1}, //diffuse
-		{1, 1, 1, 1}, //specular
-		{0, 0, 2, 1} //position 1 means a point 0 means a vector light
-	};
-	objs.light(light);
 	Matrix<float> proj{4,4};
 	proj.glprojection(-1,1,-1,1,-1,1);
 
@@ -61,12 +60,14 @@ int main(int ac, char** av)
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		objs.matrix(KeyBindMatrix * objs[0]);
-		objs(0);
-		objs.matrix(KeyBindMatrix * objs[1]);
-		objs(1);
-		objs.matrix(proj * KeyBindMatrix * m.glrotateY(k) * m.gltranslate(0,0.5,0.4) * m.glrotateX(k) * objs[2]);
-		objs(2);
+		for(int i=0; i<3; i++) {
+			objs.matrix(KeyBindMatrix * objs[i]);
+			objs(i);
+		}
+		objs.matrix(proj * KeyBindMatrix * m.glrotateY(k) * m.gltranslate(0,0.5,0.4) * m.glrotateX(k) * objs[3]);
+		objs(3);
+		objs.matrix(KeyBindMatrix * m.gltranslate(0,0.5,0.4) * objs[3]);
+		objs(3);
 
 		k+= 0.1;
 		glfwSwapBuffers(window);
