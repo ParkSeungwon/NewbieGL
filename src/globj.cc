@@ -44,13 +44,13 @@ vec3 view = vec3(0,0,3);
 
 void main() {
 	vec4 lp = vec4(light_pos, 1);
-	lp = KeyBindMatrix * lp;
+//	lp = KeyBindMatrix * lp;
 	vec3 N = normalize(normal.xyz);
 	vec3 L = normalize(lp.xyz - vertex);
 	vec3 V = normalize(view);
-	vec3 R = -V + 2 * dot(N, V) * N;
+	vec3 R = -L + 2 * dot(N, L) * N;
 
-	vec3 shade = 0.1*ambient + 0.8*diffuse*dot(L, N) + specular*pow(dot(V, R), 25);
+	vec3 shade = ambient + diffuse*max(dot(L, N),0) + specular*pow(dot(V, R), 24);
 	
 	vec4 col;
 	if(INFO[0].x < 0) col = vec4(color, 1.0);
@@ -105,10 +105,10 @@ unsigned GLObjs::transfer_all()
 	vbo[3] = indices(indices_);
 	cout << indices_.size() << endl;
 	light({//default light
-		{0.2, 0.2, 0.2, 1}, //ambient
-		{1, 1, 1, 1}, //diffuse
+		{0.1, 0.1, 0.1, 1}, //ambient
+		{0.5, 0.5, 0.5, 0.5}, //diffuse
 		{1, 1, 1, 1}, //specular
-		{0, 0, 2, 1} //position 1 means a point 0 means a vector light
+		{3, 3, -3, 1} //position 1 means a point 0 means a vector light
 	});
 	return r;
 }
