@@ -16,6 +16,60 @@ void GLObject::colors(vector<Matrix<float>>&& v) { colors_ = move(v); }
 void GLObject::indices(const vector<unsigned>& v) { indices_ = v; }
 void GLObject::indices(vector<unsigned>&& v) { indices_ = move(v); }
 void GLObject::texture_file(string f) { texture_file_ = f; }
+void GLObject::subdiv_triangle()
+{
+	vector<Matrix<float>> v;
+	vector<unsigned> ix;
+	try {
+		for(int i=0; i<indices_.size(); i+=3) {
+			auto a = vertexes_[indices_[i]];
+			auto b = vertexes_[indices_[i+1]];
+			auto c = vertexes_[indices_[i+2]];
+			v.push_back(a);
+			v.push_back(b);
+			v.push_back(c);
+			v.push_back((a + b) * 0.5f);
+			v.push_back((b + c) * 0.5f);
+			v.push_back((c + a) * 0.5f);
+			unsigned rel_pos[] = {0, 3, 5, 3, 1, 4, 3, 4, 5, 5, 4, 2};
+			for(unsigned j : rel_pos) ix.push_back(i*2 + j);
+		}
+	} catch(const char* e) { cerr << e << endl; }
+	vertexes_ = v;
+	indices_ = ix;
+	normals_.clear();
+}
+
+void GLObject::butterfly()
+{
+	vector<Matrix<float>> v;
+	vector<unsigned> ix;
+	try {
+		for(int i=0; i<indices_.size(); i+=3) {
+			auto a = vertexes_[indices_[i]];
+			auto b = vertexes_[indices_[i+1]];
+			auto c = vertexes_[indices_[i+2]];
+			v.push_back(a);
+			v.push_back(b);
+			v.push_back(c);
+			auto d1 = a - b;
+			auto d2 = c - b;
+			auto d3 = a - c;
+			auto c1 = cross(a, b);
+			auto c2 = cross(b, c);
+			auto c3 = cross(c, a);
+			v.push_back((a + b) * 0.5f + c1 * 0.1 * d1.distance());
+			v.push_back((b + c) * 0.5f + c2 * 0.1 * d2.distance());
+			v.push_back((c + a) * 0.5f + c3 * 0.1 * d3.distance());
+			unsigned rel_pos[] = {0, 3, 5, 3, 1, 4, 3, 4, 5, 5, 4, 2};
+			for(unsigned j : rel_pos) ix.push_back(i * 2 + j);
+		}
+	} catch(const char* e) { cerr << e << endl; }
+	vertexes_ = v;
+	indices_ = ix;
+	normals_.clear();
+}
+
 void GLObject::normals()
 {///should come after setting mode
 	if(normals_.size() == vertexes_.size()) return;

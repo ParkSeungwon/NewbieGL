@@ -53,6 +53,12 @@ public:
 			(*this)[x][y] = m.at<T>(y-1, x-1);
 	}
 
+	float distance() {
+		auto* p = data();
+		return sqrt(*p * *p + *++p * *p + *++p * *p);
+	}
+
+
 	operator cv::Mat() {
 		cv::Mat mat {cv::Mat_<T>{height, width}};
 		for(int x=1; x<=width; x++) for(int y=1; y<=height; y++) 

@@ -13,7 +13,10 @@ int main(int ac, char** av)
 	if (!glinit(window)) return -1;
 
 	GLObject obj3d;
-	auto sz = obj3d.read_obj_file(av[1]);
+	obj3d.read_obj_file(av[1]);
+	obj3d.subdiv_triangle();
+//	obj3d.subdiv_triangle();
+//	obj3d.butterfly();
 	obj3d.texture_file(av[2]);
 	GLObjs stage;
 	stage += obj3d;
@@ -23,10 +26,8 @@ int main(int ac, char** av)
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		for(int i=0; i<10; i++) for(int j=0; j<10; j++) {
-			stage.matrix(KeyBindMatrix * m.gltranslate(-1+0.2*i, -1+0.2*j, 0) * m.glscale(0.1,0.1,0.1));
-			stage(0);
-		}
+		stage.matrix(KeyBindMatrix *  m.glscale(0.8,0.8,0.8));
+		stage(0);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

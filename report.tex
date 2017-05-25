@@ -45,30 +45,24 @@
 \section*{Lab 11. Texturing}
 	
 \begin{verbatim}
-Lab 11. Texturing
+Pick a relatively low resolution 3D model from the thingiverse.
 
-Programming Practice
-1. Download a 3D model from thingiverse.
+Step 1. Apply the butterfly subdivision. Show the difference before and after applying it. (3pt)
 
-2. Convert it to an OBJ file.
+Step 2. Apply the Loop subdivision. Show the difference before and after applying it. (3pt)
 
-3. Render it with phong shading. (3pts) 
-
-4. Map a texture on it. You may use any image you like. (4pts) 
-
-5. Animate texture. (3pts)
-
-* Note: you are going to study bump mapping next week.
-
+Step 3. Show the difference between the butterfly and the Loop subdivision. (4pt)
 \end{verbatim}
 
-horse.obj 파일을 다운 받아서, 텍스쳐를 입혔다.
-cubeMap 으로 하려고 했으나, 실패하고, 2D 맵으로 했다.
-첨부한 소스 파일의 중간 쯤에 텍스쳐를 불러오는 부분이 있다.
-opencv 라이브러리의 루틴을 호출하여, 이미지 파일을 불러오고, 텍스쳐로 사용했다.
+블렌더의 대표 마스코트인 몽키를 triangle subdivision했다.
+위가 loop이고, 아래가 butterfly이다.
+그런데, normal에서의 버그가 있어서인지, 트라이앵글을 나누어서 노말을 자체적으로 계산했을때,
+원숭이의 얼굴 반만이 나왔다.
 
-\includegraphics[width=0.8\textwidth]{1.png}
-\lstinputlisting[caption=texture loading]{src/globj.cc}
+\includegraphics[width=\textwidth]{1.png}
+
+\includegraphics[width=\textwidth]{2.png}
+\lstinputlisting[]{src/globject.cc}
 \lstinputlisting[caption=main함수]{src/val2.cpp}
-\lstinputlisting[caption=fragment shader]{src/fragment_shader.glsl}
+
 \end{document}

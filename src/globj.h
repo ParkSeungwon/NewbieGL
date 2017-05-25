@@ -18,6 +18,8 @@ public:
 	void indices(const std::vector<unsigned>& ids);
 	void indices(std::vector<unsigned>&& ids);
 	void texture_file(std::string filename);
+	void subdiv_triangle();
+	void butterfly();
 
 protected:
 	void normals();
