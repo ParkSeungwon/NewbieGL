@@ -15,7 +15,8 @@ int main(int ac, char** av)
 	GLObject obj3d;
 	obj3d.read_obj_file(av[1]);
 	obj3d.subdiv_triangle();
-//	obj3d.subdiv_triangle();
+	obj3d.subdiv_triangle();
+//	obj3d.butterfly();
 //	obj3d.butterfly();
 	obj3d.texture_file(av[2]);
 	GLObjs stage;
