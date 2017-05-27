@@ -80,11 +80,12 @@ void GLObject::normals()
 		default: face = 3;
 	}
 	try{
-		for(int i=0; i<vertexes_.size(); i+=face) {
-			auto v1 = vertexes_[i+1] - vertexes_[i];
-			auto v2 = vertexes_[i+2] - vertexes_[i];
+		for(int i=0; i<indices_.size(); i+=face) {
+			auto v1 = vertexes_[indices_[i+1]] - vertexes_[indices_[i]];
+			auto v2 = vertexes_[indices_[i+2]] - vertexes_[indices_[i]];
 			auto n = cross(v1, v2);
-			for(int j=0; j<face; j++) normals_[i+j] = normals_[i+j] + n;
+			for(int j=0; j<face; j++)
+				normals_[indices_[i+j]] = normals_[indices_[i+j]] + n;
 		}
 	} catch(const char* e) { cerr << e << endl; }
 	for(auto& a : normals_) {
@@ -136,7 +137,7 @@ unsigned GLObject::read_obj_file(string file)
 
 
 void GLObject::colors()
-{
+{//change to fit to texture u,v position
 	if(texture_file_ == "") return;
 	colors_.clear();
 	normalize_vertex();
@@ -153,12 +154,12 @@ void GLObject::colors()
 //		else colors_.push_back({vx, vy, z>0?1:-1});
 
 		if(abs(x) > abs(y) && abs(x) > abs(z)) //map to 육면체 전개도 
-			colors_.push_back({x > 0 ? 0.5 - (vz + 1) / 8 : (vz + 1) / 8, 
+			colors_.push_back({x > 0 ? 0.5 + (1 - vz) / 8 : (vz + 1) / 8, 
 					1.0f / 3 + (vy + 1) / 6, 0});
 		else if(abs(y)>abs(z) && abs(y)>abs(x)) 
 			colors_.push_back({0.25 + (vx + 1) / 8, 
-					y > 0 ? (vz + 1) / 6 : 2.0f / 3 - (vz + 1) / 6, 0});
-		else colors_.push_back({z > 0 ? 0.25 + (vx + 1) / 8 : 0.75 - (vx + 1) / 8,
+					y > 0 ? (vz + 1) / 6 : 2.0f / 3 + (1 - vz) / 6, 0});
+		else colors_.push_back({z > 0 ? 0.25 + (vx + 1) / 8 : 0.75 + (1 - vx) / 8,
 				1.0f / 3 + (vy + 1) / 6, 0});
 	}
 

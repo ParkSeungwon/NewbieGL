@@ -27,7 +27,7 @@ int main(int ac, char** av)
 	Matrix<float> ve[8] = {{0,0,0}, {1,0,0}, {1,1,0}, {0,1,0},
 		{0,0,1}, {1,0,1}, {1,1,1}, {0,1,1}};
 	vector<Matrix<float>> v, c;
-	int idx[24] = {0,1,2,3, 4,5,6,7, 0,4,5,1, 1,5,6,2, 2,6,7,3, 0,4,7,3};
+	int idx[24] = {3,2,1,0, 4,5,6,7, 0,1,5,4, 1,2,6,5, 2,3,7,6, 3,0,4,7};
 	for(auto a : idx) v.push_back(ve[a]);
 	for(int i=0; i<8; i++) for(int j=0; j<4; j++) {
 		if(i==0 || i==6) continue;
@@ -37,7 +37,7 @@ int main(int ac, char** av)
 	for(int i=0; i<24; i++) id.push_back(i);
 	cube.vertexes(v);
 	//cube.colors(c);
-	cube.texture_file("google.jpg");
+	cube.texture_file("6.png");
 	cube.indices(id);
 	cube.matrix(m.glscale(0.1,0.1,0.1) * m.glortho(0,1,0,1,0,1));
 	cube.mode(GL_QUADS);
@@ -61,7 +61,7 @@ int main(int ac, char** av)
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		for(int i=0; i<3; i++) {
-			objs.matrix(KeyBindMatrix * objs[i]);
+			objs.matrix(proj * KeyBindMatrix * objs[i]);
 			objs(i);
 		}
 		objs.matrix(proj * KeyBindMatrix * m.glrotateY(k) * m.gltranslate(0,0.5,0.4) * m.glrotateX(k) * objs[3]);

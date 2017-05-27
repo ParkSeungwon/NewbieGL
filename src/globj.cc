@@ -67,10 +67,10 @@ GLObjs::GLObjs()
 
 GLObjs& GLObjs::operator+=(GLObject& r)
 {
-	r.normals();
-	r.colors();//if texture
 	if(r.indices_.empty()) for(int i=0; i<r.vertexes_.size(); i++) //if no indices
 		r.indices_.push_back(i);
+	r.normals();
+	r.colors();//if texture
 //	for(int i=0; i<10; i++) cout << r.vertexes_[i] << r.colors_[i] << r.normals_[i];
 	auto sz = vertexes_.size();
 	vertexes_.insert(vertexes_.end(), r.vertexes_.begin(), r.vertexes_.end());
@@ -103,7 +103,7 @@ unsigned GLObjs::transfer_all()
 	vbo[1] = transfer_data(colors_, "colors_");
 	vbo[2] = transfer_data(normals_, "normals_");
 	vbo[3] = indices(indices_);
-	cout << indices_.size() << endl;
+	cout << "indices size : " << indices_.size() << endl;
 	light({//default light
 		{0.1, 0.1, 0.1, 1}, //ambient
 		{0.5, 0.5, 0.5, 0.5}, //diffuse
