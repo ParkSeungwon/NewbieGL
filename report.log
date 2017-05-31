@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.7.8)  25 MAY 2017 11:30
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.7.8)  30 MAY 2017 20:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -909,6 +909,64 @@ Package: eso-pic 2015/07/21 v2.0g eso-pic (RN)
 (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/atbegshi.sty
 Package: atbegshi 2011/10/05 v1.16 At begin shipout hook (HO)
 ))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2016/03/03 v2.15a AMS math features
+\@mathmargin=\skip43
+
+For additional information on amsmath, use the `?' option.
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2000/06/29 v2.01 AMS text
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks35
+\ex@=\dimen163
+))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen164
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 1999/12/14 v2.01 operator names
+)
+\inf@bad=\count119
+LaTeX Info: Redefining \frac on input line 199.
+\uproot@=\count120
+\leftroot@=\count121
+LaTeX Info: Redefining \overline on input line 297.
+\classnum@=\count122
+\DOTSCASE@=\count123
+LaTeX Info: Redefining \ldots on input line 394.
+LaTeX Info: Redefining \dots on input line 397.
+LaTeX Info: Redefining \cdots on input line 518.
+\Mathstrutbox@=\box39
+\strutbox@=\box40
+\big@size=\dimen165
+LaTeX Font Info:    Redeclaring font encoding OML on input line 630.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 631.
+\macc@depth=\count124
+\c@MaxMatrixCols=\count125
+\dotsspace@=\muskip10
+\c@parentequation=\count126
+\dspbrk@lvl=\count127
+\tag@help=\toks36
+\row@=\count128
+\column@=\count129
+\maxfields@=\count130
+\andhelp@=\toks37
+\eqnshift@=\dimen166
+\alignsep@=\dimen167
+\tagshift@=\dimen168
+\tagwidth@=\dimen169
+\totwidth@=\dimen170
+\lineht@=\dimen171
+\@envbody=\toks38
+\multlinegap=\skip44
+\multlinetaggap=\skip45
+\mathdisplay@stack=\toks39
+LaTeX Info: Redefining \[ on input line 2735.
+LaTeX Info: Redefining \] on input line 2736.
+)
 (/usr/share/texlive/texmf-dist/tex/latex/cjk-ko/kotex.sty
 Package: kotex 2015/04/19 v1.6 Korean TeX (ko.TeX)
 
@@ -917,8 +975,8 @@ Package: kotex 2015/04/19 v1.6 Korean TeX (ko.TeX)
 Package: kotexutf 2015/07/18 v2.1.1 typesetting UTF-8 Korean documents
 
 (/usr/share/texlive/texmf-dist/tex/plain/kotex-plain/kotexutf-core.tex
-\unih@ngulpoint=\count119
-\dhucs@emph@raise=\dimen163
+\unih@ngulpoint=\count131
+\dhucs@emph@raise=\dimen172
 )
 Now handling font encoding LUC ...
 ... processing UTF-8 mapping file for font encoding LUC
@@ -971,8 +1029,8 @@ File: lucenc.dfu 2007/09/05 UTF-8 support for dhucs
    defining Unicode char U+FF64 (decimal 65380)
    defining Unicode char U+FF65 (decimal 65381)
 )
-\@josa=\count120
-\josatoks=\toks35
+\@josa=\count132
+\josatoks=\toks40
 
 (/usr/share/texlive/texmf-dist/tex/latex/cjk-ko/kolabels-utf.sty
 Package: kolabels-utf 2015/03/20 v1.5 UTF-8 Hangul item labels
@@ -991,48 +1049,48 @@ File: kosections-utf 2013/10/20 hangul option to kotex/utf
 (/usr/share/texlive/texmf-dist/tex/latex/cjk-ko/konames-utf.sty
 Package: konames-utf 2015/07/06 v1.7 UTF-8 Hangul captions
 )
-\raisedotdim=\dimen164
-\dhucs@emph@width=\dimen165
-\useremphraisedim=\dimen166
+\raisedotdim=\dimen173
+\dhucs@emph@width=\dimen174
+\useremphraisedim=\dimen175
 )))
 (./report.aux)
 \openout1 = `report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 39.
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 39.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 39.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 40.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 40.
  (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 39.
-LaTeX Font Info:    Checking defaults for LUC/nanummj/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for LUC/nanummj/m/n on input line 40.
 LaTeX Font Info:    Try loading font information for LUC+nanummj on input line 
-39.
+40.
 
 (/usr/share/texlive/texmf-dist/tex/latex/nanumtype1/lucnanummj.fd
 File: lucnanummj.fd 2013/02/12 v0.1 Nanum Myeongjo font definitions
 )
-LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    ... okay on input line 40.
 LaTeX Font Info:    Try loading font information for OT1+LinuxLibertineT-TLF on
- input line 39.
+ input line 40.
 
 (/usr/share/texlive/texmf-dist/tex/latex/libertine/OT1LinuxLibertineT-TLF.fd
 File: OT1LinuxLibertineT-TLF.fd 2012/11/26 (autoinst) Font definitions for OT1/
 LinuxLibertineT-TLF.
 )
 LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 12.0pt on input line 39.
+(Font)              scaled to size 12.0pt on input line 40.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -1070,17 +1128,17 @@ LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/n' will be
 
 (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count121
-\scratchdimen=\dimen167
-\scratchbox=\box39
-\nofMPsegments=\count122
-\nofMParguments=\count123
-\everyMPshowfont=\toks36
-\MPscratchCnt=\count124
-\MPscratchDim=\dimen168
-\MPnumerator=\count125
-\makeMPintoPDFobject=\count126
-\everyMPtoPDFconversion=\toks37
+\scratchcounter=\count133
+\scratchdimen=\dimen176
+\scratchbox=\box41
+\nofMPsegments=\count134
+\nofMParguments=\count135
+\everyMPshowfont=\toks41
+\MPscratchCnt=\count136
+\MPscratchDim=\dimen177
+\MPnumerator=\count137
+\makeMPintoPDFobject=\count138
+\everyMPtoPDFconversion=\toks42
 ) (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
 Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
 )
@@ -1120,36 +1178,28 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-\c@lstlisting=\count127
-\c@mv@tabular=\count128
-\c@mv@boldtabular=\count129
+\c@lstlisting=\count139
+\c@mv@tabular=\count140
+\c@mv@boldtabular=\count141
 
 ABD: EveryShipout initializing macros
-\AtBeginShipoutBox=\box40
+\AtBeginShipoutBox=\box42
 LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 20.74pt on input line 40.
+(Font)              scaled to size 20.74pt on input line 41.
 
 (/usr/share/texlive/texmf-dist/tex/generic/pgfornament/vectorian/vectorian84.pg
 f)
 LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 50.0pt on input line 40.
+(Font)              scaled to size 50.0pt on input line 41.
 
 (/usr/share/texlive/texmf-dist/tex/generic/pgfornament/vectorian/vectorian88.pg
 f)
 LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 14.4pt on input line 40.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <14.4> on input line 40.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 40.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <20.74> on input line 40.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 40.
+(Font)              scaled to size 14.4pt on input line 41.
  <logo.jpg, id=4, 602.25pt x 187.70125pt>
 File: logo.jpg Graphic file (type jpg)
  <use logo.jpg>
-Package pdftex.def Info: logo.jpg used on input line 40.
+Package pdftex.def Info: logo.jpg used on input line 41.
 (pdftex.def)             Requested size: 270.3012pt x 84.2471pt.
 
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
@@ -1164,11 +1214,11 @@ File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./logo.jpg>]
 LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 17.28pt on input line 45.
+(Font)              scaled to size 17.28pt on input line 46.
 LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/b/n' will be
-(Font)              scaled to size 17.28pt on input line 45.
+(Font)              scaled to size 17.28pt on input line 46.
 LaTeX Font Info:    Try loading font information for OT1+LinuxLibertineMonoT-TL
-F on input line 47.
+F on input line 48.
 
 (/usr/share/texlive/texmf-dist/tex/latex/libertine/OT1LinuxLibertineMonoT-TLF.f
 d
@@ -1176,21 +1226,21 @@ File: OT1LinuxLibertineMonoT-TLF.fd 2012/12/06 (autoinst) Font definitions for
 OT1/LinuxLibertineMonoT-TLF.
 )
 LaTeX Font Info:    Font shape `OT1/LinuxLibertineMonoT-TLF/m/n' will be
-(Font)              scaled to size 12.0pt on input line 47.
+(Font)              scaled to size 12.0pt on input line 48.
 
-Overfull \hbox (160.84271pt too wide) in paragraph at lines 55--55
+Overfull \hbox (160.84271pt too wide) in paragraph at lines 56--56
 []\OT1/LinuxLibertineMonoT-TLF/m/n/12 Step 1. Apply the butterfly subdivision. 
 Show the difference before and after applying it. (3pt)[] 
  []
 
 
-Overfull \hbox (122.44275pt too wide) in paragraph at lines 55--55
+Overfull \hbox (122.44275pt too wide) in paragraph at lines 56--56
 []\OT1/LinuxLibertineMonoT-TLF/m/n/12 Step 2. Apply the Loop subdivision. Show 
 the difference before and after applying it. (3pt)[] 
  []
 
 
-Overfull \hbox (50.762pt too wide) in paragraph at lines 55--55
+Overfull \hbox (50.762pt too wide) in paragraph at lines 56--56
 []\OT1/LinuxLibertineMonoT-TLF/m/n/12 Step 3. Show the difference between the b
 utterfly and the Loop subdivision. (4pt)[] 
  []
@@ -1198,20 +1248,20 @@ utterfly and the Loop subdivision. (4pt)[]
 <1.png, id=28, 1027.84pt x 798.985pt>
 File: 1.png Graphic file (type png)
  <use 1.png>
-Package pdftex.def Info: 1.png used on input line 62.
+Package pdftex.def Info: 1.png used on input line 63.
 (pdftex.def)             Requested size: 540.60239pt x 420.24147pt.
 
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 62--63
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 63--64
 [][] 
  []
 
 <2.png, id=30, 1027.84pt x 798.985pt>
 File: 2.png Graphic file (type png)
  <use 2.png>
-Package pdftex.def Info: 2.png used on input line 64.
+Package pdftex.def Info: 2.png used on input line 65.
 (pdftex.def)             Requested size: 540.60239pt x 420.24147pt.
 
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 64--65
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 65--66
 [][] 
  []
 
@@ -1237,49 +1287,50 @@ LaTeX Font Warning: Font shape `OMS/LinuxLibertineT-TLF/m/n' undefined
 
 [3 <./2.png>]
 LaTeX Font Info:    Try loading font information for TS1+LinuxLibertineT-TLF on
- input line 31.
+ input line 32.
 
 (/usr/share/texlive/texmf-dist/tex/latex/libertine/TS1LinuxLibertineT-TLF.fd
 File: TS1LinuxLibertineT-TLF.fd 2012/11/26 (autoinst) Font definitions for TS1/
 LinuxLibertineT-TLF.
 )
 LaTeX Font Info:    Font shape `TS1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 12.0pt on input line 31.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 56.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 56.
+(Font)              scaled to size 12.0pt on input line 32.
 
 [4]
 LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/it' will be
-(Font)              scaled to size 12.0pt on input line 76.
+(Font)              scaled to size 12.0pt on input line 73.
  [5] [6]
 
 LaTeX Font Warning: Font shape `OML/LinuxLibertineT-TLF/m/it' undefined
 (Font)              using `OML/cmm/m/it' instead
-(Font)              for symbol `textgreater' on input line 149.
+(Font)              for symbol `textgreater' on input line 147.
 
 
 LaTeX Font Warning: Font shape `OMS/LinuxLibertineT-TLF/m/it' undefined
 (Font)              using `OMS/LinuxLibertineT-TLF/m/n' instead
-(Font)              for symbol `textbraceleft' on input line 154.
+(Font)              for symbol `textbraceleft' on input line 152.
 
 LaTeX Font Info:    Font shape `LUC/nanummj/m/it' in size <12> not available
 (Font)              Font shape `LUC/nanummj/m/sl' tried instead on input line 1
-58.
-[7]) (./src/val2.cpp [8]) [9] (./report.aux)
+56.
+[7]) (./src/val2.cpp [8])
+LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/n' will be
+(Font)              scaled to size 8.0pt on input line 79.
+LaTeX Font Info:    Font shape `OT1/LinuxLibertineT-TLF/m/n' will be
+(Font)              scaled to size 6.0pt on input line 79.
+ [9] [10] (./report.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 16710 strings out of 493029
- 315440 string characters out of 6136235
- 620007 words of memory out of 5000000
- 19826 multiletter control sequences out of 15000+600000
- 37779 words of font info for 100 fonts, out of 8000000 for 9000
+ 17335 strings out of 493029
+ 322511 string characters out of 6136235
+ 624320 words of memory out of 5000000
+ 20433 multiletter control sequences out of 15000+600000
+ 42705 words of font info for 111 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 62i,13n,97p,473b,1692s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 62i,13n,97p,473b,1706s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/libertine/lbtn_xogrpz.enc}{/us
 r/share/texlive/texmf-dist/fonts/enc/dvips/libertine/lbtn_naooyc.enc}{/usr/shar
 e/texlive/texmf-dist/fonts/enc/dvips/libertine/lbtn_4jqvtd.enc}{/usr/share/texl
@@ -1290,48 +1341,49 @@ st/fonts/type1/public/libertine/LinLibertineT.pfb></usr/share/texlive/texmf-dis
 t/fonts/type1/public/libertine/LinLibertineTB.pfb></usr/share/texlive/texmf-dis
 t/fonts/type1/public/libertine/LinLibertineTI.pfb></usr/share/texlive/texmf-dis
 t/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/font
-s/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type
-1/public/nanumtype1/nanummjmac.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
-ublic/nanumtype1/nanummjmac.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
-ic/nanumtype1/nanummjmad.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
-nanumtype1/nanummjmae.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nan
-umtype1/nanummjmb0.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanumt
-ype1/nanummjmb1.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype
-1/nanummjmb2.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/n
-anummjmb3.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanu
-mmjmb3.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanummj
-mb5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanummjmb7
-.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanummjmb8.pf
-b></usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanummjmb9.pfb><
-/usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanummjmba.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanummjmba.pfb></usr/s
-hare/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanummjmbb.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanummjmbc.pfb></usr/share/t
-exlive/texmf-dist/fonts/type1/public/nanumtype1/nanummjmbd.pfb></usr/share/texl
-ive/texmf-dist/fonts/type1/public/nanumtype1/nanummjmbe.pfb></usr/share/texlive
-/texmf-dist/fonts/type1/public/nanumtype1/nanummjmc0.pfb></usr/share/texlive/te
-xmf-dist/fonts/type1/public/nanumtype1/nanummjmc1.pfb></usr/share/texlive/texmf
--dist/fonts/type1/public/nanumtype1/nanummjmc2.pfb></usr/share/texlive/texmf-di
-st/fonts/type1/public/nanumtype1/nanummjmc5.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/public/nanumtype1/nanummjmc6.pfb></usr/share/texlive/texmf-dist/fon
-ts/type1/public/nanumtype1/nanummjmc7.pfb></usr/share/texlive/texmf-dist/fonts/
-type1/public/nanumtype1/nanummjmc7.pfb></usr/share/texlive/texmf-dist/fonts/typ
-e1/public/nanumtype1/nanummjmc8.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/nanumtype1/nanummjmc8.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
-lic/nanumtype1/nanummjmc9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
-/nanumtype1/nanummjmcc.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/na
-numtype1/nanummjmcc.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanum
-type1/nanummjmce.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanumtyp
-e1/nanummjmcf.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/
-nanummjmd0.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/nan
-ummjmd1.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanumm
-jmd2.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanummjmd
-4.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanummjmd5.p
-fb>
-Output written on report.pdf (9 pages, 2204614 bytes).
+s/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanumt
+ype1/nanummjmac.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype
+1/nanummjmac.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/n
+anummjmad.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanu
+mmjmae.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanummj
+mb0.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanummjmb1
+.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanummjmb2.pf
+b></usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanummjmb3.pfb><
+/usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanummjmb3.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanummjmb5.pfb></usr/s
+hare/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanummjmb7.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanummjmb8.pfb></usr/share/t
+exlive/texmf-dist/fonts/type1/public/nanumtype1/nanummjmb9.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/public/nanumtype1/nanummjmba.pfb></usr/share/texlive
+/texmf-dist/fonts/type1/public/nanumtype1/nanummjmba.pfb></usr/share/texlive/te
+xmf-dist/fonts/type1/public/nanumtype1/nanummjmbb.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/nanumtype1/nanummjmbc.pfb></usr/share/texlive/texmf-di
+st/fonts/type1/public/nanumtype1/nanummjmbd.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/public/nanumtype1/nanummjmbe.pfb></usr/share/texlive/texmf-dist/fon
+ts/type1/public/nanumtype1/nanummjmc0.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/nanumtype1/nanummjmc1.pfb></usr/share/texlive/texmf-dist/fonts/typ
+e1/public/nanumtype1/nanummjmc2.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+public/nanumtype1/nanummjmc5.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
+lic/nanumtype1/nanummjmc6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
+/nanumtype1/nanummjmc7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/na
+numtype1/nanummjmc7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanum
+type1/nanummjmc8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanumtyp
+e1/nanummjmc8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/
+nanummjmc9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/nan
+ummjmcc.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanumm
+jmcc.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanummjmc
+e.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanummjmcf.p
+fb></usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanummjmd0.pfb>
+</usr/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanummjmd1.pfb></u
+sr/share/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanummjmd2.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanummjmd4.pfb></usr/sha
+re/texlive/texmf-dist/fonts/type1/public/nanumtype1/nanummjmd5.pfb>
+Output written on report.pdf (10 pages, 2310805 bytes).
 PDF statistics:
- 227 PDF objects out of 1000 (max. 8388607)
- 165 compressed objects within 2 object streams
+ 238 PDF objects out of 1000 (max. 8388607)
+ 173 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  28 words of extra memory for PDF output out of 10000 (max. 10000000)
 
