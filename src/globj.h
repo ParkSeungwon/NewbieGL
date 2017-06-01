@@ -20,12 +20,12 @@ public:
 	void texture_file(std::string filename);
 	void subdiv_triangle();
 	void butterfly();
+	std::vector<Matrix<float>> vertexes_, colors_, normals_;
+	void colors();//for texture mapping if filename is specified
+	std::vector<unsigned> indices_;
+	void normals();
 
 protected:
-	void normals();
-	void colors();//for texture mapping if filename is specified
-	std::vector<Matrix<float>> vertexes_, colors_, normals_;
-	std::vector<unsigned> indices_;
 	Matrix<float> matrix_;
 	GLenum mode_ = GL_TRIANGLES;
 	std::string texture_file_;
