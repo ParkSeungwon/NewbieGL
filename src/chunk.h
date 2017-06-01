@@ -18,5 +18,5 @@ protected:
 	
 private:
 	bool* mass;
-	int f(int x, int y, int z) { return x + y * x_ + z * x_ + y_; }
+	int f(int x, int y, int z) { return x + y * x_ + z * x_ * y_; }
 };
