@@ -17,7 +17,7 @@ out vec4 normal;
 out vec3 vertex;
 
 void main() {
-	gl_PointSize = 10;
+//	gl_PointSize = 10;
 	gl_Position = KeyBindMatrix * vec4(vertexes_, 1.0);
 	normal = KeyBindMatrix * vec4(normals_, 0.0f);
 	color = colors_;
@@ -167,7 +167,7 @@ void GLObjs::operator()(int n)
 {//draw nth object
 	unsigned offset = 0;
 	for(int i=0; i<n; i++) offset += index_chunks_[i];
-	glActiveTexture(GL_TEXTURE0 + n);//???
+//	glActiveTexture(GL_TEXTURE0 + n);//???
 	Matrix<float> m{4,4};
 	if(texture_files_[n] == "") m[1][1] = -1;
 	else m[1][1] = n;

@@ -9,10 +9,8 @@ public:
 	void subtract(std::function<bool(int,int,int)> f, 
 			const Matrix<float>& m = Matrix<float>{4,4}.E());
 	void show();
-	void indices();
-	std::vector<unsigned> indices_;
+	std::vector<unsigned> indices();
 	std::vector<Matrix<float>> vertexes_;
-
 protected:
 	int x_, y_, z_;
 	

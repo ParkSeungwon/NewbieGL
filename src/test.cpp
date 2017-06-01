@@ -20,7 +20,7 @@ bool cube(int x, int y, int z, int a, int b, int c, int d)
 int main()
 {
 	using namespace std::placeholders;
-	Chunk ch{100,100,100};//stack size limit warning
+	Chunk ch{50,50,50};//stack size limit warning
 
 	if (!glfwInit()) return -1;
 	GLFWwindow* window = glfwCreateWindow(1024, 1024, "Color Cube", NULL, NULL);
@@ -29,21 +29,21 @@ int main()
 	Matrix<float> m{4,4};
 	GLObject obj3d;
 	obj3d.vertexes(ch.vertexes_);
-	ch.subtract(bind(sphere, _1, _2, _3, 35,35,0,70));//set bool
-	ch.indices();//change index
-	obj3d.indices(ch.indices_);
+	ch.subtract(bind(sphere, _1, _2, _3, 35,35,0,20));//set bool
+	obj3d.indices(ch.indices());
 	obj3d.texture_file("marble.jpg");
 	obj3d.mode(GL_QUADS);
 
 	GLObjs stage;
 	stage += obj3d;
 	stage.transfer_all();
-	int t = 0;
+	ch.subtract(bind(sphere, _1, _2, _3, 0,0,0,20));//set bool
+	stage.indices(ch.indices(), stage.vbo[3]);
+	
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		stage.matrix(KeyBindMatrix * stage[0]);
-//		stage.indices(ch.indices_, stage.vbo[3]);
 		stage(0);
 
 		glfwSwapBuffers(window);

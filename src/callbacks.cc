@@ -84,6 +84,7 @@ bool glinit(GLFWwindow* window)
 	glClearColor(0, 0, 0, 0); // black background
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
+//	glDepthMask(GL_FALSE);
 //	glEnable(GL_LIGHTING);
 //	glEnable(GL_LIGHT0);
 	glEnable(GL_NORMALIZE);

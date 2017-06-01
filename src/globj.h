@@ -50,10 +50,10 @@ public:
 	unsigned vbo[4];
 	unsigned transfer_data(const std::vector<Matrix<float>>& v, const char* var,
 			unsigned vbo=0);
+	std::vector<unsigned> index_chunks_;
 
 protected:
 	unsigned shader_program_;
-	std::vector<unsigned> index_chunks_;
 	std::vector<Matrix<float>> matrixes_;
 	std::vector<GLenum> modes_;
 	std::vector<std::string> texture_files_;
