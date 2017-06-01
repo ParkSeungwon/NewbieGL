@@ -17,6 +17,7 @@ out vec4 normal;
 out vec3 vertex;
 
 void main() {
+	gl_PointSize = 10;
 	gl_Position = KeyBindMatrix * vec4(vertexes_, 1.0);
 	normal = KeyBindMatrix * vec4(normals_, 0.0f);
 	color = colors_;
@@ -70,7 +71,7 @@ GLObjs& GLObjs::operator+=(GLObject& r)
 	if(r.indices_.empty()) for(int i=0; i<r.vertexes_.size(); i++) //if no indices
 		r.indices_.push_back(i);
 	r.normals();
-	r.colors();//if texture
+	r.colors();//if texture, normalize vertex
 //	for(int i=0; i<10; i++) cout << r.vertexes_[i] << r.colors_[i] << r.normals_[i];
 	auto sz = vertexes_.size();
 	vertexes_.insert(vertexes_.end(), r.vertexes_.begin(), r.vertexes_.end());

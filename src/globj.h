@@ -47,6 +47,9 @@ public:
 	unsigned transfer_all();
 	void light(const Matrix<float>& light);//after transfer 
 	void matrix(const Matrix<float>& r);
+	unsigned vbo[4];
+	unsigned transfer_data(const std::vector<Matrix<float>>& v, const char* var,
+			unsigned vbo=0);
 
 protected:
 	unsigned shader_program_;
@@ -54,10 +57,7 @@ protected:
 	std::vector<Matrix<float>> matrixes_;
 	std::vector<GLenum> modes_;
 	std::vector<std::string> texture_files_;
-	unsigned vbo[4];
 
 private:
-	unsigned transfer_data(const std::vector<Matrix<float>>& v, const char* var,
-			unsigned vbo=0);
 	unsigned read_texture();
 };

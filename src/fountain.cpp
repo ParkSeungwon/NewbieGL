@@ -3,9 +3,7 @@
 #include<iostream>
 #include"glutil.h"
 #include"globj.h"
-#include"spring.h"
-#define W 20
-#define H 40
+#include"fountain.h"
 using namespace std;
 extern Matrix<float> KeyBindMatrix;
 
@@ -15,11 +13,11 @@ int main()
 	GLFWwindow* window = glfwCreateWindow(1024, 768, "Color Cube", NULL, NULL);
 	if (!glinit(window)) return -1;
 
-	SpringConnection cloak{20, 20};
+	Fountain foun;
 	GLObject ob;
-	ob.vertexes(cloak);
-	ob.indices(cloak.indices);
-	ob.texture_file("brick.png");
+	ob.vertexes(foun.pos);
+	ob.colors(vector<Matrix<float>>{1000, {1,0,0}});
+	ob.mode(GL_POINTS);
 
 	GLObjs stage;
 	stage += ob;
@@ -36,13 +34,9 @@ int main()
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-//		for(int i=0; i<20; i++) {
-//			cloak[i+1][1].y0 = 0.1*sin(th);
-//			cloak[i+1][1].z0 = 0.1*cos(th);
-//		}
-//		th += 0.1;
-		cloak.time_pass(0.005);
-		stage.transfer_data(cloak, "vertexes_", stage.vbo[0]);
+		foun.time_pass(0.01);
+
+		stage.transfer_data(foun.pos, "vertexes_", stage.vbo[0]);
 		stage.matrix(KeyBindMatrix * stage[0]);
 		stage(0);
 
@@ -52,3 +46,4 @@ int main()
 	}
 	glfwTerminate();
 }
+

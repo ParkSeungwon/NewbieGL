@@ -34,10 +34,7 @@ void  SpringModel3D::time_pass(float x0, float y0, float z0, float dt)
 
 SpringConnection::operator vector<Matrix<float>>()
 {
-	vector<Matrix<float>> v;
-	for(int i=0; i<width; i++) for(int j=0; j<height; j++) 
-		v.push_back((*this)[i+1][j+1]);
-	return v;
+	return vector<Matrix<float>>{data(), data() + width * height};
 }
 
 SpringConnection::SpringConnection(int w, int h) : Matrix<SpringModel3D>{w, h}
@@ -48,21 +45,29 @@ SpringConnection::SpringConnection(int w, int h) : Matrix<SpringModel3D>{w, h}
 		(*this)[i+1][j+1].y = j * H;
 		(*this)[i+1][j+1].y0 = j * H;
 	}
-	//indices.push_back(
+	for(int i=0; i<w-1; i++) for(int j=0; j<h-1; j++) {
+		indices.push_back(w * i + j);
+		indices.push_back(w * i + j + w);
+		indices.push_back(w * i + j + 1);
+		indices.push_back(w * i + j + 1);
+		indices.push_back(w * i + j + w);
+		indices.push_back(w * i + j + w + 1);
+	}
 }
 
-void SpringConnection::time_pass() 
+void SpringConnection::time_pass(float dt) 
 {
-	for(int i=0; i<width; i++) for(int j=0; j<height; j++) {//position
+	static float th = 0;
+	for(int i=0; i<width; i++) for(int j=0; j<height-1; j++) {//position
 		float x0 = 0, y0 = 0, z0 = 0;
 		for(int m=-1; m<2; m++) for(int n=-1; n<2; n++) {//connect around
 			if(i+1+m > 0 && j+1+n > 0 && i+1+m <= width && j+1+n <= height)
 				if(m != 0 || n != 0) {//border check, not itself
-					x0 += (*this)[i+1+m][j+1+n].x;
-					y0 += (*this)[i+1+m][j+1+n].y;
-					z0 += (*this)[i+1+m][j+1+n].z;
-					(*this)[i+1][j+1].time_pass(x0, y0, z0);
-				}
+				x0 += (*this)[i+1+m][j+1+n].x - (*this)[i+1][j+1].x;
+				y0 += (*this)[i+1+m][j+1+n].y - (*this)[i+1][j+1].y;
+				z0 += (*this)[i+1+m][j+1+n].z - (*this)[i+1][j+1].z;
+				(*this)[i+1][j+1].time_pass(x0, y0, z0, dt);
+			}
 		}
 	}
 }

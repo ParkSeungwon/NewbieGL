@@ -43,29 +43,25 @@
 \noindent
 \lstset{language=C++, columns=flexible, tabsize=4, frame=shadowbox, showstringspaces=false, breaklines=true, upquote=true, basicstyle=\normalsize}
 \newpage
-\section*{Lab 11. Texturing}
+\section*{Lab 13. 물리 엔진}
 	
 \begin{verbatim}
-Pick a relatively low resolution 3D model from the thingiverse.
+Problem 1. Use particle system to make a fountain similarly to the one
+below: (5pts)
+https://www.youtube.com/watch?v=rbS9_VzslFU
 
-Step 1. Apply the butterfly subdivision. Show the difference before and after applying it. (3pt)
+Problem 2. Implement damping to make your cloth simulation more stable. (5pts)\end{verbatim}
+\section{분수}
+\lstinputlisting[caption=fountain header]{src/fountain.h}
+\lstinputlisting[caption=fountain implementation]{src/fountain.cc}
+\lstinputlisting[caption=fountain main]{src/fountain.cpp}
+\includegraphics[width=0.7\textwidth]{2.png}
 
-Step 2. Apply the Loop subdivision. Show the difference before and after applying it. (3pt)
-
-Step 3. Show the difference between the butterfly and the Loop subdivision. (4pt)
-\end{verbatim}
-
-블렌더의 대표 마스코트인 몽키를 triangle subdivision했다.
-위가 loop이고, 아래가 butterfly이다.
-그런데, normal에서의 버그가 있어서인지, 트라이앵글을 나누어서 노말을 자체적으로 계산했을때,
-원숭이의 얼굴 반만이 나왔다.
-
-\includegraphics[width=\textwidth]{1.png}
-
-\includegraphics[width=\textwidth]{2.png}
-\lstinputlisting[]{src/globject.cc}
-\lstinputlisting[caption=main함수]{src/val2.cpp}
-
+glEnable(GL\_PROGRMA\_POINT\_SIZE)한 후에 vertex shader에서 glPointSize를 설정해 준다.
+그러나, 검은 화면만 나옴. 
+버그가 있다.
+2시간내에 물리엔진 두 개나 구현하기에는 조금 벅차다.
+\section{커튼}
 k=스프링상수, m=질량, x=위치, c=damping, x0=스프링이 달린 부분의 움직임,위치
 \begin{gather*}
 F = ma = -k(x-x_0) - c \frac{dx}{dt}\\
@@ -84,4 +80,14 @@ float SpringModel::time_pass(float x0, float dt) {
 	z = (c*z + k*(x - x0)) * dt / -m + z;
 }
 \end{lstlisting}
+\lstinputlisting[caption=spring system header]{src/spring.h}
+\lstinputlisting[caption=spring system implementation]{src/spring.cc}
+\lstinputlisting[caption=main함수]{src/cloak.cpp}
+\includegraphics[width=0.7\textwidth]{1.png}
+
+그냥 일차원에서 시험을 할 때는 괜찮았으나 삼차원으로 확장하는 과정에서 버그가 있다.
+우선 중력 계산을 빠뜨렸다.
+스프링 함수에 뭔가 버그가 있다. 
+자연스러운 커튼이 되지 못하고 이상한 모양으로 움직인다.
+
 \end{document}

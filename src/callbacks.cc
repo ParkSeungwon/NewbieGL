@@ -91,6 +91,7 @@ bool glinit(GLFWwindow* window)
 	glDisable(GL_COLOR_MATERIAL);
 	glEnable(GL_TEXTURE_CUBE_MAP);
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+	glEnable(GL_PROGRAM_POINT_SIZE);
 //	glCullFace(GL_FRONT_AND_BACK);
 
 	glewExperimental = true; // Needed for core profile

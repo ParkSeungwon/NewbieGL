@@ -2,12 +2,11 @@
 #include<complex>
 #include"matrix.h"
 
-class SpringModel
+struct SpringModel
 {//F = ma = m d2x/dt2 = -k(x-x0) - c dx/dt, x = position
 // mx'' + cx' + k(x-x0) = 0
 // x = e^at -> ma^2t^2 + cat + k = 0
-public:
-	SpringModel(float damping = 0.1, float x = 0, float k = 1, float m = 1);
+	SpringModel(float damping = 0.5, float x = 0, float k = 1, float m = 1);
 	float time_pass(float x0 = 0, float dt = 0.1);
 	float m = 1;//mass
 	float x0, x = 0;//position
@@ -18,9 +17,8 @@ public:
 	float xp = 0;//x'
 };
 
-class SpringModel3D : public SpringModel, public Matrix<float>
+struct SpringModel3D : public SpringModel, public Matrix<float>
 {
-public:
 	SpringModel3D();
 	float y0=0, z0=0, yp=0, zp=0;
 	void time_pass(float x0 = 0, float y0 = 0, float z0 = 0, float dt = 0.1);
@@ -28,17 +26,14 @@ public:
 	float &x,&y,&z;
 };
 
-class SpringConnection : public Matrix<SpringModel3D>
+struct SpringConnection : public Matrix<SpringModel3D>
 {
-public:
 	SpringConnection(int w, int h);
 	operator std::vector<Matrix<float>>();
-	operator std::vector<unsigned>();
-	void time_pass();
-	
-private:
+	void time_pass(float dt);
 	std::vector<unsigned> indices;
-	const int W = 20;
-	const int H = 40;
+	
+	const float W = 0.02;
+	const float H = 0.04;
 };
 	
