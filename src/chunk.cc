@@ -26,10 +26,10 @@ bool& Chunk::at(int x, int y, int z)
 
 void Chunk::indices()
 {//inspect bool -> add index of the cube
+	indices_.clear();
 	const static int xx[] = {f(0,0,1), f(1,0,1), f(1,0,0), f(0,0,0),
 					 		  f(0,1,1), f(1,1,1), f(1,1,0), f(0,1,0)};
-	const static int idx[] = {3,2,1,0, 4,5,6,7, 0,1,5,4, 1,2,6,5, 2,3,7,6, 3,0,4,7,
-	0,1,2,3};
+	const static int idx[] = {3,2,1,0, 4,5,6,7, 0,1,5,4, 1,2,6,5, 2,3,7,6, 3,0,4,7};
 	for(int x=0; x<x_-1; x++) for(int y=0; y<y_-1; y++) for(int z=0; z<z_-1; z++)
 		if(at(x,y,z)) for(int a : idx) indices_.push_back(f(x,y,z) + xx[a]);
 }
