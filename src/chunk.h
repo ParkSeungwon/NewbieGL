@@ -11,6 +11,7 @@ public:
 	void show();
 	std::vector<unsigned> indices();
 	std::vector<Matrix<float>> vertexes_;
+	unsigned sz_;
 protected:
 	int x_, y_, z_;
 	

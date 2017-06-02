@@ -24,7 +24,7 @@ bool odd(int x, int y, int z) {
 int main()
 {
 	using namespace std::placeholders;
-	Chunk ch{100,100,100};//stack size limit warning
+	Chunk ch{50,50,50};//stack size limit warning
 
 	if (!glfwInit()) return -1;
 	GLFWwindow* window = glfwCreateWindow(1024, 1024, "Color Cube", NULL, NULL);
@@ -42,8 +42,9 @@ int main()
 	GLObjs stage;
 	stage += obj3d;
 	stage.transfer_all();
-	ch.subtract(bind(sphere, _1, _2, _3, 0,0,0,51));//set bool
+	ch.subtract(bind(sphere, _1, _2, _3, 0,0,0,20));//set bool
 	stage.indices(ch.indices(), stage.vbo[3]);
+//	stage.index_chunks_[0] = 2000000;
 	
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
