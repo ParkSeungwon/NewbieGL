@@ -26,9 +26,7 @@ int main()
 	GLFWwindow* window = glfwCreateWindow(1024, 1024, "Color Cube", NULL, NULL);
 	if (!glinit(window)) return -1;
 
-	Matrix<float> m{4,4};
-	GLObjs stage;
-	stage.transfer_data(ch.vertexes_, "vertexes_", );
+	GLObject obj3d;
 	ch.subtract(bind(sphere, _1, _2, _3, 35,35,0,20));//set bool
 	obj3d.indices(ch.indices());
 	obj3d.texture_file("marble.jpg");
@@ -39,10 +37,8 @@ int main()
 	stage.transfer_all();
 	ch.subtract(bind(sphere, _1, _2, _3, 0,0,0,20));//set bool
 	obj3d.indices(ch.indices());
-	obj3d.normals();
-	obj3d.colors();
 	stage.transfer_data(obj3d.colors_, "colors_", stage.vbo[1]);
-	stage.indices(obj3d.indices_);
+//	stage.indices(obj3d.indices_);
 	
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
