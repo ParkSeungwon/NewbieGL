@@ -84,15 +84,18 @@ bool glinit(GLFWwindow* window)
 	glClearColor(0, 0, 0, 0); // black background
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
+//	glDisable(GL_CULL_FACE);
+//	glPolygonMode(GL_BACK, GL_FILL);
 //	glDepthMask(GL_FALSE);
-//	glEnable(GL_LIGHTING);
+//	glEnable(GL_STENCIL_TEST);
+//	glStencilFunc(GL_ALWAYS, 1, 0xff);
 //	glEnable(GL_LIGHT0);
 	glEnable(GL_NORMALIZE);
 	glShadeModel(GL_SMOOTH);
 	glDisable(GL_COLOR_MATERIAL);
-	glEnable(GL_TEXTURE_CUBE_MAP);
-	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
-	glEnable(GL_PROGRAM_POINT_SIZE);
+//	glEnable(GL_TEXTURE_CUBE_MAP);
+//	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+//	glEnable(GL_PROGRAM_POINT_SIZE);
 //	glCullFace(GL_FRONT_AND_BACK);
 
 	glewExperimental = true; // Needed for core profile
