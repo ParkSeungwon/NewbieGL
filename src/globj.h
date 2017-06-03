@@ -40,19 +40,20 @@ class GLObjs : protected GLObject
 {
 public:
 	GLObjs();
-	unsigned indices(const std::vector<unsigned>& v, unsigned vbo=0);
 	void operator()(int n);
 	Matrix<float> operator[](int n);
 	GLObjs& operator+=(GLObject& r);
 	unsigned transfer_all();
 	void light(const Matrix<float>& light);//after transfer 
 	void matrix(const Matrix<float>& r);
-	unsigned vbo[4];
 	unsigned transfer_data(const std::vector<Matrix<float>>& v, const char* var,
 			unsigned vbo=0);
-	std::vector<unsigned> index_chunks_;
+	unsigned update(std::vector<unsigned>&& v);
 
 protected:
+	unsigned indices(const std::vector<unsigned>& v, unsigned vbo=0);
+	unsigned vbo[4];
+	std::vector<unsigned> index_chunks_;
 	unsigned shader_program_;
 	std::vector<Matrix<float>> matrixes_;
 	std::vector<GLenum> modes_;

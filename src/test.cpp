@@ -43,7 +43,7 @@ int main()
 	stage += obj3d;
 	stage.transfer_all();
 	ch.subtract(bind(sphere, _1, _2, _3, 0,0,0,20));//set bool
-	stage.indices(ch.indices(), stage.vbo[3]);
+	stage.update(ch.indices());
 //	stage.index_chunks_[0] = 2000000;
 	
 	while (!glfwWindowShouldClose(window)) {

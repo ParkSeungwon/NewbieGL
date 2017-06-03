@@ -36,7 +36,7 @@ int main()
 		
 		foun.time_pass(0.01);
 
-		stage.transfer_data(foun.pos, "vertexes_", stage.vbo[0]);
+//		stage.transfer_data(foun.pos, "vertexes_", stage.vbo[0]);
 		stage.matrix(KeyBindMatrix * stage[0]);
 		stage(0);
 

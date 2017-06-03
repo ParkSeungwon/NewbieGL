@@ -42,7 +42,7 @@ int main()
 //		}
 //		th += 0.1;
 		cloak.time_pass(0.005);
-		stage.transfer_data(cloak, "vertexes_", stage.vbo[0]);
+//		stage.transfer_data(cloak, "vertexes_", stage.vbo[0]);
 		stage.matrix(KeyBindMatrix * stage[0]);
 		stage(0);
 

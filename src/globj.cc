@@ -158,6 +158,34 @@ unsigned GLObjs::indices(const vector<unsigned>& v, unsigned vbo)
 	return vbo;
 }
 
+unsigned GLObjs::update(vector<unsigned>&& v)
+{
+	indices(v, vbo[3]);
+	indices_ = move(v);
+	index_chunks_[0] = indices_.size();
+	for(auto& a : normals_) a = 0;
+	int face;
+	switch(modes_[0]) {
+		case GL_TRIANGLES: face = 3; break;
+		case GL_QUADS: face = 4; break;
+		default: face = 3;
+	}
+	try{
+		for(int i=0; i<indices_.size(); i+=face) {
+			auto v1 = vertexes_[indices_[i+1]] - vertexes_[indices_[i]];
+			auto v2 = vertexes_[indices_[i+2]] - vertexes_[indices_[i]];
+			auto n = cross(v1, v2);
+			for(int j=0; j<face; j++)
+				normals_[indices_[i+j]] = normals_[indices_[i+j]] + n;
+		}
+	} catch(const char* e) { cerr << e << endl; }
+	for(auto& a : normals_) {
+		a = a * (1.0f / sqrt(a[1][1]*a[1][1] + a[1][2]*a[1][2] + a[1][3]*a[1][3]));
+		a[1][4] = 1;
+	}
+	transfer_data(normals_, "normals_", vbo[2]);
+}	
+
 Matrix<float> GLObjs::operator[](int n)
 {
 	return matrixes_[n];
