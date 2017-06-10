@@ -1,32 +1,22 @@
 #include"matrix.h"
 #include<vector>
-typedef Matrix<float> TV
-class Neural
+#include<array>
+
+template<int N> class Neural
 {
 public:
+	Neural(const std::vector<Matrix<float>>& in,const std::vector<Matrix<float>>& out);
+	Matrix<float> train_input, train_output;
+	void forward_feed();
+	void update_layer();
+	void back_propagation();
+	std::array<Matrix<float>, N> hidden;
+	std::array<Matrix<float>, N> layers;
+
+protected:
+	std::vector<Matrix<float>> in, out;
+	int height_;
+	int layer_ = N;
+	float alpha_ = 0.01;
 };
 
-class Particle
-{
-public:
-	TV pos, vel;
-};
-
-class ParticleSystem
-{
-public:
-	std::vector<Particle> particles;
-	initParticles() {
-		const int num_pts = 1000;
-		particles.resize(num_pts);
-		for(int p = 0; p < num_pts; p++) {
-			TV& pos(particles[P].pos);
-			pos.x_ = (float)rand() / (float)RAND_MAX;
-			pos.y_ = (float)rand() / (float)RAND_MAX;
-	}
-
-};
-
-glEnable(GL_VERTEX_PROGRAM_POINT_SIZE)
-
-In the shader you just use gl_PointSize = psize;

@@ -159,7 +159,7 @@ unsigned GLObjs::indices(const vector<unsigned>& v, unsigned vbo)
 }
 
 unsigned GLObjs::update(vector<unsigned>&& v)
-{
+{//only for michelangelo
 	indices(v, vbo[3]);
 	indices_ = move(v);
 	index_chunks_[0] = indices_.size();
