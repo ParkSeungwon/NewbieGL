@@ -17,7 +17,7 @@ out vec4 normal;
 out vec3 vertex;
 
 void main() {
-//	gl_PointSize = 10;
+	gl_PointSize = 3;
 	gl_Position = KeyBindMatrix * vec4(vertexes_, 1.0);
 	normal = KeyBindMatrix * vec4(normals_, 0.0f);
 	color = colors_;
@@ -106,8 +106,8 @@ unsigned GLObjs::transfer_all()
 	vbo[3] = indices(indices_);
 	cout << "indices size : " << indices_.size() << endl;
 	light({//default light
-		{0.1, 0.1, 0.1, 1}, //ambient
-		{0.5, 0.5, 0.5, 0.5}, //diffuse
+		{0.2, 0.2, 0.2, 1}, //ambient
+		{0.7, 0.7, 0.7, 0.5}, //diffuse
 		{1, 1, 1, 1}, //specular
 		{3, 3, -3, 1} //position 1 means a point 0 means a vector light
 	});

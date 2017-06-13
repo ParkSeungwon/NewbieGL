@@ -6,17 +6,9 @@
 #include<type_traits>
 #include"matrix.h"
 
-void set_light(const Matrix<float>& light_source);
-void set_material(const Matrix<float>& material, float shininess);
-void glortho(float r);
-void glcolor(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 bool glinit(GLFWwindow* window);
-void bindNdraw(unsigned color, unsigned vertex, GLenum mode, int first, int count, unsigned indices = 0);
-std::vector<Matrix<float>> polygon(int points_count=100, float r=1);
 unsigned make_shader_program(std::string v, std::string f);
-void replace(char* str, std::string anchor, const Matrix<float>& mat);
 void transfer_matrix(unsigned shader_program, const Matrix<float>& m, const char* var_name);
-void gl_bind_data(unsigned fv, unsigned fc, unsigned fe);
 
 template <typename T>
 unsigned int gl_transfer_data(T* begin, T* end, GLenum mode = GL_ARRAY_BUFFER)

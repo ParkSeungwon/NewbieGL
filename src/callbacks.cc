@@ -4,46 +4,22 @@
 #include<vector>
 #include<valarray>
 #include<fstream>
+#include<thread>
 #include"matrix.h"
 #define STEP 0.05
 using namespace std;
-Matrix<float> KeyBindMatrix{4,4};
 
 static Matrix<float> m{4,4};
-bool record = false;
-float camera_x=1, camera_y=1;
+float thz, dest_x, dest_y;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) 
 {// && action == GLFW_PRESS) 
 	switch(key) {
-	case GLFW_KEY_LEFT:
-		KeyBindMatrix = m.gltranslate(-STEP, 0, 0) * KeyBindMatrix; break;
-	case GLFW_KEY_DOWN:
-		KeyBindMatrix = m.gltranslate(0, -STEP, 0) * KeyBindMatrix; break;
-	case GLFW_KEY_RIGHT:
-		KeyBindMatrix = m.gltranslate(STEP, 0, 0) * KeyBindMatrix; break;
-	case GLFW_KEY_UP:
-		KeyBindMatrix = m.gltranslate(0, STEP, 0) * KeyBindMatrix; break;
-	case GLFW_KEY_Z:
-		KeyBindMatrix = m.glscale(1+STEP, 1+STEP, 1+STEP) * KeyBindMatrix; break;
-	case GLFW_KEY_X:
-		KeyBindMatrix = m.glscale(1-STEP, 1-STEP, 1-STEP) * KeyBindMatrix; break;
-
-	case GLFW_KEY_W: KeyBindMatrix = m.glrotateX(STEP) * KeyBindMatrix; break;
-	case GLFW_KEY_A: KeyBindMatrix = m.glrotateY(-STEP) * KeyBindMatrix; break;
-	case GLFW_KEY_S: KeyBindMatrix = m.glrotateX(-STEP) * KeyBindMatrix; break;
-	case GLFW_KEY_D: KeyBindMatrix = m.glrotateY(STEP) * KeyBindMatrix; break;
-	case GLFW_KEY_Q: KeyBindMatrix = m.glrotateZ(-STEP) * KeyBindMatrix; break;
-	case GLFW_KEY_E: KeyBindMatrix = m.glrotateZ(STEP) * KeyBindMatrix; break;
-
-	case GLFW_KEY_SPACE: KeyBindMatrix.E(); break;
-
-	case GLFW_KEY_J: camera_x -= STEP; break;
-	case GLFW_KEY_K: camera_y -= STEP; break;
-	case GLFW_KEY_L: camera_x += STEP; break;
-	case GLFW_KEY_I: camera_y += STEP; break;
+		case GLFW_KEY_Q: thz += STEP; break;
+		case GLFW_KEY_E: thz -= STEP; break;
 	}
 }
+
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
 	double x, y;
@@ -54,18 +30,16 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
-	KeyBindMatrix = m.glscale(1+yoffset, 1+yoffset, 1+yoffset) * KeyBindMatrix;
+//	KeyBindMatrix = m.glscale(1+yoffset, 1+yoffset, 1+yoffset) * KeyBindMatrix;
 }
 
-void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos) {
-	if(record) cout << xpos << ' ' << ypos << ' ' << flush;
-}
-
-void glortho(float r) {
-	glOrtho(-r,r,-r,r,-r,r);
-}
-void glcolor(unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
-	glColor4f(float(r)/256, float(g)/256, float(b)/256, float(a)/256);
+void cursor_pos_callback(GLFWwindow* window, double to_x, double to_y) {
+	dest_x = to_x / 512 - 1;
+	dest_y = -(to_y / 512 - 1);
+	if(dest_x > 0.8) dest_x = 0.8;
+	else if(dest_x < -0.8) dest_x = -0.8;
+	if(dest_y > 0.8) dest_y = 0.8;
+	else if(dest_y < -0.8) dest_y = -0.8;
 }
 
 bool glinit(GLFWwindow* window) 
@@ -95,7 +69,7 @@ bool glinit(GLFWwindow* window)
 	glDisable(GL_COLOR_MATERIAL);
 //	glEnable(GL_TEXTURE_CUBE_MAP);
 //	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
-//	glEnable(GL_PROGRAM_POINT_SIZE);
+	glEnable(GL_PROGRAM_POINT_SIZE);
 //	glCullFace(GL_FRONT_AND_BACK);
 
 	glewExperimental = true; // Needed for core profile
@@ -109,7 +83,6 @@ bool glinit(GLFWwindow* window)
         printf("OpenGL 3.3 not supported\n");
         exit(1);
     }
-	KeyBindMatrix.E();
 	cout << "shading language version : " << 
 			glGetString(GL_SHADING_LANGUAGE_VERSION) << endl;
 	cout << glGetString( GL_VENDOR ) << endl;
@@ -117,28 +90,6 @@ bool glinit(GLFWwindow* window)
 	cout << glGetString( GL_VERSION   ) << endl;
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	return true;
-}
-
-std::vector<Matrix<float>> polygon(int points_count, float r)
-{
-	Matrix<float> p{r, 0, 0};//when arg is 3 or 4, it makes 4x1 matrix r,0,0,1
-	Matrix<float> rz{4, 4};//this makes 4x4 matrix
-	vector<Matrix<float>> pts;//{Matrix<float>{0,0,0}, points_count};
-	rz.glrotateZ(2 * M_PI / points_count);
-	for(int i=0; i<points_count; i++) {
-		pts.push_back(p);
-		p = rz * p;
-	}
-	return pts;
-}
-
-string read_file(string file)
-{
-	string r;
-	char c;
-	ifstream f(file);
-	while(f >> noskipws >> c) r += c;
-	return r;
 }
 
 unsigned make_shader_program(string v_shader, string f_shader)
@@ -183,6 +134,7 @@ unsigned make_shader_program(string v_shader, string f_shader)
 	}
 	return shader_program;
 }
+
 void transfer_matrix(unsigned shader_program, const Matrix<float>& m, 
 		const char* var_name)
 {
