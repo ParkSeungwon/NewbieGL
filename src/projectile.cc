@@ -16,9 +16,9 @@ Matrix<float> Projectile::time_pass(float dt)
 
 bool Projectile::out_of_bound()
 {
-	if(abs(pos_[1][1] > 1)) return true;
-	if(abs(pos_[1][2] > 1)) return true;
-	if(abs(pos_[1][3] > 1)) return true;
+	if(abs(pos_[1][1]) > 1) return true;
+	if(abs(pos_[1][2]) > 1) return true;
+	if(abs(pos_[1][3]) > 15) return true;
 	return false;
 }
 

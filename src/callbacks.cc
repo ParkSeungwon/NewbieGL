@@ -10,13 +10,15 @@
 using namespace std;
 
 static Matrix<float> m{4,4};
-float thz, dest_x, dest_y;
+float thz, dest_x, dest_y, dest_z;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) 
 {// && action == GLFW_PRESS) 
 	switch(key) {
 		case GLFW_KEY_Q: thz += STEP; break;
 		case GLFW_KEY_E: thz -= STEP; break;
+		case GLFW_KEY_W: dest_z -= STEP; break;
+		case GLFW_KEY_S: dest_z += STEP; break;
 	}
 }
 

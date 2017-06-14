@@ -7,6 +7,7 @@
 #include"matrix.h"
 
 bool glinit(GLFWwindow* window);
+void init_globjects();
 unsigned make_shader_program(std::string v, std::string f);
 void transfer_matrix(unsigned shader_program, const Matrix<float>& m, const char* var_name);
 

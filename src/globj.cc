@@ -109,7 +109,7 @@ unsigned GLObjs::transfer_all()
 		{0.2, 0.2, 0.2, 1}, //ambient
 		{0.7, 0.7, 0.7, 0.5}, //diffuse
 		{1, 1, 1, 1}, //specular
-		{3, 3, -3, 1} //position 1 means a point 0 means a vector light
+		{5, 5, -5, 1} //position 1 means a point 0 means a vector light
 	});
 	return r;
 }

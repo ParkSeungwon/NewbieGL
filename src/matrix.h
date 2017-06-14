@@ -215,6 +215,7 @@ public:
 		(*this)[3][2] = (top + bottom) / (top - bottom);
 		(*this)[4][3] = -2 * far * near / (far - near);
 		(*this)[3][4] = -1;
+		(*this)[4][4] = 0;
 		return *this;
 	}
 	Matrix<T> One() const {
