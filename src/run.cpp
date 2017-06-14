@@ -28,9 +28,16 @@ void push()
 void enemy()
 {
 	uniform_real_distribution<float> di{-1, 1};
+	uniform_int_distribution<> di2{1, 3};
 	random_device rd;
-	while(!end_game) {
-		enemies.push_back({di(rd), di(rd), -10});
+	Matrix<float> pos;
+	while(!end_game) {//initial x,y,z position
+		pos[1][1] = di(rd); 
+		pos[1][2] = di(rd); 
+		pos[1][3] = -14; 
+		pos[1][4] = di2(rd);//buddha or ironman
+		enemies.push_back(pos);
+		while(!enemies.empty() && enemies.front()[1][3] > -5) enemies.pop_front();
 		this_thread::sleep_for(1s);
 	}
 }
@@ -45,6 +52,7 @@ int main()
 	Matrix<float> proj{4,4}, m{4,4};
 	proj.glprojection(-1,1,-1,1,-5,5);
 	thread th{push};
+	thread the{enemy};
 
 	while (!glfwWindowShouldClose(window)) {
 		if(abs(dest_x - x) >= STEP || abs(dest_y - y) >= STEP) {
@@ -59,20 +67,25 @@ int main()
 
 		objs.matrix(proj * m.gltranslate(x,y,0) * m.glrotateZ(thz) * objs[0]);
 		objs(0);//spaceship
-//		objs.matrix(KeyBindMatrix * m.gltranslate(0,0.5,0.4) * objs[1]);
-//		objs(1);
-		objs.matrix(proj * objs[2]);
-		objs(2);//background
+		for(auto& a : enemies) {
+			objs.matrix(proj * m.gltranslate(a[1][1],a[1][2],a[1][3]) * objs[a[1][4]]);
+			objs(a[1][4]);
+			a[1][3] += 0.05;
+		}
+		objs.matrix(proj * objs[4]);
+		objs(4);//background
 		
 		for(auto& a : bullets) {
-			objs.matrix(proj * a.time_pass() * objs[3]);
-			objs(3);//bullet
+			objs.matrix(proj * a.time_pass() * objs[5]);
+			objs(5);//bullet
 		}
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 //		this_thread::sleep_for(50ms);
 	}
+
 	end_game = true;
 	th.join();
+	the.join();
 	glfwTerminate();
 }
