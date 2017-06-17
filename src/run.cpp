@@ -33,7 +33,7 @@ void generate_bullet()
 void generate_enemy()
 {
 	uniform_real_distribution<float> di{-1, 1};
-	uniform_int_distribution<> di2{1, 3};
+	uniform_int_distribution<> di2{0, 3};
 	random_device rd;
 	Matrix<float> pos;
 	unique_lock<mutex> lock{mtx2, defer_lock};
@@ -46,7 +46,7 @@ void generate_enemy()
 		lock.lock();
 		while(!enemies.empty() && enemies.front()[1][3] > -5) enemies.pop_front();
 		lock.unlock();
-		this_thread::sleep_for(1s);
+		this_thread::sleep_for(2s);
 	}
 }
 
@@ -63,7 +63,7 @@ int main()
 	thread th1{generate_bullet}, th2{generate_enemy};
 
 	while (!glfwWindowShouldClose(window)) {
-		if(abs(dest_x - x) >= STEP || abs(dest_y - y) >= STEP) {
+		if(abs(dest_x - x) >= STEP || abs(dest_y - y) >= STEP) {//move ship x,y
 			complex<float> to{dest_x, dest_y};
 			complex<float> cur{x, y};
 			float th = arg(to - cur);
@@ -78,8 +78,8 @@ int main()
 		lock2.lock();
 		for(auto& a : enemies) {
 			objs.matrix(proj * m.gltranslate(a[1][1],a[1][2],a[1][3]) * objs[a[1][4]]);
-			objs(a[1][4]);
-			a[1][3] += 0.05;
+			objs(a[1][4]);//enemy
+			a[1][3] += 0.05;//advance forward
 		}
 		lock2.unlock();
 		objs.matrix(proj * objs[4]);
@@ -93,7 +93,6 @@ int main()
 		lock1.unlock();
 		glfwSwapBuffers(window);
 		glfwPollEvents();
-//		this_thread::sleep_for(50ms);
 	}
 
 	end_game = true;

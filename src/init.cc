@@ -35,9 +35,9 @@ void init_globjects()
 	projectile.matrix(m.glscale(0.05, 0.05, 0.05));
 	projectile.mode(GL_QUADS);
 
-	buddha.read_obj_file("BuddhaSculpture.obj");
+	buddha.read_obj_file("missile.obj");
 	buddha.texture_file("marble.jpg");
-	buddha.matrix(m.glrotateY(0.5*M_PI)*m.glrotateX(-0.5*M_PI)*m.glscale(.7,.7,.7));
+	buddha.matrix(m.glscale(.5,.5,.5));
 
 	objs += spaceship;
 	objs += ironman;
