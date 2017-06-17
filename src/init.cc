@@ -5,7 +5,7 @@ using namespace std;
 GLObjs objs;
 void init_globjects()
 {
-	GLObject spaceship, background, projectile, ironman, buddha, monkey;
+	GLObject spaceship, background, projectile, ironman, missile, monkey, hare, dummy;
 
 	spaceship.read_obj_file("space_frigate_6.obj");
 	spaceship.texture_file("google.jpg");
@@ -35,15 +35,25 @@ void init_globjects()
 	projectile.matrix(m.glscale(0.05, 0.05, 0.05));
 	projectile.mode(GL_QUADS);
 
-	buddha.read_obj_file("missile.obj");
-	buddha.texture_file("marble.jpg");
-	buddha.matrix(m.glscale(.5,.5,.5));
+	missile.read_obj_file("missile.obj");
+	missile.texture_file("steel.png");
+	missile.matrix(m.glscale(.5,.5,.5));
+
+	hare.read_obj_file("hare.obj");
+	hare.texture_file("marble.jpg");
+	hare.matrix(m.glrotateX(-M_PI/2) * m.glscale(0.6,0.6,0.6));
+
+	dummy.read_obj_file("dummy_obj.obj");
+	dummy.texture_file("steel.png");
+	dummy.matrix(m.glscale(0.5,0.5,.5));
 
 	objs += spaceship;
-	objs += ironman;
-	objs += buddha;
-	objs += monkey;
 	objs += background;
+	objs += ironman;
+	objs += missile;
+	objs += monkey;
+	objs += hare;
+	objs += dummy;
 	objs += projectile;
 	objs.transfer_all();
 }
