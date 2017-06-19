@@ -1,8 +1,8 @@
 CC = g++
 OBJ = $(wildcard *.o)
 EXE = $(patsubst %.x, ../%.x, $(wildcard *.x))
-glLIB = -lGLEW -lGLU -lGL -lglut -lglfw
-cvLIB = $(shell pkg-config opencv --libs)
+glLIB = -lGLEW -lGLU -lGL -lglut -lglfw -lpthread -lrt
+cvLIB = $(shell pkg-config opencv --libs) 
 
 all : $(EXE)
 
