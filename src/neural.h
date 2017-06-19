@@ -1,22 +1,17 @@
-#include"matrix.h"
 #include<vector>
-#include<array>
+#include"matrix.h"
 
-template<int N> class Neural
+template<int L, int H> class Neural
 {
 public:
-	Neural(const std::vector<Matrix<float>>& in,const std::vector<Matrix<float>>& out);
-	Matrix<float> train_input, train_output;
-	void forward_feed();
+	Neural();
+	void forward_feed(const Matrix<float>& input);
+	void back_propagation(const Matrix<float>& target);
 	void update_layer();
-	void back_propagation();
-	std::array<Matrix<float>, N> hidden;
-	std::array<Matrix<float>, N> layers;
+	std::vector<Matrix<float>> hidden;//hidden layer
+	std::vector<Matrix<float>> layers;//weight & bias
 
 protected:
-	std::vector<Matrix<float>> in, out;
-	int height_;
-	int layer_ = N;
 	float alpha_ = 0.01;
 };
 
