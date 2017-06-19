@@ -7,8 +7,9 @@ template<int L, int H> Neural<L, H>::Neural()
 {
 	uniform_real_distribution<float> di{0,1};
 	random_device rd;
-	for(int k=0; k<L; k++) for(int i=0; i<H; i++) for(int j=0; j<H; j++) 
+	for(int k=0; k<L; k++) for(int i=0; i<H; i++) for(int j=0; j<H-1; j++) 
 		layers[k][i+1][j+1] = di(rd);
+	layers[L-1][H][H] = 1;
 }
 
 template<int L, int H> void Neural<L, H>::forward_feed(const Matrix<float>& in)

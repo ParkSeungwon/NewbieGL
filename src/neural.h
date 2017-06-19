@@ -12,6 +12,6 @@ public:
 	std::vector<Matrix<float>> layers;//weight & bias
 
 protected:
-	float alpha_ = 0.01;
+	float alpha_ = 0.001;
 };
 
