@@ -35,16 +35,16 @@ int main()
 {
 	Matrix<int> layerSize = {{3, 5, 7, 7, 7, 7, 7, 5, 5, 2}}; 
 	Matrix<float> input = generate_input(CASE);//{{1, 2, 1}, {1, -3, 2}, {2, -1, -1}};
-	cout << input;
 	Matrix<float> output = generate_output(input);//{{-1, -1}, {1, 2}, {1, -0.5}};
-	cout << output;
 	Matrix<float> sample{CASE, 1};// = {{1, 1, 1}};
 	for(int i=0; i<CASE; i++) sample[i+1][1] = .001;
 	Matrix<float> test = {{1, 2, 1}};
 	Mat result;
 	CvANN_MLP nn{layerSize};
-	nn.train(input, output, sample);
-	nn.predict(test, result);
-	cout << result;
+	for(int i=0; i<100; i++) {
+		nn.train(input, output, sample);
+		nn.predict(test, result);
+		cout << result;
+	}
 }
 
