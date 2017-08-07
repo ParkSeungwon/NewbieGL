@@ -54,11 +54,25 @@ string plot(const valarray<float>& x, const valarray<float>& y)
 	return s;
 }
 
+string plot(const valarray<float>& x, const valarray<complex<float>>& y)
+{
+	valarray<float> z(y.size());
+	for(int i=0; i<z.size(); i++) z[i] = y[i].real();
+	return plot(x, z);
+}
+
 complex<float> DFT(const valarray<float>& x, float w)
 {//discrete fourier transform
 	complex<float> im = 0;
 	for(float i=0; i<x.size(); i++) im += x[i] * exp(-1if * w * i);//sampling rate
 	return im;
+}
+
+valarray<complex<float>> DFT(const valarray<float>& x, const valarray<float>& w)
+{
+	valarray<complex<float>> v(w.size());
+	for(int i=0; i<v.size(); i++) v[i] = DFT(x, w[i]);
+	return v;
 }
 
 complex<float> IDFT(const std::valarray<std::complex<float>>& Xw, int n)
