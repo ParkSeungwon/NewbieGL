@@ -55,14 +55,14 @@ string plot(const valarray<float>& x, const valarray<float>& y)
 }
 
 complex<float> DFT(const valarray<float>& x, float w)
-{
+{//discrete fourier transform
 	complex<float> im = 0;
 	for(float i=0; i<x.size(); i++) im += x[i] * exp(-1if * w * i);//sampling rate
 	return im;
 }
 
 complex<float> IDFT(const std::valarray<std::complex<float>>& Xw, int n)
-{
+{//inverse DFT
 	float dw = 2 * M_PI / Xw.size();
 	complex<float> im = 0;
 	float i = 0;
