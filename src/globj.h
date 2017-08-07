@@ -6,7 +6,7 @@ class GLObject
 {
 public:
 	GLObject();
-	unsigned read_obj_file(std::string filename);
+	unsigned read_obj_file(std::string filename, bool vt = true, bool vn = true);
 
 	//setters
 	void mode(GLenum md);

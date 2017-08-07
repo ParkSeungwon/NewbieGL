@@ -25,7 +25,7 @@ void init_globjects()
 	background.matrix(m.gltranslate(0,0,-9.9) * m.glscale(1,1,5));
 	background.mode(GL_QUADS);
 
-	monkey.read_obj_file("monkey.obj");
+	monkey.read_obj_file("monkey.obj", false, false);
 	monkey.texture_file("brick.png");
 	monkey.matrix(m.glscale(.5,.5,.5));
 
@@ -39,13 +39,13 @@ void init_globjects()
 	missile.texture_file("Texture.png");
 	missile.matrix(m.glscale(.5,.5,.5));
 
-//	hare.read_obj_file("hare.obj");
-//	hare.texture_file("marble.jpg");
-//	hare.matrix(m.glrotateX(-M_PI/2) * m.glscale(0.6,0.6,0.6));
-//
-//	dummy.read_obj_file("dummy_obj.obj");
-//	dummy.texture_file("steel.png");
-//	dummy.matrix(m.glscale(0.5,0.5,.5));
+	hare.read_obj_file("hare.obj", false, false);
+	hare.texture_file("marble.jpg");
+	hare.matrix(m.glrotateX(-M_PI/2) * m.glscale(0.6,0.6,0.6));
+
+	dummy.read_obj_file("dummy_obj.obj", false, false);
+	dummy.texture_file("steel.png");
+	dummy.matrix(m.glscale(0.5,0.5,.5));
 
 	objs += spaceship;
 	objs += background;

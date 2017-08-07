@@ -52,7 +52,7 @@ Matrix<float> GLObject::cross(const Matrix<float>& v1, const Matrix<float>& v2)
 	return m;
 }
 							 
-unsigned GLObject::read_obj_file(string file)
+unsigned GLObject::read_obj_file(string file, bool vt, bool vn)
 {
 	int face = 0;
 	string s;
@@ -66,10 +66,10 @@ unsigned GLObject::read_obj_file(string file)
 		if(s == "v") {
 			ss >> x >> y >> z;
 			v[0].push_back(Matrix<float>{x, y, z});
-		} else if(s == "vt") {
+		} else if(s == "vt" && vt) {
 			ss >> x >> y;
 			v[1].push_back(Matrix<float>{x, y, 0});
-		} else if(s == "vn") {
+		} else if(s == "vn" && vn) {
 			ss >> x >> y >> z;
 			v[2].push_back(Matrix<float>{x, y, z});
 		} else if(s == "f") {
@@ -94,10 +94,8 @@ unsigned GLObject::read_obj_file(string file)
 
 void GLObject::colors()
 {//change to fit to texture u,v position
-	if(texture_file_ == "") return;
-	bool emp = false;
-	if(colors_.empty()) emp = true;;
 	normalize_vertex();
+	if(texture_file_ == "" || !colors_.empty()) return;
 	for(int i=0; i<normals_.size(); i++) {
 		float x = normals_[i][1][1];
 		float y = normals_[i][1][2];
@@ -106,28 +104,17 @@ void GLObject::colors()
 		float vy = vertexes_[i][1][2];
 		float vz = vertexes_[i][1][3];
 
-//		if(abs(x) > abs(y) && abs(x) > abs(z)) colors_.push_back({x>0?1:-1, vy, vz});
-//		else if(abs(y)>abs(z) && abs(y)>abs(x)) colors_.push_back({vx, y>0?1:-1, vz});
-//		else colors_.push_back({vx, vy, z>0?1:-1});
-
-		if(emp) {
-			if(abs(x) > abs(y) && abs(x) > abs(z)) //map to 육면체 전개도 
-				colors_.push_back({x > 0 ? 0.5 + (1 - vz) / 8 : (vz + 1) / 8, 
-						1.0f / 3 + (vy + 1) / 6, 0});
-			else if(abs(y)>abs(z) && abs(y)>abs(x)) 
-				colors_.push_back({0.25 + (vx + 1) / 8, 
-						y > 0 ? (vz + 1) / 6 : 2.0f / 3 + (1 - vz) / 6, 0});
-			else colors_.push_back({z > 0 ? 0.25 + (vx + 1) / 8 : 0.75 + (1 - vx) / 8,
+		if(abs(x) > abs(y) && abs(x) > abs(z)) //map to 육면체 전개도 
+			colors_.push_back({x > 0 ? 0.5 + (1 - vz) / 8 : (vz + 1) / 8, 
 					1.0f / 3 + (vy + 1) / 6, 0});
-		}
+		else if(abs(y)>abs(z) && abs(y)>abs(x)) 
+			colors_.push_back({0.25 + (vx + 1) / 8, 
+					y > 0 ? (vz + 1) / 6 : 2.0f / 3 + (1 - vz) / 6, 0});
+		else colors_.push_back({z > 0 ? 0.25 + (vx + 1) / 8 : 0.75 + (1 - vx) / 8,
+				1.0f / 3 + (vy + 1) / 6, 0});
 	}
 
 	cout << "colors_ size : " << colors_.size() << endl;
-	for(auto& a : colors_) {
-		assert(a[1][1] >= -1 && a[1][1] <= 1);
-		assert(a[1][2] >= -1 && a[1][2] <= 1);
-		assert(a[1][3] >= -1 && a[1][3] <= 1);
-	}
 }
 
 void GLObject::normalize_vertex()
@@ -157,11 +144,6 @@ void GLObject::normalize_vertex()
 			a[1][i] -= 0.5;
 			a[1][i] *= 2;
 		}
-	}
-	for(auto& a : vertexes_) {
-		assert(a[1][1] >= -1 && a[1][1] <= 1);
-		assert(a[1][2] >= -1 && a[1][2] <= 1);
-		assert(a[1][3] >= -1 && a[1][3] <= 1);
 	}
 }
 
