@@ -9,4 +9,6 @@ std::string plot(const std::valarray<float>& x, const std::valarray<float>& y);
 std::valarray<std::complex<float>> DFT(const std::valarray<float>& x, const std::valarray<float>& w);
 std::string plot(const std::valarray<float>& x, const std::valarray<std::complex<float>>& y);
 std::complex<float> IDFT(const std::valarray<std::complex<float>>& Xw, int n);
+void fft(std::valarray<std::complex<float>>& x);
+void ifft(std::valarray<std::complex<float>>& x);
 

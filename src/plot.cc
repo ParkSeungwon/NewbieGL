@@ -6,6 +6,8 @@
 #include<sys/stat.h>
 #include<cmath>
 #include<cassert>
+#include<thread>
+#include"autothread.h"
 #include"plot.h"
 using namespace std;
 
@@ -48,7 +50,7 @@ string plot(const valarray<float>& x, const valarray<float>& y)
 		*ptr++ = y[i];
 	}
 	
-	string command = "python plot.py ";
+	string command = "plot.py ";
 	string s = psstm(command + to_string(sz));
 	shm_unlink(name);
 	return s;
@@ -61,7 +63,7 @@ string plot(const valarray<float>& x, const valarray<complex<float>>& y)
 	return plot(x, z);
 }
 
-complex<float> DFT(const valarray<float>& x, float w)
+complex<float> DFT1(const valarray<float>& x, float w)
 {//discrete fourier transform
 	complex<float> im = 0;
 	for(float i=0; i<x.size(); i++) im += x[i] * exp(-1if * w * i);//sampling rate
@@ -70,8 +72,11 @@ complex<float> DFT(const valarray<float>& x, float w)
 
 valarray<complex<float>> DFT(const valarray<float>& x, const valarray<float>& w)
 {
+	AutoThread at;
+	vector<future<complex<float>>> vf;
 	valarray<complex<float>> v(w.size());
-	for(int i=0; i<v.size(); i++) v[i] = DFT(x, w[i]);
+	for(int i=0; i<v.size(); i++) vf.push_back(at.add_thread(bind(DFT1, x, w[i])));
+	for(int i=0; i<v.size(); i++) v[i] = vf[i].get();
 	return v;
 }
 
@@ -79,7 +84,52 @@ complex<float> IDFT(const std::valarray<std::complex<float>>& Xw, int n)
 {//inverse DFT
 	float dw = 2 * M_PI / Xw.size();
 	complex<float> im = 0;
-	float i = 0;
-	for(float w=-M_PI; w<M_PI; w+=dw) im += Xw[i++] * exp(1if * w * (float)n) * dw;
+	for(float w=-M_PI, i=0; w<M_PI; w+=dw, i++) 
+		im += Xw[i] * exp(1if * w * (float)n) * dw;
 	return im / 2.f / (float)M_PI;
+}
+
+ 
+// Cooley–Tukey FFT (in-place, divide-and-conquer)
+// Higher memory requirements and redundancy although more intuitive
+void fft(valarray<complex<float>>& x)
+{
+	const float PI = 3.141592653589793238460;
+
+	typedef std::complex<float> Complex;
+	typedef std::valarray<Complex> CArray;
+
+    const size_t N = x.size();
+    if (N <= 1) return;
+ 
+    // divide
+    CArray even = x[std::slice(0, N/2, 2)];
+    CArray  odd = x[std::slice(1, N/2, 2)];
+ 
+    // conquer
+    fft(even);
+    fft(odd);
+ 
+    // combine
+    for (size_t k = 0; k < N/2; ++k)
+    {
+        Complex t = std::polar(1.0f, -2 * PI * k / N) * odd[k];
+        x[k    ] = even[k] + t;
+        x[k+N/2] = even[k] - t;
+    }
+}
+// inverse fft (in-place)
+void ifft(valarray<complex<float>>& x)
+{
+    // conjugate the complex numbers
+    x = x.apply(std::conj);
+ 
+    // forward fft
+    fft( x );
+ 
+    // conjugate the complex numbers again
+    x = x.apply(std::conj);
+ 
+    // scale the numbers
+    x /= x.size();
 }
